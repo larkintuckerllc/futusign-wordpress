@@ -12,7 +12,7 @@ Manage and display digital signage content
 == Description ==
 Manage and display digital signage content
 
-**See details on GitHub:** https://github.com/larkintuckerllc/futusign
+**See details on GitHub:** https://github.com/larkintuckerllc/futusign-wordpress
 
 == Installation ==
 1. Copy the `futusign` folder into your `wp-content/plugins` folder
