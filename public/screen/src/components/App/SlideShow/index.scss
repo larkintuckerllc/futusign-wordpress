@@ -1,0 +1,29 @@
+#root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+.rootCanvas {
+  background-color: transparent;
+}
+#rootCanvasOdd {
+  background-color: transparent;
+}
+#rootCanvasEven {
+  background-color: transparent;
+}
+#rootCover {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  transition: opacity 1s;
+}
