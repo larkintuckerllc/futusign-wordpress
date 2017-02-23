@@ -1,4 +1,4 @@
-<?php
+h?php
 
 /**
  * The plugin bootstrap file
@@ -7,7 +7,7 @@
  * @since            0.1.0
  * @package          futusign
  * @wordpress-plugin
- * Plugin Name: 	   futusign
+ * Plugin Name:      futusign
  * Plugin URI:       https://github.com/larkintuckerllc/futusign
  * Description:      Manage and display digital signage content
  * Version:          0.3.0

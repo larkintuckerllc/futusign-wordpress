@@ -3,7 +3,7 @@ Contributors: sckmkny
 Tags: digital, signage
 Requires at least: 4.3
 Tested up to: 4.7
-Stable tag: 0.2.2
+Stable tag: 0.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -19,6 +19,12 @@ Manage and display digital signage content
 2. Activate the `futusign` plugin via the plugin admin page
 
 == Changelog ==
+
+= 0.3.0 =
+
+Refactor plugin based on WordPress-Plugin-Boilerplate.
+
+Fix bug where screen would fail connect when using "Plain" permalinks.
 
 = 0.2.2 =
 
