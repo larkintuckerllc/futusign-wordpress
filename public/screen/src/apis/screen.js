@@ -1,11 +1,12 @@
 import { SCREENS_API_ENDPOINT } from '../strings';
 import * as fromRest from '../util/rest';
-import { getBase } from './base';
+import { getBase, getSeparator } from './base';
 
 // eslint-disable-next-line
 export const get = (id) => {
   const version = Date.now();
-  return fromRest.get(`${getBase()}${SCREENS_API_ENDPOINT}/${id}?version=${version}`)
+  // eslint-disable-next-line
+  return fromRest.get(`${getBase()}${SCREENS_API_ENDPOINT}/${id}${getSeparator()}version=${version}`)
     .then(response => ({
       id: response.id,
       subscribedPlaylistIds: response['fs-playlists'],

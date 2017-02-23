@@ -1,8 +1,15 @@
 const URL_REGEX = /^<([^>]*)>/;
 let base;
+let separator;
 export const getBase = () => base;
-export const fetchBase = () => (
-  new Promise((resolve, reject) => {
+export const getSeparator = () => separator;
+export const fetchBase = () => {
+  if (process.env.NODE_ENV !== 'production') {
+    base = '/data/wp/v2/';
+    separator = '?';
+    return Promise.resolve();
+  }
+  return new Promise((resolve, reject) => {
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.addEventListener('load', () => {
       const status = xmlhttp.status;
@@ -10,7 +17,12 @@ export const fetchBase = () => (
         reject({ message: status.toString() });
       }
       const link = xmlhttp.getResponseHeader('Link');
-      base = link !== null ? `${URL_REGEX.exec(link)[1]}wp/v2/` : 'data/';
+      base = `${URL_REGEX.exec(link)[1]}wp/v2/`;
+      if (base.indexOf('?') === -1) {
+        separator = '?';
+      } else {
+        separator = '&';
+      }
       resolve();
     });
     xmlhttp.addEventListener('error', () => {
@@ -21,5 +33,5 @@ export const fetchBase = () => (
     });
     xmlhttp.open('HEAD', '/', true);
     xmlhttp.send();
-  })
-);
+  });
+};
