@@ -3,7 +3,7 @@ Contributors: sckmkny
 Tags: digital, signage
 Requires at least: 4.3
 Tested up to: 4.7
-Stable tag: 0.3.3
+Stable tag: 0.3.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -20,13 +20,17 @@ Manage and display digital signage content
 
 == Changelog ==
 
+== 0.3.4 =
+
+Fix bug in activation caused by refactor.
+
 = 0.3.3 =
 
 Refactor plugin based on WordPress-Plugin-Boilerplate.
 
 Fix bug where screen would fail connect when using "Plain" permalinks.
 
-= 0.3.2 = 
+= 0.3.2 =
 
 Broken deployment.
 
