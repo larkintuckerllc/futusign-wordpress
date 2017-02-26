@@ -25,9 +25,10 @@ class Futusign_Activator {
 	 */
 	public static function activate() {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'common/class-futusign-common.php';
-		$screen = new Futusign_Screen();
-		$slide_deck = new Futusign_Slide_Deck();
- 		$playlist = new Futusign_Playlist();
+		$plugin_common = new Futusign_Common();
+		$screen = $plugin_common->get_screen();
+		$slide_deck = $plugin_common->get_slide_deck();
+    $playlist = $plugin_common->get_playlist();
 		$screen->register();
 		$slide_deck->register();
 		$playlist->register();
