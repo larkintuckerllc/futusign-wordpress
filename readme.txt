@@ -3,7 +3,7 @@ Contributors: sckmkny
 Tags: digital, signage
 Requires at least: 4.3
 Tested up to: 4.7
-Stable tag: 0.3.4
+Stable tag: 0.3.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -19,6 +19,14 @@ Manage and display digital signage content
 2. Activate the `futusign` plugin via the plugin admin page
 
 == Changelog ==
+
+== 0.3.5 =
+
+Minor code cleanup in screen web application.
+
+Add 'key' to Advanced Custom Fields registration to address
+bug introduced in ACF Pro v5.5.8 (fixed in v5.5.9).
+Future-proofs code.
 
 == 0.3.4 =
 

@@ -39,6 +39,7 @@ class App extends Component {
         setOfflinePlaying(false);
         setBadPlaying(false);
         setAppBlocking(false);
+        return null;
       })
       .catch(error => {
         setOfflinePlaying(true);

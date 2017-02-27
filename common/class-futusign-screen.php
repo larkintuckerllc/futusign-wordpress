@@ -144,9 +144,11 @@
 	 *
 	 * @since    0.3.0
 	 */
+  // TODO: DEPRECATED REPLACE WITH ACF_ADD_LOCAL_FIELD_GROUP
   public function register_field_group() {
     register_field_group(array (
-      'id' => 'acf_futusign-screens',
+      'key' => 'acf_futusign_screens',
+      'id' => 'acf_futusign-screens', // TODO: DEPREICATED REMOVE
       'title' => 'futusign Screens',
       'fields' => array (
       ),

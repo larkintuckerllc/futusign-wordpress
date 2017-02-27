@@ -140,9 +140,11 @@ class Futusign_Slide_Deck {
 		$term = get_term_by( 'id', $q_vars[$taxonomy_id], $taxonomy_id );
 		$q_vars[$taxonomy_id] = $term->slug;
 	}
+	// TODO: DEPRECATED REPLACE WITH ACF_ADD_LOCAL_FIELD_GROUP
 	public function register_field_group() {
 		register_field_group(array (
-			'id' => 'acf_futusign-slide-decks',
+		  'key' => 'acf_futusign-slide-decks',
+			'id' => 'acf_futusign-slide-decks', // TODO: DEPRECATED REMOVE
 			'title' => 'futusign Slide Decks',
 			'fields' => array (
 				array (
