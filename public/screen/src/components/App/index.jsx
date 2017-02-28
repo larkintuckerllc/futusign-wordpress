@@ -5,6 +5,7 @@ import { fetchBase } from '../../apis/base';
 import * as fromAppBlocking from '../../ducks/appBlocking';
 import * as fromScreen from '../../ducks/screen';
 import * as fromSlideDecks from '../../ducks/slideDecks';
+import * as fromYoutubeVideos from '../../ducks/youtubeVideos';
 import * as fromOfflinePlaying from '../../ducks/offlinePlaying';
 import * as fromBadPlaying from '../../ducks/badPlaying';
 import Blocking from './Blocking';
@@ -18,7 +19,9 @@ class App extends Component {
     const {
       fetchScreen,
       fetchSlideDecks,
+      fetchYoutubeVideos,
       resetSlideDecks,
+      resetYoutubeVideos,
       setAppBlocking,
       setBadPlaying,
       setOfflinePlaying,
@@ -31,9 +34,13 @@ class App extends Component {
       .then(screen => {
         if (screen.subscribedPlaylistIds.length === 0) {
           resetSlideDecks();
+          resetYoutubeVideos();
           return Promise.resolve();
         }
-        return fetchSlideDecks(screen.subscribedPlaylistIds);
+        return Promise.all([
+          fetchSlideDecks(screen.subscribedPlaylistIds),
+          fetchYoutubeVideos(screen.subscribedPlaylistIds),
+        ]);
       })
       .then(() => {
         setOfflinePlaying(false);
@@ -82,12 +89,15 @@ App.propTypes = {
   badPlaying: PropTypes.bool.isRequired,
   fetchScreen: PropTypes.func.isRequired,
   fetchSlideDecks: PropTypes.func.isRequired,
+  fetchYoutubeVideos: PropTypes.func.isRequired,
   offlinePlaying: PropTypes.bool.isRequired,
   resetSlideDecks: PropTypes.func.isRequired,
+  resetYoutubeVideos: PropTypes.func.isRequired,
   setAppBlocking: PropTypes.func.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
+  youtubeVideos: PropTypes.array.isRequired,
 };
 export default connect(
   state => ({
@@ -95,11 +105,14 @@ export default connect(
     badPlaying: fromBadPlaying.getBadPlaying(state),
     offlinePlaying: fromOfflinePlaying.getOfflinePlaying(state),
     slideDecks: fromSlideDecks.getSlideDecks(state),
+    youtubeVideos: fromYoutubeVideos.getYoutubeVideos(state),
   }),
   {
     fetchScreen: fromScreen.fetchScreen,
     fetchSlideDecks: fromSlideDecks.fetchSlideDecks,
+    fetchYoutubeVideos: fromYoutubeVideos.fetchYoutubeVideos,
     resetSlideDecks: fromSlideDecks.resetSlideDecks,
+    resetYoutubeVideos: fromYoutubeVideos.resetYoutubeVideos,
     setAppBlocking: fromAppBlocking.setAppBlocking,
     setBadPlaying: fromBadPlaying.setBadPlaying,
     setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,

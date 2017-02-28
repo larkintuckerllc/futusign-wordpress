@@ -4,6 +4,7 @@ import offlinePlaying from '../ducks/offlinePlaying';
 import badPlaying from '../ducks/badPlaying';
 import screen from '../ducks/screen';
 import slideDecks from '../ducks/slideDecks';
+import youtubeVideos from '../ducks/youtubeVideos';
 
 export default combineReducers({
   appBlocking,
@@ -11,4 +12,5 @@ export default combineReducers({
   badPlaying,
   screen,
   slideDecks,
+  youtubeVideos,
 });
