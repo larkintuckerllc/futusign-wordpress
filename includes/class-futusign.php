@@ -169,7 +169,7 @@ class Futusign {
 		$this->loader->add_filter('restrict_manage_posts', $screen, 'restrict_manage_posts');
 		$this->loader->add_filter('parse_query', $screen, 'parse_query');
 		// PLAYLIST
-		$this->loader->add_action('init', $plugin_common->get_playlist(), 'register');
+		$this->loader->add_action('init', $plugin_common->get_playlist(), 'register', 20);
 	}
 	/**
 	 * Register all of the hooks related to the admin area functionality

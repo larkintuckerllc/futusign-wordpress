@@ -30,6 +30,10 @@ class Futusign_Playlist {
 	 * @since    0.3.0
 	 */
 	public function register() {
+		$object_types = array( 'futusign_slide_deck', 'futusign_screen' );
+		if (class_exists( 'Futusign_Youtube' )) {
+			array_push( $object_types, 'futusign_yt_video' );
+		}
 		$labels = array(
 			 'name' => __( 'Playlists', 'futusign' ),
 			 'singular_name' => __( 'Playlist', 'futusign' ),
@@ -47,7 +51,7 @@ class Futusign_Playlist {
 		);
 		register_taxonomy(
 			'futusign_playlist',
-			array( 'futusign_slide_deck', 'futusign_screen' ),
+			$object_types,
 			array(
 				'labels' => $labels,
 				'rewrite' => false,
