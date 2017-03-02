@@ -35,6 +35,9 @@ class Player extends Component {
         player = (
           <PlayerYoutubeVideos
             loop={slideDecks.length === 0}
+            setBadPlaying={setBadPlaying}
+            setOfflinePlaying={setOfflinePlaying}
+            youtubeVideos={youtubeVideos}
             done={() => {
               setCurrentlyPlaying(SLIDE_DECKS);
             }}

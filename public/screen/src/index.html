@@ -15,6 +15,14 @@
   </div>
   <script>
     (function(){
+      window.futusignYoutubeEmitter = {
+        addEventListener: function(listener) {
+          window.document.addEventListener('futusign_youtube', listener);
+        },
+        removeEventListener: function(listener) {
+          window.document.removeEventListener('futusign_youtube', listener);
+        }
+      };
       var tag = document.createElement('script');
       tag.src = "https://www.youtube.com/iframe_api";
       var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -23,10 +31,19 @@
         var player = new window.YT.Player('futusign_youtube__player', {
           events: {
             'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange,
           }
         });
         function onPlayerReady() {
           window.futusignYoutubePlayer = player;
+        }
+        function onPlayerStateChange(event) {
+          window.document.dispatchEvent(
+            new CustomEvent(
+              'futusign_youtube',
+              { detail: event.data }
+            )
+          );
         }
       }
     })();
