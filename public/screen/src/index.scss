@@ -3,7 +3,25 @@
   padding: 0px;
   font-family: sans-serif;
   background-color: black;
+  overflow: hidden;
 }
 :global(div) {
   box-sizing: border-box;
+}
+:global(#futusign_youtube) {
+  visibility: hidden;
+  position: absolute;
+  top: 50%;
+  left: 0px;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 0px;
+	padding-bottom: 56.25%;
+}
+:global(#futusign_youtube__player) {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
