@@ -7,9 +7,10 @@
   top: 0px;
   width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: red;
 }
 #rootSpinner {
+  font-size: 3em;
   animation: spin 2s infinite linear;
 }
 @keyframes spin {

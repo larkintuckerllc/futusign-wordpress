@@ -1,14 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
 import pdfjsLib from 'pdfjs-dist';
-import { getFile } from '../../../util/rest';
-import { convertDataURIToBinary } from '../../../util/misc';
-import * as fromOfflinePlaying from '../../../ducks/offlinePlaying';
-import * as fromBadPlaying from '../../../ducks/badPlaying';
+import { convertDataURIToBinary } from '../../../../util/misc';
+import { getFile } from '../../../../util/rest';
 import styles from './index.scss';
 
-pdfjsLib.PDFJS.workerSrc = `${window.publicPath}pdf.worker.js`;
-class Slideshow extends Component {
+class PlayerSlideDecks extends Component {
   constructor() {
     super();
     this.handleFile = this.handleFile.bind(this);
@@ -27,51 +23,14 @@ class Slideshow extends Component {
     this.coverEl = document.getElementById(styles.rootCover);
     this.slideDecks = slideDecks;
     this.slideDuration = 2;
-    this.worker = new pdfjsLib.PDFWorker();
     this.start();
-  }
-  componentWillReceiveProps(nextProps) {
-    const { slideDecks } = this.props;
-    const nextSlideDecks = nextProps.slideDecks;
-    if (
-      slideDecks.map(o => o.id).join() !==
-      nextSlideDecks.map(o => o.id).join()) {
-      window.clearTimeout(this.renderTimeout);
-      this.slideDecks = nextProps.slideDecks;
-      this.slideDuration = 2;
-      this.start();
-    }
   }
   shouldComponentUpdate() {
     return false;
   }
   componentWillUnmount() {
+    window.clearTimeout(this.coverTimeout);
     window.clearTimeout(this.renderTimeout);
-  }
-  start() {
-    this.first = true;
-    this.odd = true;
-    this.iList = 0;
-    this.renderPlayable();
-  }
-  handleFile(file) {
-    const { setBadPlaying } = this.props;
-    const loadingTask = pdfjsLib.getDocument({
-      data: convertDataURIToBinary(file),
-      worker: this.worker,
-    });
-    loadingTask.promise.then(
-      this.handleDocument,
-      () => {
-        setBadPlaying(true);
-      }
-    );
-  }
-  handleDocument(pdfDocument) {
-    this.pdfDocument = pdfDocument;
-    this.iPage = 1;
-    this.numPages = pdfDocument.numPages;
-    this.renderPage();
   }
   handlePage(pdfPage) {
     let viewport = pdfPage.getViewport(1);
@@ -88,14 +47,15 @@ class Slideshow extends Component {
       viewport,
     });
   }
+  // eslint-disable-next-line
   renderPage() {
-    const { setBadPlaying } = this.props;
+    const { done, loop, setBadPlaying } = this.props;
     this.renderCanvasEl = this.odd ? this.canvasOddEl : this.canvasEvenEl;
     const renderedCanvasEl = !this.odd ? this.canvasOddEl : this.canvasEvenEl;
     this.renderCanvasEl.style.display = 'none';
     renderedCanvasEl.style.display = 'block';
     this.coverEl.style.opacity = 0;
-    window.setTimeout(() => {
+    this.coverTimeout = window.setTimeout(() => {
       this.coverEl.style.opacity = 1;
     }, (this.slideDuration - 1) * 1000);
     this.pdfDocument.getPage(this.iPage).then(
@@ -111,20 +71,71 @@ class Slideshow extends Component {
       this.slideDuration = this.slideDecks[this.iList].slideDuration;
     } else {
       const lastIList = this.iList;
-      this.iList = this.iList < this.slideDecks.length - 1
-        ? this.iList + 1 : 0;
-      this.renderTimeout = window.setTimeout(this.renderPlayable, this.slideDuration * 1000);
-      this.slideDuration = this.slideDecks[lastIList].slideDuration;
+      // MOVE TO NEXT DECK
+      if (this.iList < this.slideDecks.length - 1) {
+        this.iList += 1;
+        this.renderTimeout = window.setTimeout(this.renderPlayable, this.slideDuration * 1000);
+        this.slideDuration = this.slideDecks[lastIList].slideDuration;
+      // END OF LAST DECK
+      } else {
+        // eslint-disable-next-line
+        if (loop) {
+          this.iList = 0;
+          this.renderTimeout = window.setTimeout(this.renderPlayable, this.slideDuration * 1000);
+          this.slideDuration = this.slideDecks[lastIList].slideDuration;
+        } else {
+          // PUSH LAST SLIDE AND KICK OUT
+          this.renderTimeout = window.setTimeout(() => {
+            const lastCanvasEl = this.odd ? this.canvasOddEl : this.canvasEvenEl;
+            const nextCanvasEl = !this.odd ? this.canvasOddEl : this.canvasEvenEl;
+            lastCanvasEl.style.display = 'none';
+            nextCanvasEl.style.display = 'block';
+            this.coverEl.style.opacity = 0;
+            this.renderTimeout = window.setTimeout(() => {
+              this.coverEl.style.opacity = 1;
+              this.renderTimeout = window.setTimeout(() => {
+                done();
+              }, 1000);
+            }, (this.slideDuration - 1) * 1000);
+          }, this.slideDuration * 1000);
+        }
+      }
     }
+  }
+  handleDocument(pdfDocument) {
+    this.pdfDocument = pdfDocument;
+    this.iPage = 1;
+    this.numPages = pdfDocument.numPages;
+    this.renderPage();
+  }
+  handleFile(file) {
+    const { setBadPlaying } = this.props;
+    const loadingTask = pdfjsLib.getDocument({
+      data: convertDataURIToBinary(file),
+      worker: window.futusignPDFWorker,
+    });
+    loadingTask.promise.then(
+      this.handleDocument,
+      () => {
+        setBadPlaying(true);
+      }
+    );
   }
   renderPlayable() {
     const { setOfflinePlaying } = this.props;
     getFile(this.slideDecks[this.iList].file)
-      .then(
-        this.handleFile,
-        () => {
-          setOfflinePlaying(true);
-        });
+    .then(
+      this.handleFile,
+      () => {
+        setOfflinePlaying(true);
+      }
+    );
+  }
+  start() {
+    this.first = true;
+    this.odd = true;
+    this.iList = 0;
+    this.renderPlayable();
   }
   render() {
     return (
@@ -136,15 +147,11 @@ class Slideshow extends Component {
     );
   }
 }
-Slideshow.propTypes = {
-  slideDecks: PropTypes.array.isRequired,
+PlayerSlideDecks.propTypes = {
+  done: PropTypes.func.isRequired,
+  loop: PropTypes.bool.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
+  slideDecks: PropTypes.array.isRequired,
 };
-export default connect(
-  null,
-  {
-    setBadPlaying: fromBadPlaying.setBadPlaying,
-    setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
-  }
-)(Slideshow);
+export default PlayerSlideDecks;
