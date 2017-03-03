@@ -79,13 +79,9 @@
       }
     })();
   </script>
-  <?php while (have_posts()) : the_post(); ?>
-    <script>
-      window.publicPath = '<?php echo trailingslashit( plugins_url( '', __FILE__ ) ); ?>';
-      window.screenId = <?php echo get_the_ID(); ?>;
-    </script>
-  <?php endwhile; ?>
-  <script src="<?php echo plugins_url( 'vendor.bundle.js', __FILE__ ); ?>"></script>
-  <script src="<?php echo plugins_url( 'main.bundle.js', __FILE__ ); ?>"></script>
-</body>
+  <script>
+    window.publicPath = '/';
+    window.screenId = 80;
+  </script>
+<script type="text/javascript" src="vendor.bundle.js"></script><script type="text/javascript" src="main.bundle.js"></script></body>
 </html>

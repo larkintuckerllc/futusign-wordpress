@@ -8,17 +8,16 @@ class PlayerYoutubeVideos extends Component {
     this.handleYoutubeStateChange = this.handleYoutubeStateChange.bind(this);
     this.handleYoutubeError = this.handleYoutubeError.bind(this);
     this.futusignCoverEl = document.getElementById('futusign_cover');
+    this.futusignYoutubeEl = window.document.getElementById('futusign_youtube');
     this.started = false;
   }
   componentDidMount() {
     const { setBadPlaying, setCurrentlyPlaying, setOfflinePlaying, youtubeVideos } = this.props;
-    this.futusignYoutubeEl = window.document.getElementById('futusign_youtube');
     if (window.futusignYoutubePlayer === undefined) {
       setOfflinePlaying(true);
       setCurrentlyPlaying(LOADING);
       return;
     }
-    // CHECK ALL VIDEOS FIRST
     this.videoIds = [];
     this.numberVideos = youtubeVideos.length;
     let validVideos = true;
@@ -42,6 +41,9 @@ class PlayerYoutubeVideos extends Component {
     window.futusignYoutubeError.addEventListener(this.handleYoutubeError);
     window.futusignYoutubePlayer.cueVideoById(this.videoIds[this.iVideo], 0, 'large');
   }
+  shouldComponentUpdate() {
+    return false;
+  }
   componentWillUnmount() {
     if (!this.started) return;
     window.clearTimeout(this.coverTimeout);
@@ -57,12 +59,14 @@ class PlayerYoutubeVideos extends Component {
         window.futusignYoutubePlayer.playVideo();
         this.futusignYoutubeEl.style.visibility = 'visible';
         this.coverTimeout = window.setTimeout(() => {
+          const current = window.futusignYoutubePlayer.getCurrentTime();
           const duration = window.futusignYoutubePlayer.getDuration();
+          const remaining = duration - current;
           this.futusignCoverEl.style.opacity = 0;
-          if (duration >= 2) {
+          if (remaining >= 1) {
             this.coverTimeout = window.setTimeout(() => {
               this.futusignCoverEl.style.opacity = 1;
-            }, (duration - 2) * 1000);
+            }, (remaining - 1) * 1000);
           }
         }, 1000);
         break;
