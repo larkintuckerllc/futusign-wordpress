@@ -50,7 +50,15 @@ class App extends Component {
       if (screen.subscribedPlaylistIds.length === 0) {
         resetSlideDecks();
         resetYoutubeVideos();
-        return Promise.resolve();
+        return Promise.resolve([{
+          response: {
+            result: [],
+          },
+        }, {
+          response: {
+            result: [],
+          },
+        }]);
       }
       return Promise.all([
         fetchSlideDecks(screen.subscribedPlaylistIds),

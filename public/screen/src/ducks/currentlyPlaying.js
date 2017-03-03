@@ -1,6 +1,7 @@
 import { ACTION_PREFIX } from '../strings';
 
 // API
+export const BLANK = 'BLANK';
 export const LOADING = 'LOADING';
 export const SLIDE_DECKS = 'SLIDE_DECKS';
 export const YOUTUBE_VIDEOS = 'YOUTUBE_VIDEOS';

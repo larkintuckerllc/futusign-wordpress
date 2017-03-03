@@ -50,7 +50,7 @@ class PlayerSlideDecks extends Component {
   }
   // eslint-disable-next-line
   renderPage() {
-    const { done, loop, setBadPlaying, setCurrentlyPlaying } = this.props;
+    const { done, setBadPlaying, setCurrentlyPlaying } = this.props;
     this.renderCanvasEl = this.odd ? this.canvasOddEl : this.canvasEvenEl;
     const renderedCanvasEl = !this.odd ? this.canvasOddEl : this.canvasEvenEl;
     this.renderCanvasEl.style.display = 'none';
@@ -80,27 +80,19 @@ class PlayerSlideDecks extends Component {
         this.slideDuration = this.slideDecks[lastIList].slideDuration;
       // END OF LAST DECK
       } else {
-        // eslint-disable-next-line
-        if (loop) {
-          this.iList = 0;
-          this.renderTimeout = window.setTimeout(this.renderPlayable, this.slideDuration * 1000);
-          this.slideDuration = this.slideDecks[lastIList].slideDuration;
-        } else {
-          // PUSH LAST SLIDE AND KICK OUT
+        this.renderTimeout = window.setTimeout(() => {
+          const lastCanvasEl = this.odd ? this.canvasOddEl : this.canvasEvenEl;
+          const nextCanvasEl = !this.odd ? this.canvasOddEl : this.canvasEvenEl;
+          lastCanvasEl.style.display = 'none';
+          nextCanvasEl.style.display = 'block';
+          this.futusignCoverEl.style.opacity = 0;
           this.renderTimeout = window.setTimeout(() => {
-            const lastCanvasEl = this.odd ? this.canvasOddEl : this.canvasEvenEl;
-            const nextCanvasEl = !this.odd ? this.canvasOddEl : this.canvasEvenEl;
-            lastCanvasEl.style.display = 'none';
-            nextCanvasEl.style.display = 'block';
-            this.futusignCoverEl.style.opacity = 0;
+            this.futusignCoverEl.style.opacity = 1;
             this.renderTimeout = window.setTimeout(() => {
-              this.futusignCoverEl.style.opacity = 1;
-              this.renderTimeout = window.setTimeout(() => {
-                done();
-              }, 1000);
-            }, (this.slideDuration - 1) * 1000);
-          }, this.slideDuration * 1000);
-        }
+              done();
+            }, 1000);
+          }, (this.slideDuration - 1) * 1000);
+        }, this.slideDuration * 1000);
       }
     }
   }
@@ -152,7 +144,6 @@ class PlayerSlideDecks extends Component {
 }
 PlayerSlideDecks.propTypes = {
   done: PropTypes.func.isRequired,
-  loop: PropTypes.bool.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
   setCurrentlyPlaying: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,

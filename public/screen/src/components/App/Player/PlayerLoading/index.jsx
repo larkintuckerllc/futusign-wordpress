@@ -8,8 +8,8 @@ class PlayerLoading extends Component {
     document.getElementById('futusign_cover').style.opacity = 0;
     this.coverTimeout = window.setTimeout(() => {
       document.getElementById('futusign_cover').style.opacity = 1;
+      this.coverTimeout = window.setTimeout(done, 1000);
     }, 3000);
-    window.setTimeout(done, 4000);
   }
   componentWillUnmount() {
     window.clearTimeout(this.coverTimeout);

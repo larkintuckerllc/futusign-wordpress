@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { SLIDE_DECKS, YOUTUBE_VIDEOS } from '../../../ducks/currentlyPlaying';
+import { BLANK, LOADING, SLIDE_DECKS, YOUTUBE_VIDEOS } from '../../../ducks/currentlyPlaying';
+import PlayerBlank from './PlayerBlank';
 import PlayerLoading from './PlayerLoading';
 import PlayerSlideDecks from './PlayerSlideDecks';
 import PlayerYoutubeVideos from './PlayerYoutubeVideos';
@@ -20,16 +21,41 @@ class Player extends Component {
     } = this.props;
     let player;
     switch (currentlyPlaying) {
+      case LOADING:
+        player = (
+          <PlayerLoading
+            done={() => {
+              setCurrentlyPlaying(BLANK);
+            }}
+          />
+        );
+        break;
+      case BLANK:
+        player = (
+          <PlayerBlank
+            done={() => {
+              if (slideDecks.length !== 0) {
+                setCurrentlyPlaying(SLIDE_DECKS);
+              } else {
+                setCurrentlyPlaying(YOUTUBE_VIDEOS);
+              }
+            }}
+          />
+        );
+        break;
       case SLIDE_DECKS:
         player = (
           <PlayerSlideDecks
-            loop={youtubeVideos.length === 0}
             setCurrentlyPlaying={setCurrentlyPlaying}
             setBadPlaying={setBadPlaying}
             setOfflinePlaying={setOfflinePlaying}
             slideDecks={slideDecks}
             done={() => {
-              setCurrentlyPlaying(YOUTUBE_VIDEOS);
+              if (youtubeVideos.length !== 0) {
+                setCurrentlyPlaying(YOUTUBE_VIDEOS);
+              } else {
+                setCurrentlyPlaying(BLANK);
+              }
             }}
           />
         );
@@ -43,23 +69,13 @@ class Player extends Component {
             setOfflinePlaying={setOfflinePlaying}
             youtubeVideos={youtubeVideos}
             done={() => {
-              setCurrentlyPlaying(SLIDE_DECKS);
+              setCurrentlyPlaying(BLANK);
             }}
           />
         );
         break;
       default:
-        player = (
-          <PlayerLoading
-            done={() => {
-              if (slideDecks.length !== 0) {
-                setCurrentlyPlaying(SLIDE_DECKS);
-              } else {
-                setCurrentlyPlaying(YOUTUBE_VIDEOS);
-              }
-            }}
-          />
-        );
+        player = null;
     }
     return (
       <div id={styles.root}>
