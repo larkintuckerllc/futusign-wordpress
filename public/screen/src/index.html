@@ -50,6 +50,7 @@
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       window.onYouTubeIframeAPIReady = function() {
         var player = new window.YT.Player('futusign_youtube', {
+          playerVars: { 'controls': 0 },
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange,
