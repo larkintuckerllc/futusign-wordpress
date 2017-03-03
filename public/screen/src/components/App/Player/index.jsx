@@ -6,6 +6,9 @@ import PlayerYoutubeVideos from './PlayerYoutubeVideos';
 import styles from './index.scss';
 
 class Player extends Component {
+  componentDidMount() {
+    document.getElementById('futusign_cover').style.opacity = 0;
+  }
   componentWillUnmount() {
     document.getElementById('futusign_cover').style.opacity = 0;
   }
@@ -24,6 +27,7 @@ class Player extends Component {
         player = (
           <PlayerSlideDecks
             loop={youtubeVideos.length === 0}
+            setCurrentlyPlaying={setCurrentlyPlaying}
             setBadPlaying={setBadPlaying}
             setOfflinePlaying={setOfflinePlaying}
             slideDecks={slideDecks}
@@ -37,6 +41,7 @@ class Player extends Component {
         player = (
           <PlayerYoutubeVideos
             loop={slideDecks.length === 0}
+            setCurrentlyPlaying={setCurrentlyPlaying}
             setBadPlaying={setBadPlaying}
             setOfflinePlaying={setOfflinePlaying}
             youtubeVideos={youtubeVideos}

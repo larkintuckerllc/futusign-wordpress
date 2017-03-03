@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import pdfjsLib from 'pdfjs-dist';
+import { LOADING } from '../../../../ducks/currentlyPlaying';
 import { convertDataURIToBinary } from '../../../../util/misc';
 import { getFile } from '../../../../util/rest';
 import styles from './index.scss';
@@ -22,7 +23,7 @@ class PlayerSlideDecks extends Component {
     this.canvasOddEl = document.getElementById(styles.rootCanvasOdd);
     this.canvasEvenEl = document.getElementById(styles.rootCanvasEven);
     this.slideDecks = slideDecks;
-    this.slideDuration = 2;
+    this.slideDuration = 1;
     this.start();
   }
   shouldComponentUpdate() {
@@ -49,7 +50,7 @@ class PlayerSlideDecks extends Component {
   }
   // eslint-disable-next-line
   renderPage() {
-    const { done, loop, setBadPlaying } = this.props;
+    const { done, loop, setBadPlaying, setCurrentlyPlaying } = this.props;
     this.renderCanvasEl = this.odd ? this.canvasOddEl : this.canvasEvenEl;
     const renderedCanvasEl = !this.odd ? this.canvasOddEl : this.canvasEvenEl;
     this.renderCanvasEl.style.display = 'none';
@@ -62,6 +63,7 @@ class PlayerSlideDecks extends Component {
       this.handlePage,
       () => {
         setBadPlaying(true);
+        setCurrentlyPlaying(LOADING);
       });
     this.first = false;
     this.odd = !this.odd;
@@ -109,7 +111,7 @@ class PlayerSlideDecks extends Component {
     this.renderPage();
   }
   handleFile(file) {
-    const { setBadPlaying } = this.props;
+    const { setBadPlaying, setCurrentlyPlaying } = this.props;
     const loadingTask = pdfjsLib.getDocument({
       data: convertDataURIToBinary(file),
       worker: window.futusignPDFWorker,
@@ -118,16 +120,18 @@ class PlayerSlideDecks extends Component {
       this.handleDocument,
       () => {
         setBadPlaying(true);
+        setCurrentlyPlaying(LOADING);
       }
     );
   }
   renderPlayable() {
-    const { setOfflinePlaying } = this.props;
+    const { setOfflinePlaying, setCurrentlyPlaying } = this.props;
     getFile(this.slideDecks[this.iList].file)
     .then(
       this.handleFile,
       () => {
         setOfflinePlaying(true);
+        setCurrentlyPlaying(LOADING);
       }
     );
   }
@@ -150,6 +154,7 @@ PlayerSlideDecks.propTypes = {
   done: PropTypes.func.isRequired,
   loop: PropTypes.bool.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
+  setCurrentlyPlaying: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
 };

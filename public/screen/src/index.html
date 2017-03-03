@@ -26,13 +26,21 @@
         futusignYoutubeEl.style.width = (height * (16 / 9)).toString() + 'px';
         futusignYoutubeEl.style.height = (height).toString() + 'px';
       }
-      // SETUP YOUTUBE EMITTER
-      window.futusignYoutubeEmitter = {
+      // SETUP YOUTUBE EMITTERS
+      window.futusignYoutubeStateChange = {
         addEventListener: function(listener) {
-          window.document.addEventListener('futusign_youtube', listener);
+          window.document.addEventListener('futusign_youtube_state_change', listener);
         },
         removeEventListener: function(listener) {
-          window.document.removeEventListener('futusign_youtube', listener);
+          window.document.removeEventListener('futusign_youtube_state_change', listener);
+        }
+      };
+      window.futusignYoutubeError = {
+        addEventListener: function(listener) {
+          window.document.addEventListener('futusign_youtube_error', listener);
+        },
+        removeEventListener: function(listener) {
+          window.document.removeEventListener('futusign_youtube_error', listener);
         }
       };
       // STARTUP YOUTUBE
@@ -45,6 +53,7 @@
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange,
+            'onError': onPlayerError,
           }
         });
         function onPlayerReady() {
@@ -53,7 +62,15 @@
         function onPlayerStateChange(event) {
           window.document.dispatchEvent(
             new CustomEvent(
-              'futusign_youtube',
+              'futusign_youtube_state_change',
+              { detail: event.data }
+            )
+          );
+        }
+        function onPlayerError(event) {
+          window.document.dispatchEvent(
+            new CustomEvent(
+              'futusign_youtube_error',
               { detail: event.data }
             )
           );

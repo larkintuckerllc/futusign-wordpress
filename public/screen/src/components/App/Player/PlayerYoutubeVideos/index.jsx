@@ -1,17 +1,21 @@
 import React, { Component, PropTypes } from 'react';
+import { LOADING } from '../../../../ducks/currentlyPlaying';
 
 const URL_REGEX = /^https:\/\/youtu\.be\/(.*)/;
 class PlayerYoutubeVideos extends Component {
   constructor() {
     super();
-    this.handleYoutubeEvents = this.handleYoutubeEvents.bind(this);
+    this.handleYoutubeStateChange = this.handleYoutubeStateChange.bind(this);
+    this.handleYoutubeError = this.handleYoutubeError.bind(this);
     this.futusignCoverEl = document.getElementById('futusign_cover');
+    this.started = false;
   }
   componentDidMount() {
-    const { setBadPlaying, setOfflinePlaying, youtubeVideos } = this.props;
+    const { setBadPlaying, setCurrentlyPlaying, setOfflinePlaying, youtubeVideos } = this.props;
     this.futusignYoutubeEl = window.document.getElementById('futusign_youtube');
     if (window.futusignYoutubePlayer === undefined) {
       setOfflinePlaying(true);
+      setCurrentlyPlaying(LOADING);
       return;
     }
     // TODO: CONVERT TO LOOP
@@ -19,19 +23,24 @@ class PlayerYoutubeVideos extends Component {
     const match = URL_REGEX.exec(url);
     if (match === null) {
       setBadPlaying(true);
+      setCurrentlyPlaying(LOADING);
       return;
     }
+    this.started = true;
     const id = match[1];
-    window.futusignYoutubeEmitter.addEventListener(this.handleYoutubeEvents);
+    window.futusignYoutubeStateChange.addEventListener(this.handleYoutubeStateChange);
+    window.futusignYoutubeError.addEventListener(this.handleYoutubeError);
     window.futusignYoutubePlayer.cueVideoById(id, 0, 'large');
   }
   componentWillUnmount() {
+    if (!this.started) return;
     window.clearTimeout(this.coverTimeout);
-    window.futusignYoutubeEmitter.removeEventListener(this.handleYoutubeEvents);
+    window.futusignYoutubeStateChange.removeEventListener(this.handleYoutubeStateChange);
+    window.futusignYoutubeError.removeEventListener(this.handleYoutubeError);
     window.futusignYoutubePlayer.stopVideo();
     this.futusignYoutubeEl.style.visibility = 'hidden';
   }
-  handleYoutubeEvents(event) {
+  handleYoutubeStateChange(event) {
     const { done } = this.props;
     switch (event.detail) {
       case window.YT.PlayerState.CUED:
@@ -53,6 +62,11 @@ class PlayerYoutubeVideos extends Component {
       default:
     }
   }
+  handleYoutubeError() {
+    const { setBadPlaying, setCurrentlyPlaying } = this.props;
+    setBadPlaying(true);
+    setCurrentlyPlaying(LOADING);
+  }
   render() {
     return (
       <div />
@@ -62,6 +76,7 @@ class PlayerYoutubeVideos extends Component {
 PlayerYoutubeVideos.propTypes = {
   done: PropTypes.func.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
+  setCurrentlyPlaying: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
 };
