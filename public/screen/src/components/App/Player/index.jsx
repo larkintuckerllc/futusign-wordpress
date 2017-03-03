@@ -6,9 +6,6 @@ import PlayerYoutubeVideos from './PlayerYoutubeVideos';
 import styles from './index.scss';
 
 class Player extends Component {
-  componentDidMount() {
-    document.getElementById('futusign_cover').style.opacity = 0;
-  }
   componentWillUnmount() {
     document.getElementById('futusign_cover').style.opacity = 0;
   }
