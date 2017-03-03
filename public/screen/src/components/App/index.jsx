@@ -29,6 +29,7 @@ class App extends Component {
       fetchScreen,
       fetchSlideDecks,
       fetchYoutubeVideos,
+      offlinePlaying,
       resetSlideDecks,
       resetYoutubeVideos,
       setAppBlocking,
@@ -38,6 +39,9 @@ class App extends Component {
       slideDecks,
       youtubeVideos,
     } = this.props;
+    if (offlinePlaying) {
+      window.location.reload();
+    }
     fetchBase()
     .then(() => (
       fetchScreen()

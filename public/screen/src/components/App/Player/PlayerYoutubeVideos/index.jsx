@@ -63,8 +63,8 @@ class PlayerYoutubeVideos extends Component {
     }
   }
   handleYoutubeError() {
-    const { setBadPlaying, setCurrentlyPlaying } = this.props;
-    setBadPlaying(true);
+    const { setOfflinePlaying, setCurrentlyPlaying } = this.props;
+    setOfflinePlaying(true);
     setCurrentlyPlaying(LOADING);
   }
   render() {
