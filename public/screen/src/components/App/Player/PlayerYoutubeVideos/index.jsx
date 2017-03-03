@@ -38,7 +38,13 @@ class PlayerYoutubeVideos extends Component {
         window.futusignYoutubePlayer.playVideo();
         this.futusignYoutubeEl.style.visibility = 'visible';
         this.coverTimeout = window.setTimeout(() => {
+          const duration = window.futusignYoutubePlayer.getDuration();
           this.futusignCoverEl.style.opacity = 0;
+          if (duration >= 2) {
+            this.coverTimeout = window.setTimeout(() => {
+              this.futusignCoverEl.style.opacity = 1;
+            }, (duration - 2) * 1000);
+          }
         }, 1000);
         break;
       case window.YT.PlayerState.ENDED:

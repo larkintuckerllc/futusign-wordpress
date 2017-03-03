@@ -38,7 +38,7 @@ class PlayerSlideDecks extends Component {
     const pdfHeight = viewport.height;
     const scaleX = this.rootWidth / pdfWidth;
     const scaleY = this.rootHeight / pdfHeight;
-    const scale = Math.min(scaleX, scaleY);
+    const scale = Math.max(scaleX, scaleY);
     this.renderCanvasEl.width = pdfWidth * scale;
     this.renderCanvasEl.height = pdfHeight * scale;
     viewport = pdfPage.getViewport(scale);
