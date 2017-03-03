@@ -18,19 +18,29 @@ class PlayerYoutubeVideos extends Component {
       setCurrentlyPlaying(LOADING);
       return;
     }
-    // TODO: CONVERT TO LOOP
-    const url = youtubeVideos[0].url;
-    const match = URL_REGEX.exec(url);
-    if (match === null) {
+    // CHECK ALL VIDEOS FIRST
+    this.videoIds = [];
+    this.numberVideos = youtubeVideos.length;
+    let validVideos = true;
+    for (let i = 0; i < this.numberVideos; i += 1) {
+      const url = youtubeVideos[i].url;
+      const match = URL_REGEX.exec(url);
+      if (match === null) {
+        validVideos = false;
+      } else {
+        this.videoIds.push(match[1]);
+      }
+    }
+    if (!validVideos) {
       setBadPlaying(true);
       setCurrentlyPlaying(LOADING);
       return;
     }
     this.started = true;
-    const id = match[1];
+    this.iVideo = 0;
     window.futusignYoutubeStateChange.addEventListener(this.handleYoutubeStateChange);
     window.futusignYoutubeError.addEventListener(this.handleYoutubeError);
-    window.futusignYoutubePlayer.cueVideoById(id, 0, 'large');
+    window.futusignYoutubePlayer.cueVideoById(this.videoIds[this.iVideo], 0, 'large');
   }
   componentWillUnmount() {
     if (!this.started) return;
@@ -57,7 +67,12 @@ class PlayerYoutubeVideos extends Component {
         }, 1000);
         break;
       case window.YT.PlayerState.ENDED:
-        done();
+        if (this.iVideo < this.numberVideos - 1) {
+          this.iVideo += 1;
+          window.futusignYoutubePlayer.cueVideoById(this.videoIds[this.iVideo], 0, 'large');
+        } else {
+          done();
+        }
         break;
       default:
     }
