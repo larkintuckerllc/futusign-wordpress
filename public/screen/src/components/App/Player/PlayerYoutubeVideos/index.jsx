@@ -5,6 +5,7 @@ class PlayerYoutubeVideos extends Component {
   constructor() {
     super();
     this.handleYoutubeEvents = this.handleYoutubeEvents.bind(this);
+    this.futusignCoverEl = document.getElementById('futusign_cover');
   }
   componentDidMount() {
     const { setBadPlaying, setOfflinePlaying, youtubeVideos } = this.props;
@@ -22,22 +23,28 @@ class PlayerYoutubeVideos extends Component {
     }
     const id = match[1];
     window.futusignYoutubeEmitter.addEventListener(this.handleYoutubeEvents);
-    window.futusignYoutubePlayer
-    .cueVideoById(id, 0, 'large');
-    window.futusignYoutubePlayer
-    .playVideo();
-    this.futusignYoutubeEl.style.visibility = 'visible';
+    window.futusignYoutubePlayer.cueVideoById(id, 0, 'large');
   }
   componentWillUnmount() {
+    window.clearTimeout(this.coverTimeout);
     window.futusignYoutubeEmitter.removeEventListener(this.handleYoutubeEvents);
-    window.futusignYoutubePlayer
-    .stopVideo();
+    window.futusignYoutubePlayer.stopVideo();
     this.futusignYoutubeEl.style.visibility = 'hidden';
   }
   handleYoutubeEvents(event) {
     const { done } = this.props;
-    if (event.detail === window.YT.PlayerState.ENDED) {
-      done();
+    switch (event.detail) {
+      case window.YT.PlayerState.CUED:
+        window.futusignYoutubePlayer.playVideo();
+        this.futusignYoutubeEl.style.visibility = 'visible';
+        this.coverTimeout = window.setTimeout(() => {
+          this.futusignCoverEl.style.opacity = 0;
+        }, 1000);
+        break;
+      case window.YT.PlayerState.ENDED:
+        done();
+        break;
+      default:
     }
   }
   render() {

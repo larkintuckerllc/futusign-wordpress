@@ -5,10 +5,10 @@ import loading from './loading.png';
 class PlayerLoading extends Component {
   componentDidMount() {
     const { done } = this.props;
-    this.doneTimeout = window.setTimeout(done, 1000);
-  }
-  componentWillUnmount() {
-    window.clearTimeout(this.doneTimeout);
+    window.setTimeout(() => {
+      document.getElementById('futusign_cover').style.opacity = 1;
+    }, 1000);
+    window.setTimeout(done, 2000);
   }
   render() {
     return (

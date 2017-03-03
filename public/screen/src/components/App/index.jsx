@@ -56,16 +56,16 @@ class App extends Component {
     .then(([nextSlideDecks, nextYoutubeVideos]) => {
       const lastSlideDecksHash = slideDecks.map(o => o.file).join();
       const nextSlideDecksHash = nextSlideDecks
-      .response
-      .result
-      .map(o => nextSlideDecks.response.entities.slideDecks[o].file)
-      .join();
+        .response
+        .result
+        .map(o => nextSlideDecks.response.entities.slideDecks[o].file)
+        .join();
       const lastYoutubeVideosHash = youtubeVideos.map(o => o.url).join();
       const nextYoutubeVideosHash = nextYoutubeVideos
-      .response
-      .result
-      .map(o => nextYoutubeVideos.response.entities.youtubeVideos[o].url)
-      .join();
+        .response
+        .result
+        .map(o => nextYoutubeVideos.response.entities.youtubeVideos[o].url)
+        .join();
       if (
         lastSlideDecksHash !== nextSlideDecksHash ||
         lastYoutubeVideosHash !== nextYoutubeVideosHash

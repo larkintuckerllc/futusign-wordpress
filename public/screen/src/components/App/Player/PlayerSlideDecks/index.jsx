@@ -12,6 +12,7 @@ class PlayerSlideDecks extends Component {
     this.renderPlayable = this.renderPlayable.bind(this);
     this.renderPage = this.renderPage.bind(this);
     this.handlePage = this.handlePage.bind(this);
+    this.futusignCoverEl = document.getElementById('futusign_cover');
   }
   componentDidMount() {
     const { slideDecks } = this.props;
@@ -20,7 +21,6 @@ class PlayerSlideDecks extends Component {
     this.rootHeight = rootEl.offsetHeight;
     this.canvasOddEl = document.getElementById(styles.rootCanvasOdd);
     this.canvasEvenEl = document.getElementById(styles.rootCanvasEven);
-    this.coverEl = document.getElementById(styles.rootCover);
     this.slideDecks = slideDecks;
     this.slideDuration = 2;
     this.start();
@@ -54,9 +54,9 @@ class PlayerSlideDecks extends Component {
     const renderedCanvasEl = !this.odd ? this.canvasOddEl : this.canvasEvenEl;
     this.renderCanvasEl.style.display = 'none';
     renderedCanvasEl.style.display = 'block';
-    this.coverEl.style.opacity = 0;
+    this.futusignCoverEl.style.opacity = 0;
     this.coverTimeout = window.setTimeout(() => {
-      this.coverEl.style.opacity = 1;
+      this.futusignCoverEl.style.opacity = 1;
     }, (this.slideDuration - 1) * 1000);
     this.pdfDocument.getPage(this.iPage).then(
       this.handlePage,
@@ -90,9 +90,9 @@ class PlayerSlideDecks extends Component {
             const nextCanvasEl = !this.odd ? this.canvasOddEl : this.canvasEvenEl;
             lastCanvasEl.style.display = 'none';
             nextCanvasEl.style.display = 'block';
-            this.coverEl.style.opacity = 0;
+            this.futusignCoverEl.style.opacity = 0;
             this.renderTimeout = window.setTimeout(() => {
-              this.coverEl.style.opacity = 1;
+              this.futusignCoverEl.style.opacity = 1;
               this.renderTimeout = window.setTimeout(() => {
                 done();
               }, 1000);
@@ -142,7 +142,6 @@ class PlayerSlideDecks extends Component {
       <div id={styles.root}>
         <canvas id={styles.rootCanvasOdd} className={styles.rootCanvas} />
         <canvas id={styles.rootCanvasEven} className={styles.rootCanvas} />
-        <div id={styles.rootCover} />
       </div>
     );
   }

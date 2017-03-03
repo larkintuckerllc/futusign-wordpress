@@ -5,8 +5,10 @@ import PlayerSlideDecks from './PlayerSlideDecks';
 import PlayerYoutubeVideos from './PlayerYoutubeVideos';
 import styles from './index.scss';
 
-// eslint-disable-next-line
 class Player extends Component {
+  componentWillUnmount() {
+    document.getElementById('futusign_cover').style.opacity = 0;
+  }
   render() {
     const {
       currentlyPlaying,
