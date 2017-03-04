@@ -34,6 +34,9 @@ class Futusign_Playlist {
 		if (class_exists( 'Futusign_Youtube' )) {
 			array_push( $object_types, 'futusign_yt_video' );
 		}
+		if (class_exists( 'Futusign_Image' )) {
+			array_push( $object_types, 'futusign_image' );
+		}
 		$labels = array(
 			 'name' => __( 'Playlists', 'futusign' ),
 			 'singular_name' => __( 'Playlist', 'futusign' ),

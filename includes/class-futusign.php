@@ -152,14 +152,8 @@ class Futusign {
 	 */
 	private function define_common_hooks() {
 		$plugin_common = new Futusign_Common();
-		// SLIDE DECK
-		$slide_deck = $plugin_common->get_slide_deck();
-		$this->loader->add_action('init', $slide_deck, 'register');
-		$this->loader->add_filter('init', $slide_deck, 'register_field_group');
-		$this->loader->add_filter('manage_futusign_slide_deck_posts_custom_column', $slide_deck, 'manage_posts_custom_column', 10, 2 );
-		$this->loader->add_filter('manage_futusign_slide_deck_posts_columns', $slide_deck, 'manage_posts_columns');
-		$this->loader->add_filter('restrict_manage_posts', $slide_deck, 'restrict_manage_posts');
-		$this->loader->add_filter('parse_query', $slide_deck, 'parse_query');
+		// PLAYLIST
+		$this->loader->add_action('init', $plugin_common->get_playlist(), 'register', 20);
 		// SCREEN
 		$screen = $plugin_common->get_screen();
 		$this->loader->add_action('init', $screen, 'register');
@@ -168,8 +162,14 @@ class Futusign {
 		$this->loader->add_filter('manage_futusign_screen_posts_columns', $screen, 'manage_posts_columns');
 		$this->loader->add_filter('restrict_manage_posts', $screen, 'restrict_manage_posts');
 		$this->loader->add_filter('parse_query', $screen, 'parse_query');
-		// PLAYLIST
-		$this->loader->add_action('init', $plugin_common->get_playlist(), 'register', 20);
+		// SLIDE DECK
+		$slide_deck = $plugin_common->get_slide_deck();
+		$this->loader->add_action('init', $slide_deck, 'register');
+		$this->loader->add_filter('init', $slide_deck, 'register_field_group');
+		$this->loader->add_filter('manage_futusign_slide_deck_posts_custom_column', $slide_deck, 'manage_posts_custom_column', 10, 2 );
+		$this->loader->add_filter('manage_futusign_slide_deck_posts_columns', $slide_deck, 'manage_posts_columns');
+		$this->loader->add_filter('restrict_manage_posts', $slide_deck, 'restrict_manage_posts');
+		$this->loader->add_filter('parse_query', $slide_deck, 'parse_query');
 	}
 	/**
 	 * Register all of the hooks related to the admin area functionality
