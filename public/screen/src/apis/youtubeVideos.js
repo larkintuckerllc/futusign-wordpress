@@ -10,6 +10,7 @@ export const get = (playlistIds) => {
   .then(response => (response.map(o => ({
     id: o.id,
     url: o.acf.url,
+    suggestedQuality: o.acf.suggested_quality,
   }))))
   .catch(() => ([]));
 };

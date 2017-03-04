@@ -151,6 +151,16 @@
       'id' => 'acf_futusign-screens', // TODO: DEPREICATED REMOVE
       'title' => 'futusign Screens',
       'fields' => array (
+        array (
+          'key' => 'acf_futusign_screens_instructions',
+          'label' => __('Instructions', 'futusign'),
+          'name' => '',
+          'type' => 'message',
+          'message' => wp_kses(
+            __( 'Used to create an Uniform Resource Locator (URL) or address for a <i>Screen</i>, additionally add it to one or more <i>Playlists</i> below.', 'futusign' ),
+            array( 'i' => array() )
+          )
+        ),
       ),
       'location' => array (
         array (

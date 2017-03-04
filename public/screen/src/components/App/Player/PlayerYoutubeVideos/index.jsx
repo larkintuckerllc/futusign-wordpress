@@ -39,7 +39,12 @@ class PlayerYoutubeVideos extends Component {
     this.iVideo = 0;
     window.futusignYoutubeStateChange.addEventListener(this.handleYoutubeStateChange);
     window.futusignYoutubeError.addEventListener(this.handleYoutubeError);
-    window.futusignYoutubePlayer.cueVideoById(this.videoIds[this.iVideo], 0, 'large');
+    window.console.log(youtubeVideos[this.iVideo].suggestedQuality);
+    window.futusignYoutubePlayer.cueVideoById(
+      this.videoIds[this.iVideo],
+      0,
+      youtubeVideos[this.iVideo].suggestedQuality
+    );
   }
   shouldComponentUpdate() {
     return false;
@@ -53,7 +58,7 @@ class PlayerYoutubeVideos extends Component {
     this.futusignYoutubeEl.style.visibility = 'hidden';
   }
   handleYoutubeStateChange(event) {
-    const { done } = this.props;
+    const { done, youtubeVideos } = this.props;
     switch (event.detail) {
       case window.YT.PlayerState.CUED:
         window.futusignYoutubePlayer.playVideo();
@@ -73,7 +78,11 @@ class PlayerYoutubeVideos extends Component {
       case window.YT.PlayerState.ENDED:
         if (this.iVideo < this.numberVideos - 1) {
           this.iVideo += 1;
-          window.futusignYoutubePlayer.cueVideoById(this.videoIds[this.iVideo], 0, 'large');
+          window.futusignYoutubePlayer.cueVideoById(
+            this.videoIds[this.iVideo],
+            0,
+            youtubeVideos[this.iVideo].suggestedQuality
+          );
         } else {
           done();
         }

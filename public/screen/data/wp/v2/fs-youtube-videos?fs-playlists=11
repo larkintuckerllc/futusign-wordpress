@@ -20,10 +20,11 @@
     },
     "template": "",
     "fs-playlists": [
-      11 
+      11
     ],
     "acf": {
-      "url": "https://youtu.be/LIjMBLVHDQs"
+      "url": "https://youtu.be/LIjMBLVHDQs",
+      "suggested_quality": "hd720"
     },
     "_links": {
       "self": [
@@ -82,10 +83,11 @@
     },
     "template": "",
     "fs-playlists": [
-      11 
+      11
     ],
     "acf": {
-      "url": "https://youtu.be/LIjMBLVHDQs"
+      "url": "https://youtu.be/LIjMBLVHDQs",
+      "suggested_quality": "default"
     },
     "_links": {
       "self": [
