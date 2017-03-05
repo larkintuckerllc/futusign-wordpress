@@ -1,18 +1,73 @@
 import React, { Component, PropTypes } from 'react';
-import { BLANK, LOADING, SLIDE_DECKS, YOUTUBE_VIDEOS } from '../../../ducks/currentlyPlaying';
+import {
+  BLANK,
+  IMAGES,
+  LOADING,
+  SLIDE_DECKS,
+  YOUTUBE_VIDEOS,
+} from '../../../ducks/currentlyPlaying';
 import PlayerBlank from './PlayerBlank';
 import PlayerLoading from './PlayerLoading';
 import PlayerSlideDecks from './PlayerSlideDecks';
 import PlayerYoutubeVideos from './PlayerYoutubeVideos';
+import PlayerImages from './PlayerImages';
 import styles from './index.scss';
 
+// TODO: RESET ORDER
+const PLAY_ORDER = [
+  BLANK,
+  IMAGES,
+  SLIDE_DECKS,
+  YOUTUBE_VIDEOS,
+];
 class Player extends Component {
+  constructor() {
+    super();
+    this.setNextPlaying = this.setNextPlaying.bind(this);
+  }
   componentWillUnmount() {
     document.getElementById('futusign_cover').style.opacity = 0;
   }
+  setNextPlaying() {
+    const {
+      currentlyPlaying,
+      images,
+      setCurrentlyPlaying,
+      slideDecks,
+      youtubeVideos,
+    } = this.props;
+    const currentlyPlayingIndex = PLAY_ORDER.indexOf(currentlyPlaying);
+    const nextPlayingIndex = currentlyPlayingIndex < PLAY_ORDER.length - 1 ?
+      currentlyPlayingIndex + 1 : 0;
+    const nextPlaying = PLAY_ORDER[nextPlayingIndex];
+    switch (nextPlaying) {
+      case SLIDE_DECKS:
+        if (slideDecks.length === 0) {
+          this.setNextPlaying();
+          return;
+        }
+        break;
+      case IMAGES:
+        if (images.length === 0) {
+          this.setNextPlaying();
+          return;
+        }
+        break;
+      case YOUTUBE_VIDEOS:
+        if (youtubeVideos.length === 0) {
+          this.setNextPlaying();
+          return;
+        }
+        break;
+      default:
+    }
+    setCurrentlyPlaying(nextPlaying);
+  }
+  // TODO: REMOVE SETCURRENTLYPLAYING
   render() {
     const {
       currentlyPlaying,
+      images,
       setBadPlaying,
       setCurrentlyPlaying,
       setOfflinePlaying,
@@ -25,7 +80,7 @@ class Player extends Component {
         player = (
           <PlayerLoading
             done={() => {
-              setCurrentlyPlaying(BLANK);
+              setCurrentlyPlaying(PLAY_ORDER[0]);
             }}
           />
         );
@@ -33,13 +88,7 @@ class Player extends Component {
       case BLANK:
         player = (
           <PlayerBlank
-            done={() => {
-              if (slideDecks.length !== 0) {
-                setCurrentlyPlaying(SLIDE_DECKS);
-              } else {
-                setCurrentlyPlaying(YOUTUBE_VIDEOS);
-              }
-            }}
+            done={this.setNextPlaying}
           />
         );
         break;
@@ -50,13 +99,18 @@ class Player extends Component {
             setBadPlaying={setBadPlaying}
             setOfflinePlaying={setOfflinePlaying}
             slideDecks={slideDecks}
-            done={() => {
-              if (youtubeVideos.length !== 0) {
-                setCurrentlyPlaying(YOUTUBE_VIDEOS);
-              } else {
-                setCurrentlyPlaying(BLANK);
-              }
-            }}
+            done={this.setNextPlaying}
+          />
+        );
+        break;
+      case IMAGES:
+        player = (
+          <PlayerImages
+            setCurrentlyPlaying={setCurrentlyPlaying}
+            setBadPlaying={setBadPlaying}
+            setOfflinePlaying={setOfflinePlaying}
+            images={images}
+            done={this.setNextPlaying}
           />
         );
         break;
@@ -68,9 +122,7 @@ class Player extends Component {
             setBadPlaying={setBadPlaying}
             setOfflinePlaying={setOfflinePlaying}
             youtubeVideos={youtubeVideos}
-            done={() => {
-              setCurrentlyPlaying(BLANK);
-            }}
+            done={this.setNextPlaying}
           />
         );
         break;
@@ -86,6 +138,7 @@ class Player extends Component {
 }
 Player.propTypes = {
   currentlyPlaying: PropTypes.string.isRequired,
+  images: PropTypes.array.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
   setCurrentlyPlaying: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,

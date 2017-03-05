@@ -39,7 +39,6 @@ class PlayerYoutubeVideos extends Component {
     this.iVideo = 0;
     window.futusignYoutubeStateChange.addEventListener(this.handleYoutubeStateChange);
     window.futusignYoutubeError.addEventListener(this.handleYoutubeError);
-    window.console.log(youtubeVideos[this.iVideo].suggestedQuality);
     window.futusignYoutubePlayer.cueVideoById(
       this.videoIds[this.iVideo],
       0,

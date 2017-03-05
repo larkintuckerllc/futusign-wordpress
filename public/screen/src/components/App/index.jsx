@@ -120,6 +120,7 @@ class App extends Component {
       appBlocking,
       badPlaying,
       currentlyPlaying,
+      images,
       offlinePlaying,
       setBadPlaying,
       setCurrentlyPlaying,
@@ -132,11 +133,13 @@ class App extends Component {
     if (badPlaying) return <Bad />;
     if (
       slideDecks.length === 0 &&
-      youtubeVideos.length === 0
+      youtubeVideos.length === 0 &&
+      images.length === 0
     ) return <NoMedia />;
     return (
       <Player
         currentlyPlaying={currentlyPlaying}
+        images={images}
         setBadPlaying={setBadPlaying}
         setCurrentlyPlaying={setCurrentlyPlaying}
         setOfflinePlaying={setOfflinePlaying}
