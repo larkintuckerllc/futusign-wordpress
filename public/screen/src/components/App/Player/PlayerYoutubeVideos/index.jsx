@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { LOADING } from '../../../../ducks/currentlyPlaying';
 
 const URL_REGEX = /^https:\/\/youtu\.be\/(.*)/;
 class PlayerYoutubeVideos extends Component {
@@ -12,10 +11,10 @@ class PlayerYoutubeVideos extends Component {
     this.started = false;
   }
   componentDidMount() {
-    const { setBadPlaying, setCurrentlyPlaying, setOfflinePlaying, youtubeVideos } = this.props;
+    const { resetPlaying, setBadPlaying, setOfflinePlaying, youtubeVideos } = this.props;
     if (window.futusignYoutubePlayer === undefined) {
       setOfflinePlaying(true);
-      setCurrentlyPlaying(LOADING);
+      resetPlaying();
       return;
     }
     this.videoIds = [];
@@ -32,7 +31,7 @@ class PlayerYoutubeVideos extends Component {
     }
     if (!validVideos) {
       setBadPlaying(true);
-      setCurrentlyPlaying(LOADING);
+      resetPlaying();
       return;
     }
     this.started = true;
@@ -90,9 +89,9 @@ class PlayerYoutubeVideos extends Component {
     }
   }
   handleYoutubeError() {
-    const { setOfflinePlaying, setCurrentlyPlaying } = this.props;
+    const { setOfflinePlaying, resetPlaying } = this.props;
     setOfflinePlaying(true);
-    setCurrentlyPlaying(LOADING);
+    resetPlaying();
   }
   render() {
     return (
@@ -102,8 +101,8 @@ class PlayerYoutubeVideos extends Component {
 }
 PlayerYoutubeVideos.propTypes = {
   done: PropTypes.func.isRequired,
+  resetPlaying: PropTypes.func.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
-  setCurrentlyPlaying: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
 };

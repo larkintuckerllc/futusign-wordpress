@@ -24,6 +24,7 @@ class Player extends Component {
   constructor() {
     super();
     this.setNextPlaying = this.setNextPlaying.bind(this);
+    this.resetPlaying = this.resetPlaying.bind(this);
   }
   componentWillUnmount() {
     document.getElementById('futusign_cover').style.opacity = 0;
@@ -63,7 +64,10 @@ class Player extends Component {
     }
     setCurrentlyPlaying(nextPlaying);
   }
-  // TODO: REMOVE SETCURRENTLYPLAYING
+  resetPlaying() {
+    const { setCurrentlyPlaying } = this.props;
+    setCurrentlyPlaying(LOADING);
+  }
   render() {
     const {
       currentlyPlaying,
@@ -95,7 +99,7 @@ class Player extends Component {
       case SLIDE_DECKS:
         player = (
           <PlayerSlideDecks
-            setCurrentlyPlaying={setCurrentlyPlaying}
+            resetPlaying={this.resetPlaying}
             setBadPlaying={setBadPlaying}
             setOfflinePlaying={setOfflinePlaying}
             slideDecks={slideDecks}
@@ -106,7 +110,7 @@ class Player extends Component {
       case IMAGES:
         player = (
           <PlayerImages
-            setCurrentlyPlaying={setCurrentlyPlaying}
+            resetPlaying={this.resetPlaying}
             setBadPlaying={setBadPlaying}
             setOfflinePlaying={setOfflinePlaying}
             images={images}
@@ -117,8 +121,7 @@ class Player extends Component {
       case YOUTUBE_VIDEOS:
         player = (
           <PlayerYoutubeVideos
-            loop={slideDecks.length === 0}
-            setCurrentlyPlaying={setCurrentlyPlaying}
+            resetPlaying={this.resetPlaying}
             setBadPlaying={setBadPlaying}
             setOfflinePlaying={setOfflinePlaying}
             youtubeVideos={youtubeVideos}

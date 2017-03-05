@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import pdfjsLib from 'pdfjs-dist';
-import { LOADING } from '../../../../ducks/currentlyPlaying';
 import { convertDataURIToBinary } from '../../../../util/misc';
 import { getFile } from '../../../../util/rest';
 import styles from './index.scss';
@@ -50,7 +49,7 @@ class PlayerSlideDecks extends Component {
   }
   // eslint-disable-next-line
   renderPage() {
-    const { done, setBadPlaying, setCurrentlyPlaying } = this.props;
+    const { done, resetPlaying, setBadPlaying } = this.props;
     this.renderCanvasEl = this.odd ? this.canvasOddEl : this.canvasEvenEl;
     const renderedCanvasEl = !this.odd ? this.canvasOddEl : this.canvasEvenEl;
     this.renderCanvasEl.style.display = 'none';
@@ -63,7 +62,7 @@ class PlayerSlideDecks extends Component {
       this.handlePage,
       () => {
         setBadPlaying(true);
-        setCurrentlyPlaying(LOADING);
+        resetPlaying();
       });
     this.first = false;
     this.odd = !this.odd;
@@ -103,7 +102,7 @@ class PlayerSlideDecks extends Component {
     this.renderPage();
   }
   handleFile(file) {
-    const { setBadPlaying, setCurrentlyPlaying } = this.props;
+    const { resetPlaying, setBadPlaying } = this.props;
     const loadingTask = pdfjsLib.getDocument({
       data: convertDataURIToBinary(file),
       worker: window.futusignPDFWorker,
@@ -112,18 +111,18 @@ class PlayerSlideDecks extends Component {
       this.handleDocument,
       () => {
         setBadPlaying(true);
-        setCurrentlyPlaying(LOADING);
+        resetPlaying();
       }
     );
   }
   renderPlayable() {
-    const { setOfflinePlaying, setCurrentlyPlaying } = this.props;
+    const { resetPlaying, setOfflinePlaying } = this.props;
     getFile(this.slideDecks[this.iList].file)
     .then(
       this.handleFile,
       () => {
         setOfflinePlaying(true);
-        setCurrentlyPlaying(LOADING);
+        resetPlaying();
       }
     );
   }
@@ -144,8 +143,8 @@ class PlayerSlideDecks extends Component {
 }
 PlayerSlideDecks.propTypes = {
   done: PropTypes.func.isRequired,
+  resetPlaying: PropTypes.func.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
-  setCurrentlyPlaying: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
 };

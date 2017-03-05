@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
+// TODO: WORK IN DURATION
 class PlayerImages extends Component {
   componentDidMount() {
     const { done } = this.props;
