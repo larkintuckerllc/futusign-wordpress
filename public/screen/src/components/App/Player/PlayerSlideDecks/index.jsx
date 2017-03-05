@@ -4,6 +4,12 @@ import { convertDataURIToBinary } from '../../../../util/misc';
 import { getFile } from '../../../../util/rest';
 import styles from './index.scss';
 
+// GET RID OF SLIDECKS
+// GET RID OF START
+// GET RID OF CLASS
+// RENAME RENDERPLAYABLE
+// GET RID OF ODD
+// GET RID OF FIRST
 class PlayerSlideDecks extends Component {
   constructor() {
     super();
