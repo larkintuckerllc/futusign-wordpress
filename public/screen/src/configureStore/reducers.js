@@ -6,6 +6,7 @@ import screen from '../ducks/screen';
 import slideDecks from '../ducks/slideDecks';
 import youtubeVideos from '../ducks/youtubeVideos';
 import currentlyPlaying from '../ducks/currentlyPlaying';
+import images from '../ducks/images';
 
 export default combineReducers({
   appBlocking,
@@ -15,4 +16,5 @@ export default combineReducers({
   slideDecks,
   youtubeVideos,
   currentlyPlaying,
+  images,
 });

@@ -6,6 +6,7 @@ import * as fromAppBlocking from '../../ducks/appBlocking';
 import * as fromScreen from '../../ducks/screen';
 import * as fromSlideDecks from '../../ducks/slideDecks';
 import * as fromYoutubeVideos from '../../ducks/youtubeVideos';
+import * as fromImages from '../../ducks/images';
 import * as fromOfflinePlaying from '../../ducks/offlinePlaying';
 import * as fromBadPlaying from '../../ducks/badPlaying';
 import * as fromCurrentlyPlaying from '../../ducks/currentlyPlaying';
@@ -26,9 +27,11 @@ class App extends Component {
   }
   fetch() {
     const {
+      fetchImages,
       fetchScreen,
       fetchSlideDecks,
       fetchYoutubeVideos,
+      images,
       offlinePlaying,
       resetSlideDecks,
       resetYoutubeVideos,
@@ -58,14 +61,19 @@ class App extends Component {
           response: {
             result: [],
           },
+        }, {
+          response: {
+            result: [],
+          },
         }]);
       }
       return Promise.all([
         fetchSlideDecks(screen.subscribedPlaylistIds),
         fetchYoutubeVideos(screen.subscribedPlaylistIds),
+        fetchImages(screen.subscribedPlaylistIds),
       ]);
     })
-    .then(([nextSlideDecks, nextYoutubeVideos]) => {
+    .then(([nextSlideDecks, nextYoutubeVideos, nextImages]) => {
       const lastSlideDecksHash = slideDecks.map(o => o.file).join();
       const nextSlideDecksHash = nextSlideDecks
         .response
@@ -78,9 +86,16 @@ class App extends Component {
         .result
         .map(o => nextYoutubeVideos.response.entities.youtubeVideos[o].url)
         .join();
+      const lastImagesHash = images.map(o => o.file).join();
+      const nextImagesHash = nextImages
+        .response
+        .result
+        .map(o => nextImages.response.entities.images[o].url)
+        .join();
       if (
         lastSlideDecksHash !== nextSlideDecksHash ||
-        lastYoutubeVideosHash !== nextYoutubeVideosHash
+        lastYoutubeVideosHash !== nextYoutubeVideosHash ||
+        lastImagesHash !== nextImagesHash
       ) {
         setCurrentlyPlaying(fromCurrentlyPlaying.LOADING);
       }
@@ -135,6 +150,8 @@ App.propTypes = {
   appBlocking: PropTypes.bool.isRequired,
   badPlaying: PropTypes.bool.isRequired,
   currentlyPlaying: PropTypes.string.isRequired,
+  images: PropTypes.array.isRequired,
+  fetchImages: PropTypes.func.isRequired,
   fetchScreen: PropTypes.func.isRequired,
   fetchSlideDecks: PropTypes.func.isRequired,
   fetchYoutubeVideos: PropTypes.func.isRequired,
@@ -153,11 +170,13 @@ export default connect(
     appBlocking: fromAppBlocking.getAppBlocking(state),
     badPlaying: fromBadPlaying.getBadPlaying(state),
     currentlyPlaying: fromCurrentlyPlaying.getCurrentlyPlaying(state),
+    images: fromImages.getImages(state),
     offlinePlaying: fromOfflinePlaying.getOfflinePlaying(state),
     slideDecks: fromSlideDecks.getSlideDecks(state),
     youtubeVideos: fromYoutubeVideos.getYoutubeVideos(state),
   }),
   {
+    fetchImages: fromImages.fetchImages,
     fetchScreen: fromScreen.fetchScreen,
     fetchSlideDecks: fromSlideDecks.fetchSlideDecks,
     fetchYoutubeVideos: fromYoutubeVideos.fetchYoutubeVideos,

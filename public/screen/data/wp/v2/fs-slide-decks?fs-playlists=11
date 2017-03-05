@@ -23,7 +23,7 @@
       11
     ],
     "acf": {
-      "file": "https://s3-us-west-2.amazonaws.com/caching-presentation/playable.pdf",
+      "file": "http://localhost:8080/data/sample.pdf",
       "slide_duration": "4"
     },
     "_links": {
@@ -87,7 +87,7 @@
       11
     ],
     "acf": {
-      "file": "https://s3-us-west-2.amazonaws.com/caching-presentation/playable.pdf",
+      "file": "http://localhost:8080/data/sample.pdf",
       "slide_duration": "2"
     },
     "_links": {
