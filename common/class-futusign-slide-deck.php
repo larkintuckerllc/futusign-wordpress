@@ -143,12 +143,12 @@ class Futusign_Slide_Deck {
 	// TODO: DEPRECATED REPLACE WITH ACF_ADD_LOCAL_FIELD_GROUP
 	public function register_field_group() {
 		register_field_group(array (
-		  'key' => 'acf_futusign-slide-decks',
-			'id' => 'acf_futusign-slide-decks', // TODO: DEPRECATED REMOVE
+		  'key' => 'acf_futusign_slide_decks',
+			'id' => 'acf_futusign_slide_decks', // TODO: DEPRECATED REMOVE
 			'title' => 'futusign Slide Decks',
 			'fields' => array (
 				array (
-					'key' => 'field_5898796f0caa2', // TODO: BREAKING CHANGE TO RENAME
+					'key' => 'field_acf_futusign_slide_decks_instructions',
 					'label' => __('Instructions', 'futusign'),
 					'name' => '',
 					'type' => 'message',
@@ -158,7 +158,7 @@ class Futusign_Slide_Deck {
 					)
 				),
 				array (
-					'key' => 'field_589877e070b27', // TODO: BREAKING CHANGE TO RENAME
+					'key' => 'field_acf_futusign_slide_decks_file',
 					'label' => __('File', 'futusign'),
 					'name' => 'file',
 					'type' => 'file',
@@ -168,7 +168,7 @@ class Futusign_Slide_Deck {
 					'library' => 'all',
 				),
 				array (
-					'key' => 'field_589878aaca56d', // TODO: BREAKING CHANGE TO RENAME
+					'key' => 'field_acf_futusign_slide_decks_slide_duration',
 					'label' => __('Slide Duration', 'futusign'),
 					'name' => 'slide_duration',
 					'type' => 'number',

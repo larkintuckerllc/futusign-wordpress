@@ -148,7 +148,7 @@
   public function register_field_group() {
     register_field_group(array (
       'key' => 'acf_futusign_screens',
-      'id' => 'acf_futusign-screens', // TODO: DEPREICATED REMOVE
+      'id' => 'acf_futusign_screens', // TODO: DEPREICATED REMOVE
       'title' => 'futusign Screens',
       'fields' => array (
         array (
