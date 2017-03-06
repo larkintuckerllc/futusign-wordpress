@@ -4,11 +4,20 @@
   top: 0px;
   width: 100%;
   height: 100%;
-  background-color: red;
 }
-#rootOdd {
-  background-color: transparent;
+.rootDiv {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
-#rootEven {
-  background-color: transparent;
+#rootDivOdd {
+  display: block;
+}
+#rootDivEven {
+  display: block;
 }

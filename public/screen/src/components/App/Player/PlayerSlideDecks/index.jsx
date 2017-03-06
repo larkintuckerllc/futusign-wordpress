@@ -8,7 +8,7 @@ import styles from './index.scss';
 // GET RID OF START
 // GET RID OF CLASS
 // RENAME RENDERPLAYABLE
-// GET RID OF ODD
+// GET RID OF ODD MAY NOT
 // GET RID OF FIRST
 class PlayerSlideDecks extends Component {
   constructor() {
@@ -84,6 +84,7 @@ class PlayerSlideDecks extends Component {
         this.renderTimeout = window.setTimeout(this.renderPlayable, this.slideDuration * 1000);
         this.slideDuration = this.slideDecks[lastIList].slideDuration;
       // END OF LAST DECK
+      // TODO: FIX DUPLICATION
       } else {
         this.renderTimeout = window.setTimeout(() => {
           const lastCanvasEl = this.odd ? this.canvasOddEl : this.canvasEvenEl;
