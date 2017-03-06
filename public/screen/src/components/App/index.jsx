@@ -73,29 +73,27 @@ class App extends Component {
         fetchImages(screen.subscribedPlaylistIds),
       ]);
     })
-    .then(([nextSlideDecks, nextYoutubeVideos, nextImages]) => {
-      const lastSlideDecksHash = slideDecks.map(o => o.file).join();
-      const nextSlideDecksHash = nextSlideDecks
-        .response
-        .result
-        .map(o => nextSlideDecks.response.entities.slideDecks[o].file)
-        .join();
-      const lastYoutubeVideosHash = youtubeVideos.map(o => o.url).join();
-      const nextYoutubeVideosHash = nextYoutubeVideos
-        .response
-        .result
-        .map(o => nextYoutubeVideos.response.entities.youtubeVideos[o].url)
-        .join();
-      const lastImagesHash = images.map(o => o.file).join();
-      const nextImagesHash = nextImages
-        .response
-        .result
-        .map(o => nextImages.response.entities.images[o].url)
-        .join();
+    .then(([
+      slideDecksResponse,
+      youtubeVideosResponse,
+      imagesResponse,
+    ]) => {
+      let keys = slideDecksResponse.response.result;
+      let lookup = slideDecksResponse.response.entities.slideDecks;
+      let list = keys.map(o => lookup[o]);
+      const nextSlideDecks = list;
+      keys = youtubeVideosResponse.response.result;
+      lookup = youtubeVideosResponse.response.entities.youtubeVideos;
+      list = keys.map(o => lookup[o]);
+      const nextYoutubeVideos = list;
+      keys = imagesResponse.response.result;
+      lookup = imagesResponse.response.entities.images;
+      list = keys.map(o => lookup[o]);
+      const nextImages = list;
       if (
-        lastSlideDecksHash !== nextSlideDecksHash ||
-        lastYoutubeVideosHash !== nextYoutubeVideosHash ||
-        lastImagesHash !== nextImagesHash
+        JSON.stringify(slideDecks) !== JSON.stringify(nextSlideDecks) ||
+        JSON.stringify(youtubeVideos) !== JSON.stringify(nextYoutubeVideos) ||
+        JSON.stringify(images) !== JSON.stringify(nextImages)
       ) {
         setCurrentlyPlaying(fromCurrentlyPlaying.LOADING);
       }
