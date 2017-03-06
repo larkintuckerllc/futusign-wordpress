@@ -13,11 +13,10 @@ import PlayerYoutubeVideos from './PlayerYoutubeVideos';
 import PlayerImages from './PlayerImages';
 import styles from './index.scss';
 
-// TODO: RESET ORDER
 const PLAY_ORDER = [
   BLANK,
-  IMAGES,
   SLIDE_DECKS,
+  IMAGES,
   YOUTUBE_VIDEOS,
 ];
 class Player extends Component {
@@ -25,43 +24,47 @@ class Player extends Component {
     super();
     this.setNextPlaying = this.setNextPlaying.bind(this);
     this.resetPlaying = this.resetPlaying.bind(this);
+    this.checkPlaying = PLAY_ORDER[0];
   }
   componentWillUnmount() {
     document.getElementById('futusign_cover').style.opacity = 0;
   }
   setNextPlaying() {
     const {
-      currentlyPlaying,
       images,
       setCurrentlyPlaying,
       slideDecks,
       youtubeVideos,
     } = this.props;
-    const currentlyPlayingIndex = PLAY_ORDER.indexOf(currentlyPlaying);
-    const nextPlayingIndex = currentlyPlayingIndex < PLAY_ORDER.length - 1 ?
-      currentlyPlayingIndex + 1 : 0;
+    const checkPlayingIndex = PLAY_ORDER.indexOf(this.checkPlaying);
+    const nextPlayingIndex = checkPlayingIndex < PLAY_ORDER.length - 1 ?
+      checkPlayingIndex + 1 : 0;
     const nextPlaying = PLAY_ORDER[nextPlayingIndex];
     switch (nextPlaying) {
       case SLIDE_DECKS:
         if (slideDecks.length === 0) {
+          this.checkPlaying = nextPlaying;
           this.setNextPlaying();
           return;
         }
         break;
       case IMAGES:
         if (images.length === 0) {
+          this.checkPlaying = nextPlaying;
           this.setNextPlaying();
           return;
         }
         break;
       case YOUTUBE_VIDEOS:
         if (youtubeVideos.length === 0) {
+          this.checkPlaying = nextPlaying;
           this.setNextPlaying();
           return;
         }
         break;
       default:
     }
+    this.checkPlaying = nextPlaying;
     setCurrentlyPlaying(nextPlaying);
   }
   resetPlaying() {
