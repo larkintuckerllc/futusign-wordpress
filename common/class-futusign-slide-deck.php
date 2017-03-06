@@ -148,7 +148,7 @@ class Futusign_Slide_Deck {
 			'title' => 'futusign Slide Decks',
 			'fields' => array (
 				array (
-					'key' => 'field_5898796f0caa2',
+					'key' => 'field_5898796f0caa2', // TODO: BREAKING CHANGE TO RENAME
 					'label' => __('Instructions', 'futusign'),
 					'name' => '',
 					'type' => 'message',
@@ -158,7 +158,7 @@ class Futusign_Slide_Deck {
 					)
 				),
 				array (
-					'key' => 'field_589877e070b27',
+					'key' => 'field_589877e070b27', // TODO: BREAKING CHANGE TO RENAME
 					'label' => __('File', 'futusign'),
 					'name' => 'file',
 					'type' => 'file',
@@ -168,7 +168,7 @@ class Futusign_Slide_Deck {
 					'library' => 'all',
 				),
 				array (
-					'key' => 'field_589878aaca56d',
+					'key' => 'field_589878aaca56d', // TODO: BREAKING CHANGE TO RENAME
 					'label' => __('Slide Duration', 'futusign'),
 					'name' => 'slide_duration',
 					'type' => 'number',

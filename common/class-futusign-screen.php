@@ -152,7 +152,7 @@
       'title' => 'futusign Screens',
       'fields' => array (
         array (
-          'key' => 'acf_futusign_screens_instructions',
+          'key' => 'field_acf_futusign_screens_instructions',
           'label' => __('Instructions', 'futusign'),
           'name' => '',
           'type' => 'message',

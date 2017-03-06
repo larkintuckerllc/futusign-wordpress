@@ -31,7 +31,7 @@ class Futusign_Public {
 	 * @return   string      path to template
 	 */
 	public function single_template( $single ) {
-		global $wp_query, $post;
+		global $post;
 		if ($post->post_type == 'futusign_screen'){
 			return plugin_dir_path( __FILE__ ) . 'screen/dist/index.php';
 		}
