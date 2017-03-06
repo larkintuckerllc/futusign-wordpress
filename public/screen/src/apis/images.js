@@ -10,6 +10,7 @@ export const get = (playlistIds) => {
   .then(response => (response.map(o => ({
     id: o.id,
     file: o.acf.file,
+    imageDuration: Number(o.acf.image_duration),
   }))))
   .catch(() => ([]));
 };

@@ -2,8 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { getFile } from '../../../../util/rest';
 import styles from './index.scss';
 
-// TODO: WORK IN DURATION
-// TODO: PROBLEM WHEN UPDATING
 class PlayerImages extends Component {
   constructor() {
     super();
@@ -25,8 +23,8 @@ class PlayerImages extends Component {
     window.clearTimeout(this.coverTimeout);
   }
   showRendered() {
-    const renderEl = this.iList % 2 ? this.rootEvenEl : this.rootOddEl;
-    const renderedEl = this.iList % 2 ? this.rootOddEl : this.rootEvenEl;
+    const renderEl = this.iList % 2 ? this.rootOddEl : this.rootEvenEl;
+    const renderedEl = this.iList % 2 ? this.rootEvenEl : this.rootOddEl;
     renderEl.style.display = 'none';
     renderedEl.style.display = 'block';
     this.futusignCoverEl.style.opacity = 0;
@@ -36,17 +34,17 @@ class PlayerImages extends Component {
   }
   handleFile(file) {
     const { done, images } = this.props;
-    const renderEl = this.iList % 2 ? this.rootEvenEl : this.rootOddEl;
+    const renderEl = this.iList % 2 ? this.rootOddEl : this.rootEvenEl;
     this.showRendered();
     renderEl.style.backgroundImage = `url(${file})`;
     if (this.iList < images.length - 1) {
-      this.iList += 1;
       this.renderTimeout = window.setTimeout(this.renderImage, this.imageDuration * 1000);
-      this.imageDuration = 5; // TODO: FIX
+      this.imageDuration = images[this.iList].imageDuration;
+      this.iList += 1;
     } else {
       this.renderTimeout = window.setTimeout(() => {
+        this.imageDuration = images[this.iList].imageDuration;
         this.iList += 1;
-        this.imageDuration = 5;
         this.showRendered();
         this.renderTimeout = window.setTimeout(() => {
           done();
