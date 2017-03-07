@@ -56,14 +56,23 @@ class App extends Component {
         return Promise.resolve([{
           response: {
             result: [],
+            entities: {
+              slideDecks: {},
+            },
           },
         }, {
           response: {
             result: [],
+            entities: {
+              youtubeVideos: {},
+            },
           },
         }, {
           response: {
             result: [],
+            entities: {
+              images: {},
+            },
           },
         }]);
       }

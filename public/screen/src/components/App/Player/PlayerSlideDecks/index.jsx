@@ -4,32 +4,26 @@ import { convertDataURIToBinary } from '../../../../util/misc';
 import { getFile } from '../../../../util/rest';
 import styles from './index.scss';
 
-// GET RID OF SLIDECKS
-// GET RID OF START
-// GET RID OF CLASS
-// RENAME RENDERPLAYABLE
-// GET RID OF ODD MAY NOT
-// GET RID OF FIRST
 class PlayerSlideDecks extends Component {
   constructor() {
     super();
     this.handleFile = this.handleFile.bind(this);
     this.handleDocument = this.handleDocument.bind(this);
-    this.renderPlayable = this.renderPlayable.bind(this);
+    this.renderSlideDeck = this.renderSlideDeck.bind(this);
     this.renderPage = this.renderPage.bind(this);
     this.handlePage = this.handlePage.bind(this);
     this.futusignCoverEl = document.getElementById('futusign_cover');
   }
   componentDidMount() {
-    const { slideDecks } = this.props;
     const rootEl = document.getElementById(styles.root);
     this.rootWidth = rootEl.offsetWidth;
     this.rootHeight = rootEl.offsetHeight;
     this.canvasOddEl = document.getElementById(styles.rootCanvasOdd);
     this.canvasEvenEl = document.getElementById(styles.rootCanvasEven);
-    this.slideDecks = slideDecks;
     this.slideDuration = 1;
-    this.start();
+    this.odd = true;
+    this.iList = 0;
+    this.renderSlideDeck();
   }
   shouldComponentUpdate() {
     return false;
@@ -53,9 +47,7 @@ class PlayerSlideDecks extends Component {
       viewport,
     });
   }
-  // eslint-disable-next-line
-  renderPage() {
-    const { done, resetPlaying, setBadPlaying } = this.props;
+  showRendered() {
     this.renderCanvasEl = this.odd ? this.canvasOddEl : this.canvasEvenEl;
     const renderedCanvasEl = !this.odd ? this.canvasOddEl : this.canvasEvenEl;
     this.renderCanvasEl.style.display = 'none';
@@ -64,40 +56,36 @@ class PlayerSlideDecks extends Component {
     this.coverTimeout = window.setTimeout(() => {
       this.futusignCoverEl.style.opacity = 1;
     }, (this.slideDuration - 1) * 1000);
+  }
+  // eslint-disable-next-line
+  renderPage() {
+    const { done, resetPlaying, setBadPlaying, slideDecks } = this.props;
+    this.showRendered();
     this.pdfDocument.getPage(this.iPage).then(
       this.handlePage,
       () => {
         setBadPlaying(true);
         resetPlaying();
       });
-    this.first = false;
     this.odd = !this.odd;
     this.iPage += 1;
     if (this.iPage <= this.numPages) {
       this.renderTimeout = window.setTimeout(this.renderPage, this.slideDuration * 1000);
-      this.slideDuration = this.slideDecks[this.iList].slideDuration;
+      this.slideDuration = slideDecks[this.iList].slideDuration;
     } else {
       const lastIList = this.iList;
       // MOVE TO NEXT DECK
-      if (this.iList < this.slideDecks.length - 1) {
+      if (this.iList < slideDecks.length - 1) {
         this.iList += 1;
-        this.renderTimeout = window.setTimeout(this.renderPlayable, this.slideDuration * 1000);
-        this.slideDuration = this.slideDecks[lastIList].slideDuration;
+        this.renderTimeout = window.setTimeout(this.renderSlideDeck, this.slideDuration * 1000);
+        this.slideDuration = slideDecks[lastIList].slideDuration;
       // END OF LAST DECK
-      // TODO: FIX DUPLICATION
       } else {
         this.renderTimeout = window.setTimeout(() => {
-          const lastCanvasEl = this.odd ? this.canvasOddEl : this.canvasEvenEl;
-          const nextCanvasEl = !this.odd ? this.canvasOddEl : this.canvasEvenEl;
-          lastCanvasEl.style.display = 'none';
-          nextCanvasEl.style.display = 'block';
-          this.futusignCoverEl.style.opacity = 0;
+          this.showRendered();
           this.renderTimeout = window.setTimeout(() => {
-            this.futusignCoverEl.style.opacity = 1;
-            this.renderTimeout = window.setTimeout(() => {
-              done();
-            }, 1000);
-          }, (this.slideDuration - 1) * 1000);
+            done();
+          }, this.slideDuration * 1000);
         }, this.slideDuration * 1000);
       }
     }
@@ -122,9 +110,9 @@ class PlayerSlideDecks extends Component {
       }
     );
   }
-  renderPlayable() {
-    const { resetPlaying, setOfflinePlaying } = this.props;
-    getFile(this.slideDecks[this.iList].file)
+  renderSlideDeck() {
+    const { resetPlaying, setOfflinePlaying, slideDecks } = this.props;
+    getFile(slideDecks[this.iList].file)
     .then(
       this.handleFile,
       () => {
@@ -133,17 +121,11 @@ class PlayerSlideDecks extends Component {
       }
     );
   }
-  start() {
-    this.first = true;
-    this.odd = true;
-    this.iList = 0;
-    this.renderPlayable();
-  }
   render() {
     return (
       <div id={styles.root}>
-        <canvas id={styles.rootCanvasOdd} className={styles.rootCanvas} />
-        <canvas id={styles.rootCanvasEven} className={styles.rootCanvas} />
+        <canvas id={styles.rootCanvasOdd} />
+        <canvas id={styles.rootCanvasEven} />
       </div>
     );
   }
