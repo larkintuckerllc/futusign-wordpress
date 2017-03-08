@@ -52,7 +52,7 @@ class Futusign_Slide_Deck {
 			'has_archive' => false,
 			'show_in_rest' => true,
 			'rest_base' => 'fs-slide-decks',
-			'menu_icon' => 'dashicons-images-alt'
+			'menu_icon' => plugins_url( 'img/slide_deck.png', __FILE__ )
 			)
 		);
 	}
@@ -115,6 +115,7 @@ class Futusign_Slide_Deck {
 			'selected' => $selected,
 			'show_count' => false,
 			'hide_empty' => false,
+			'hide_if_empty' => true,
 		) );
 	}
 	/**

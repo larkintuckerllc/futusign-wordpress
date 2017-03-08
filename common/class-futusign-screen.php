@@ -51,7 +51,7 @@
 				'has_archive' => false,
 				'show_in_rest' => true,
 				'rest_base' => 'fs-screens',
-				'menu_icon' => 'dashicons-desktop',
+        'menu_icon' => plugins_url( 'img/screen.png', __FILE__ )
 			)
 		);
 	}
@@ -114,6 +114,7 @@
 			'selected' => $selected,
 			'show_count' => false,
 			'hide_empty' => false,
+      'hide_if_empty' => true,
 		) );
 	}
 	/**
