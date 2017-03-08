@@ -82,6 +82,7 @@ class PlayerSlideDecks extends Component {
       // END OF LAST DECK
       } else {
         this.renderTimeout = window.setTimeout(() => {
+          this.slideDuration = slideDecks[this.iList].slideDuration;
           this.showRendered();
           this.renderTimeout = window.setTimeout(() => {
             done();
