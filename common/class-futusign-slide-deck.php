@@ -149,7 +149,7 @@ class Futusign_Slide_Deck {
 			'title' => 'futusign Slide Decks',
 			'fields' => array (
 				array (
-					'key' => 'field_acf_futusign_slide_decks_instructions',
+					'key' => 'field_5898796f0caa2', // STUCK WITH ORIGINAL FIELD KEY
 					'label' => __('Instructions', 'futusign'),
 					'name' => '',
 					'type' => 'message',
@@ -159,7 +159,7 @@ class Futusign_Slide_Deck {
 					)
 				),
 				array (
-					'key' => 'field_acf_futusign_slide_decks_file',
+					'key' => 'field_589877e070b27', // STUCK WITH ORIGINAL FIELD KEY
 					'label' => __('File', 'futusign'),
 					'name' => 'file',
 					'type' => 'file',
@@ -169,7 +169,7 @@ class Futusign_Slide_Deck {
 					'library' => 'all',
 				),
 				array (
-					'key' => 'field_acf_futusign_slide_decks_slide_duration',
+					'key' => 'field_589878aaca56d', // STUCK WITH ORIGIN FIELD KEY
 					'label' => __('Slide Duration', 'futusign'),
 					'name' => 'slide_duration',
 					'type' => 'number',

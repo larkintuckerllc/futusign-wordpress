@@ -85,7 +85,7 @@
       window.screenId = <?php echo get_the_ID(); ?>;
     </script>
   <?php endwhile; ?>
-  <script src="<?php echo plugins_url( 'vendor.bundle.js', __FILE__ ); ?>"></script>
-  <script src="<?php echo plugins_url( 'main.bundle.js', __FILE__ ); ?>"></script>
+  <script src="<?php echo plugins_url( 'vendor.bundle.js?version=2017030801', __FILE__ ); ?>"></script>
+  <script src="<?php echo plugins_url( 'main.bundle.js?version=2017030801', __FILE__ ); ?>"></script>
 </body>
 </html>
