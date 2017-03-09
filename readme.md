@@ -2,7 +2,7 @@ futusign
 ====
 Manage and display digital signage content
 
-https://wordpress.org/plugins/futusign/
+<https://wordpress.org/plugins/futusign/>
 
 - [Installation](#installation)
 - [Usage](#usage)
@@ -12,8 +12,11 @@ https://wordpress.org/plugins/futusign/
 
 Installation
 ====
+
+Install the plugin from the *WordPress Plugin Directory* or:
+
 1. Copy the `futusign` folder into your `wp-content/plugins` folder
-2. Activate the `futusign` plugin via the plugin admin page
+2. Activate the *futusign* plugin via the *Plugins* admin page
 
 Usage
 ====
@@ -22,13 +25,13 @@ show and save it as a portable document format (PDF) file.
 
 From the WordPress administrative screens.
 
-1. Add a new slide deck from the main navigation menu item `Slide Decks`;
+1. Add a new slide deck from the main navigation menu item *Slide Decks*;
 uploading the PDF file.
 2. While adding the slide deck, also add it to a new playlist using
-the `Playlist` box.
-3. Add a new screen from the main navigation menu item `Screens`.
+the *Playlist* box.
+3. Add a new screen from the main navigation menu item *Screens*.
 4. While adding the screen, subscribe it to the playlist that was
-added above using the `Playlist` box.
+added above using the *Playlist* box.
 5. View the screen; it should be playing the slide deck.
 
 To create a digital sign, connect a television to a computer with a modern web
@@ -51,12 +54,21 @@ display a *no slide decks* icon.
 * If the screen is subscribed to one or more playlists that are all empty,
 the web application will display a *no slide decks* icon.
 
+When the plugin is updated, the web application will need to be reloaded;
+one solution is to regularly reboot the supporting computer.
+
 **Tips**
 
+* Slide decks play in the order shown (alphabetical) on the *Slide Decks*
+page.
 * Slide decks can be scheduled to be published in the future using the
-feature in the `Publish` box.
+schedule feature in the *Publish* box.
 * Slide decks can be scheduled to expire in the future using the third-party
-plugin `Post Expirator`.
+plugin *Post Expirator*.
+* A variety of devices can be used for digital signage
+as described in the article [Digital Signage is Just Another Screen](https://medium.com/@johntucker_48673/digital-signage-is-just-another-screen-e138c2ec3ae9#.244a74dta).
+* Additional features can be added via private plugins available at
+<https://www.futusign.com>.
 
 Contributing
 ====
