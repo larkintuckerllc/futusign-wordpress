@@ -6,6 +6,8 @@ const path = require('path');
 // eslint-disable-next-line
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // eslint-disable-next-line
+const AppCachePlugin = require('appcache-webpack-plugin');
+// eslint-disable-next-line
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 // eslint-disable-next-line
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -92,6 +94,12 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
+    }),
+    new AppCachePlugin({
+      exclude: [
+        /.*\.map$/,
+      ],
+      output: 'index.appcache',
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',

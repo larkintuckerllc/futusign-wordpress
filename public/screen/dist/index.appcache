@@ -1,0 +1,20 @@
+CACHE MANIFEST
+# 7c0e482e98a0b489462f
+
+0.0.bundle.js
+vendor.bundle.js
+main.bundle.js
+index.php
+data/bryce.pdf
+data/sample.pdf
+data/wp/v2/fs-images?fs-playlists=11
+data/wp/v2/fs-screens/80
+data/wp/v2/fs-slide-decks?fs-playlists=11
+data/wp/v2/fs-youtube-videos?fs-playlists=11
+data/cat.jpg
+data/sample.jpg
+pdf.worker.js
+index.html
+
+NETWORK:
+*

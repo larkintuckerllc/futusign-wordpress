@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { POLLING_INTERVAL } from '../../strings';
+import { CACHE_INTERVAL, POLLING_INTERVAL } from '../../strings';
 import { fetchBase } from '../../apis/base';
 import * as fromAppBlocking from '../../ducks/appBlocking';
 import * as fromScreen from '../../ducks/screen';
@@ -23,8 +23,17 @@ class App extends Component {
     this.fetch = this.fetch.bind(this);
   }
   componentDidMount() {
+    const appCache = window.applicationCache;
+    const check = () => {
+      appCache.update();
+    };
+    const handleUpdateReady = () => {
+      window.location.reload();
+    };
     this.fetch();
     window.setInterval(this.fetch, POLLING_INTERVAL * 1000);
+    window.setInterval(check, CACHE_INTERVAL * 1000);
+    appCache.addEventListener('updateready', handleUpdateReady);
   }
   fetch() {
     const {
