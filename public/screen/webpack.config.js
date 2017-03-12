@@ -8,6 +8,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // eslint-disable-next-line
 const AppCachePlugin = require('appcache-webpack-plugin');
 // eslint-disable-next-line
+const WebpackMd5Hash = require('webpack-md5-hash');
+// eslint-disable-next-line
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 // eslint-disable-next-line
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -36,11 +38,10 @@ module.exports = {
       'reselect',
     ],
     main: path.join(__dirname, 'src', 'index.jsx'),
-    // 'pdf.worker': 'pdfjs-dist/build/pdf.worker.entry',
   },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: '[name].bundle.js',
+    filename: '[name].[chunkhash].bundle.js',
   },
   module: {
     preLoaders: [{
@@ -84,6 +85,7 @@ module.exports = {
     ],
   plugins: [
     new CleanWebpackPlugin(['dist']),
+    new WebpackMd5Hash(),
     new CopyWebpackPlugin([
       { from: 'src/index.php', to: 'index.php' },
       { from: 'data', to: 'data' },
