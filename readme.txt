@@ -3,22 +3,31 @@ Contributors: sckmkny
 Tags: digital, signage
 Requires at least: 4.3
 Tested up to: 4.7
-Stable tag: 0.4.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
 Manage and display digital signage content
 
 == Description ==
+
 Manage and display digital signage content
 
 **See details on GitHub:** https://github.com/larkintuckerllc/futusign-wordpress
 
 == Installation ==
-1. Copy the `futusign` folder into your `wp-content/plugins` folder
-2. Activate the `futusign` plugin via the plugin admin page
+
+Install and activate the *futusign* plugin via the WordPress *Plugins* admin
+screen.
 
 == Changelog ==
+
+= 1.0.0 =
+
+Add support for offline operation; play first Slide Deck
+in subscribed Playlist.
+
+Add support for automatic updates on plugin update.
 
 = 0.4.0 =
 
@@ -28,7 +37,7 @@ Cosmetic instructions on screen.
 
 Cosmetic custom post type icons.
 
-Player upgrade to support additional media; image and youtube video
+Player upgrade to support additional media; image and YouTube video
 provided by future WordPress plugins.
 
 = 0.3.5 =

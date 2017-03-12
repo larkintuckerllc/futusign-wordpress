@@ -2,8 +2,6 @@ futusign
 ====
 Manage and display digital signage content
 
-<https://wordpress.org/plugins/futusign/>
-
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
@@ -13,10 +11,11 @@ Manage and display digital signage content
 Installation
 ====
 
-Install the plugin from the *WordPress Plugin Directory* or:
+Install and activate the *futusign* plugin via the WordPress *Plugins* admin
+screen or.
 
-1. Copy the `futusign` folder into your `wp-content/plugins` folder
-2. Activate the *futusign* plugin via the *Plugins* admin page
+Download the the *zip* file and upload and activate via the WordPress
+*Plugins* admin screen.
 
 Usage
 ====
@@ -25,49 +24,45 @@ show and save it as a portable document format (PDF) file.
 
 From the WordPress administrative screens.
 
-1. Add a new slide deck from the main navigation menu item *Slide Decks*;
-uploading the PDF file.
-2. While adding the slide deck, also add it to a new playlist using
-the *Playlist* box.
-3. Add a new screen from the main navigation menu item *Screens*.
-4. While adding the screen, subscribe it to the playlist that was
-added above using the *Playlist* box.
-5. View the screen; it should be playing the slide deck.
+1. Add a new *Slide Deck* from the admin menu; uploading the PDF file.
+2. While adding the slide deck, also add it to a new *Playlist*.
+3. Add a new *Screen* from the admin menu.
+4. While adding the screen, also subscribe it to the created *Playlist*.
+5. View the *Screen*; it should be playing the *Slide Deck*.
 
 To create a digital sign, connect a television to a computer with a modern web
-browser and have it load the screen's URL. The loaded web application will
-check every minute to automatically apply changes made on the administrative
-screens.
+browser and have it load the *Screen's* URL. The loaded web application will
+check every minute to automatically apply changes made on the admin screens.
 
 **Caveats**
 
-The web browser will not load the web application unless it have network
-access to the WordPress server.
+After the initial load, the web browser will load the web application with
+or without a network connection.
+
+When the plugin in updated, the web application will automatically
+update and reload within 5 minutes.
 
 There are several known situations where the web application will display an
 error until the situation is corrected (will recover within a minute).
 
-* If the web application is running and loses network access to the WordPress
-server, it will display a *no network* icon.
-* If the screen is not subscribed to a playlist, the web application will
-display a *no slide decks* icon.
-* If the screen is subscribed to one or more playlists that are all empty,
-the web application will display a *no slide decks* icon.
-
-When the plugin is updated, the web application will need to be reloaded;
-one solution is to regularly reboot the supporting computer.
+* If the web application is running and the web browser loses its network
+connection, it will display a *No Network* icon. The web application will also
+repeatedly display the first *Slide Deck* in the *Playlist* (if there is one).
+* If the screen is not subscribed to a *Playlist*, the web application will
+display a *No Slide Decks* icon.
+* If the screen is subscribed to one or more *Playlists* that are all empty,
+the web application will display a *No Slide Decks* icon.
 
 **Tips**
 
-* Slide decks play in the order shown (alphabetical) on the *Slide Decks*
-page.
-* Slide decks can be scheduled to be published in the future using the
-schedule feature in the *Publish* box.
-* Slide decks can be scheduled to expire in the future using the third-party
+* *Slide Decks* play in the order shown (alphabetical).
+* *Slide Decks* can be scheduled to be published in the future using the
+WordPress schedule feature.
+* *Slide Decks* can be scheduled to expire in the future using the third-party
 plugin *Post Expirator*.
 * A variety of devices can be used for digital signage
 as described in the article [Digital Signage is Just Another Screen](https://medium.com/@johntucker_48673/digital-signage-is-just-another-screen-e138c2ec3ae9#.244a74dta).
-* Additional features can be added via private plugins available at
+* Additional features can be added via commercial plugins available at
 <https://www.futusign.com>.
 
 Contributing
