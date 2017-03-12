@@ -99,6 +99,14 @@ class App extends Component {
       lookup = imagesResponse.response.entities.images;
       list = keys.map(o => lookup[o]);
       const nextImages = list;
+      if (nextSlideDecks.length === 0) {
+        window.localStorage.removeItem('futusign_slide_deck_url');
+        window.localStorage.removeItem('futusign_slide_deck_file');
+      }
+      if (nextImages.length === 0) {
+        window.localStorage.removeItem('futusign_image_url');
+        window.localStorage.removeItem('futusign_image_file');
+      }
       if (
         JSON.stringify(slideDecks) !== JSON.stringify(nextSlideDecks) ||
         JSON.stringify(youtubeVideos) !== JSON.stringify(nextYoutubeVideos) ||

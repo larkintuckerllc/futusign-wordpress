@@ -98,11 +98,19 @@ class PlayerSlideDecks extends Component {
     this.renderPage();
   }
   handleFile(file) {
-    const { resetPlaying, setBadPlaying } = this.props;
+    const { resetPlaying, setBadPlaying, slideDecks } = this.props;
     const loadingTask = pdfjsLib.getDocument({
       data: convertDataURIToBinary(file),
       worker: window.futusignPDFWorker,
     });
+    if (this.iList === 0) {
+      const newSlideDeckURL = slideDecks[0].file;
+      const lastSlideDeckURL = window.localStorage.getItem('futusign_slide_deck_url');
+      if (newSlideDeckURL !== lastSlideDeckURL) {
+        window.localStorage.setItem('futusign_slide_deck_url', newSlideDeckURL);
+        window.localStorage.setItem('futusign_slide_deck_file', file);
+      }
+    }
     loadingTask.promise.then(
       this.handleDocument,
       () => {
