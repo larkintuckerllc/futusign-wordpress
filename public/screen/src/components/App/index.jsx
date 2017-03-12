@@ -12,6 +12,7 @@ import * as fromBadPlaying from '../../ducks/badPlaying';
 import * as fromCurrentlyPlaying from '../../ducks/currentlyPlaying';
 import Blocking from './Blocking';
 import Offline from './Offline';
+import OfflineSlideDeck from './OfflineSlideDeck';
 import Bad from './Bad';
 import NoMedia from './NoMedia';
 import Player from './Player';
@@ -102,10 +103,7 @@ class App extends Component {
       if (nextSlideDecks.length === 0) {
         window.localStorage.removeItem('futusign_slide_deck_url');
         window.localStorage.removeItem('futusign_slide_deck_file');
-      }
-      if (nextImages.length === 0) {
-        window.localStorage.removeItem('futusign_image_url');
-        window.localStorage.removeItem('futusign_image_file');
+        window.localStorage.removeItem('futusign_slide_deck_slide_duration');
       }
       if (
         JSON.stringify(slideDecks) !== JSON.stringify(nextSlideDecks) ||
@@ -143,7 +141,15 @@ class App extends Component {
       slideDecks,
       youtubeVideos,
     } = this.props;
+    const lastSlideDeckURL = window.localStorage.getItem('futusign_slide_deck_url');
     if (appBlocking) return <Blocking />;
+    if (offlinePlaying && lastSlideDeckURL !== null) {
+      return (
+        <OfflineSlideDeck
+          setBadPlaying={setBadPlaying}
+        />
+      );
+    }
     if (offlinePlaying) return <Offline />;
     if (badPlaying) return <Bad />;
     if (

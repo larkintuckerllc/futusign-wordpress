@@ -35,14 +35,6 @@ class PlayerImages extends Component {
   handleFile(file) {
     const { done, images } = this.props;
     const renderEl = this.iList % 2 ? this.rootOddEl : this.rootEvenEl;
-    if (this.iList === 0) {
-      const newImageURL = images[0].file;
-      const lastImageURL = window.localStorage.getItem('futusign_image_url');
-      if (newImageURL !== lastImageURL) {
-        window.localStorage.setItem('futusign_image_url', newImageURL);
-        window.localStorage.setItem('futusign_image_file', file);
-      }
-    }
     this.showRendered();
     renderEl.style.backgroundImage = `url(${file})`;
     if (this.iList < images.length - 1) {

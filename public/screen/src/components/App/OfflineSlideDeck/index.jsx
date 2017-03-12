@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import pdfjsLib from 'pdfjs-dist';
-import { convertDataURIToBinary } from '../../../../util/misc';
-import { getFile } from '../../../../util/rest';
+import { convertDataURIToBinary } from '../../../util/misc';
 import styles from './index.scss';
+import offline from './offline.png';
 
-class PlayerSlideDecks extends Component {
+class OfflineSlideDeck extends Component {
   constructor() {
     super();
     this.handleFile = this.handleFile.bind(this);
@@ -59,36 +59,26 @@ class PlayerSlideDecks extends Component {
   }
   // eslint-disable-next-line
   renderPage() {
-    const { done, resetPlaying, setBadPlaying, slideDecks } = this.props;
+    const { setBadPlaying } = this.props;
     this.showRendered();
     this.pdfDocument.getPage(this.iPage).then(
       this.handlePage,
       () => {
         setBadPlaying(true);
-        resetPlaying();
       });
     this.odd = !this.odd;
     this.iPage += 1;
     if (this.iPage <= this.numPages) {
       this.renderTimeout = window.setTimeout(this.renderPage, this.slideDuration * 1000);
-      this.slideDuration = slideDecks[this.iList].slideDuration;
+      this.slideDuration = window.localStorage.getItem('futusign_slide_deck_slide_duration');
     } else {
-      const lastIList = this.iList;
-      // MOVE TO NEXT DECK
-      if (this.iList < slideDecks.length - 1) {
-        this.iList += 1;
-        this.renderTimeout = window.setTimeout(this.renderSlideDeck, this.slideDuration * 1000);
-        this.slideDuration = slideDecks[lastIList].slideDuration;
-      // END OF LAST DECK
-      } else {
+      this.renderTimeout = window.setTimeout(() => {
+        this.slideDuration = window.localStorage.getItem('futusign_slide_deck_slide_duration');
+        this.showRendered();
         this.renderTimeout = window.setTimeout(() => {
-          this.slideDuration = slideDecks[this.iList].slideDuration;
-          this.showRendered();
-          this.renderTimeout = window.setTimeout(() => {
-            done();
-          }, this.slideDuration * 1000);
+          this.renderSlideDeck();
         }, this.slideDuration * 1000);
-      }
+      }, this.slideDuration * 1000);
     }
   }
   handleDocument(pdfDocument) {
@@ -98,56 +88,36 @@ class PlayerSlideDecks extends Component {
     this.renderPage();
   }
   handleFile(file) {
-    const { resetPlaying, setBadPlaying, slideDecks } = this.props;
+    const { setBadPlaying } = this.props;
     const loadingTask = pdfjsLib.getDocument({
       data: convertDataURIToBinary(file),
       worker: window.futusignPDFWorker,
     });
-    if (this.iList === 0) {
-      const newSlideDeckURL = slideDecks[0].file;
-      const lastSlideDeckURL = window.localStorage.getItem('futusign_slide_deck_url');
-      if (newSlideDeckURL !== lastSlideDeckURL) {
-        window.localStorage.setItem('futusign_slide_deck_url', newSlideDeckURL);
-        window.localStorage.setItem('futusign_slide_deck_file', file);
-        window.localStorage.setItem(
-          'futusign_slide_deck_slide_duration',
-          slideDecks[0].slideDuration
-        );
-      }
-    }
     loadingTask.promise.then(
       this.handleDocument,
       () => {
         setBadPlaying(true);
-        resetPlaying();
       }
     );
   }
   renderSlideDeck() {
-    const { resetPlaying, setOfflinePlaying, slideDecks } = this.props;
-    getFile(slideDecks[this.iList].file)
-    .then(
-      this.handleFile,
-      () => {
-        setOfflinePlaying(true);
-        resetPlaying();
-      }
-    );
+    const lastSlideDeckFile = window.localStorage.getItem('futusign_slide_deck_file');
+    this.handleFile(lastSlideDeckFile);
   }
   render() {
     return (
       <div id={styles.root}>
         <canvas id={styles.rootCanvasOdd} />
         <canvas id={styles.rootCanvasEven} />
+        <div
+          id={styles.rootOffline}
+          style={{ backgroundImage: `url(${offline})` }}
+        />
       </div>
     );
   }
 }
-PlayerSlideDecks.propTypes = {
-  done: PropTypes.func.isRequired,
-  resetPlaying: PropTypes.func.isRequired,
+OfflineSlideDeck.propTypes = {
   setBadPlaying: PropTypes.func.isRequired,
-  setOfflinePlaying: PropTypes.func.isRequired,
-  slideDecks: PropTypes.array.isRequired,
 };
-export default PlayerSlideDecks;
+export default OfflineSlideDeck;
