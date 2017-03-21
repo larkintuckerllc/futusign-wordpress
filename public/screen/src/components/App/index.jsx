@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { CACHE_INTERVAL, POLLING_INTERVAL } from '../../strings';
 import { fetchBase } from '../../apis/base';
 import * as fromAppBlocking from '../../ducks/appBlocking';
+import * as fromMonitor from '../../ducks/monitor';
 import * as fromScreen from '../../ducks/screen';
 import * as fromSlideDecks from '../../ducks/slideDecks';
 import * as fromYoutubeVideos from '../../ducks/youtubeVideos';
@@ -38,6 +39,7 @@ class App extends Component {
   fetch() {
     const {
       fetchImages,
+      fetchMonitor,
       fetchScreen,
       fetchSlideDecks,
       fetchYoutubeVideos,
@@ -90,30 +92,40 @@ class App extends Component {
         fetchSlideDecks(screen.subscribedPlaylistIds),
         fetchYoutubeVideos(screen.subscribedPlaylistIds),
         fetchImages(screen.subscribedPlaylistIds),
+        fetchMonitor(),
       ]);
     })
     .then(([
       slideDecksResponse,
       youtubeVideosResponse,
       imagesResponse,
+      monitorResponse,
     ]) => {
+      // NEXT SLIDE DECKS
       let keys = slideDecksResponse.response.result;
       let lookup = slideDecksResponse.response.entities.slideDecks;
       let list = keys.map(o => lookup[o]);
       const nextSlideDecks = list;
+      // NEXT YOUTUBE VIDEOS
       keys = youtubeVideosResponse.response.result;
       lookup = youtubeVideosResponse.response.entities.youtubeVideos;
       list = keys.map(o => lookup[o]);
       const nextYoutubeVideos = list;
+      // NEXT IMAGES
       keys = imagesResponse.response.result;
       lookup = imagesResponse.response.entities.images;
       list = keys.map(o => lookup[o]);
       const nextImages = list;
+      // NEXT MONITORING
+      // TODO: IMPLEMENT
+      window.console.log(monitorResponse);
+      // CONDITIONALLY CLEAR LOCAL STORAGE
       if (nextSlideDecks.length === 0) {
         window.localStorage.removeItem('futusign_slide_deck_url');
         window.localStorage.removeItem('futusign_slide_deck_file');
         window.localStorage.removeItem('futusign_slide_deck_slide_duration');
       }
+      // CONDITIONALLY RESTART PLAYING LOOP
       if (
         JSON.stringify(slideDecks) !== JSON.stringify(nextSlideDecks) ||
         JSON.stringify(youtubeVideos) !== JSON.stringify(nextYoutubeVideos) ||
@@ -121,6 +133,7 @@ class App extends Component {
       ) {
         setCurrentlyPlaying(fromCurrentlyPlaying.LOADING);
       }
+      // MISC
       setOfflinePlaying(false);
       setBadPlaying(false);
       setAppBlocking(false);
@@ -185,6 +198,7 @@ App.propTypes = {
   currentlyPlaying: PropTypes.string.isRequired,
   images: PropTypes.array.isRequired,
   fetchImages: PropTypes.func.isRequired,
+  fetchMonitor: PropTypes.func.isRequired,
   fetchScreen: PropTypes.func.isRequired,
   fetchSlideDecks: PropTypes.func.isRequired,
   fetchYoutubeVideos: PropTypes.func.isRequired,
@@ -210,6 +224,7 @@ export default connect(
   }),
   {
     fetchImages: fromImages.fetchImages,
+    fetchMonitor: fromMonitor.fetchMonitor,
     fetchScreen: fromScreen.fetchScreen,
     fetchSlideDecks: fromSlideDecks.fetchSlideDecks,
     fetchYoutubeVideos: fromYoutubeVideos.fetchYoutubeVideos,

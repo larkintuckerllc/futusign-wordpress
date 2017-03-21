@@ -81,6 +81,7 @@
   </script>
   <?php while (have_posts()) : the_post(); ?>
     <script>
+      window.siteUrl = '<?php echo trailingslashit( site_url() ); ?>';
       window.publicPath = '<?php echo trailingslashit( plugins_url( '', __FILE__ ) ); ?>';
       window.screenId = <?php echo get_the_ID(); ?>;
     </script>

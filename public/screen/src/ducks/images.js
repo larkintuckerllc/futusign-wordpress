@@ -6,6 +6,7 @@ import { ServerException } from '../util/exceptions';
 // API
 import { get } from '../apis/images';
 
+// TODO: CONSIDER RID OF ERROR
 // REDUCER MOUNT POINT
 const reducerMountPoint = 'images';
 // ACTIONS

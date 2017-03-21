@@ -81,13 +81,14 @@
   </script>
   <?php while (have_posts()) : the_post(); ?>
     <script>
+      window.siteUrl = '<?php echo trailingslashit( site_url() ); ?>';
       window.publicPath = '<?php echo trailingslashit( plugins_url( '', __FILE__ ) ); ?>';
       window.screenId = <?php echo get_the_ID(); ?>;
     </script>
   <?php endwhile; ?>
   <!-- MANUALLY UPDATE -->
-  <script src="<?php echo plugins_url( 'vendor.6ac4d4440ec48f143b41.bundle.js', __FILE__ ); ?>"></script>
+  <script src="<?php echo plugins_url( 'vendor.XXXXX.bundle.js', __FILE__ ); ?>"></script>
   <!-- MANUALLY UPDATE -->
-  <script src="<?php echo plugins_url( 'main.347a948ad7ce65129be5.bundle.js', __FILE__ ); ?>"></script>
+  <script src="<?php echo plugins_url( 'main.XXXXX.bundle.js', __FILE__ ); ?>"></script>
 </body>
 </html>
