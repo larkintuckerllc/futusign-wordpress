@@ -1,5 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 import { CACHE_INTERVAL, POLLING_INTERVAL } from '../../strings';
 import { fetchBase } from '../../apis/base';
 import * as fromAppBlocking from '../../ducks/appBlocking';
@@ -18,6 +21,13 @@ import Bad from './Bad';
 import NoMedia from './NoMedia';
 import Player from './Player';
 
+const firebaseConfig = {
+  apiKey: 'AIzaSyCHlnyTagJHHRutt6p11wyYFd27N5AQ7cc',
+  authDomain: 'test-12880.firebaseapp.com',
+  databaseURL: 'https://test-12880.firebaseio.com',
+  storageBucket: 'test-12880.appspot.com',
+  messagingSenderId: '68843491940',
+};
 class App extends Component {
   constructor() {
     super();
@@ -44,6 +54,7 @@ class App extends Component {
       fetchSlideDecks,
       fetchYoutubeVideos,
       images,
+      monitor,
       offlinePlaying,
       resetSlideDecks,
       resetYoutubeVideos,
@@ -54,14 +65,14 @@ class App extends Component {
       slideDecks,
       youtubeVideos,
     } = this.props;
-    if (offlinePlaying) {
-      window.location.reload();
-    }
     fetchBase()
     .then(() => (
       fetchScreen()
     ))
     .then(screen => {
+      if (offlinePlaying) {
+        window.location.reload();
+      }
       if (screen.subscribedPlaylistIds.length === 0) {
         resetSlideDecks();
         resetYoutubeVideos();
@@ -93,6 +104,7 @@ class App extends Component {
         fetchYoutubeVideos(screen.subscribedPlaylistIds),
         fetchImages(screen.subscribedPlaylistIds),
         fetchMonitor(),
+        Promise.resolve(screen),
       ]);
     })
     .then(([
@@ -100,6 +112,7 @@ class App extends Component {
       youtubeVideosResponse,
       imagesResponse,
       monitorResponse,
+      screen,
     ]) => {
       // NEXT SLIDE DECKS
       let keys = slideDecksResponse.response.result;
@@ -116,9 +129,47 @@ class App extends Component {
       lookup = imagesResponse.response.entities.images;
       list = keys.map(o => lookup[o]);
       const nextImages = list;
-      // NEXT MONITORING
-      // TODO: IMPLEMENT
-      window.console.log(monitorResponse);
+      // MONITORING
+      const nextMonitor = monitorResponse;
+      // MONITORING - LOGOUT AND RELOAD
+      if (
+        monitor !== null &&
+        JSON.stringify(nextMonitor) !== JSON.stringify(monitor)
+      ) {
+        // TODO: CHANGE TO MONITOR
+        firebase.initializeApp(firebaseConfig);
+        firebase.auth().onAuthStateChanged(user => {
+          if (user) {
+            firebase.auth().signOut()
+            .finally(() => window.location.reload());
+          } else {
+            window.location.reload();
+          }
+        });
+        return null;
+      }
+      // MONITORING - LOGIN AND CHECK-IN
+      if (monitor === null && nextMonitor !== null) {
+        // TODO: CHANGE TO NEXT MONITOR
+        firebase.initializeApp(firebaseConfig);
+        firebase.auth().onAuthStateChanged(user => {
+          if (!user) {
+            firebase.auth().signInWithEmailAndPassword('john@larkintuckerllc.com', 'FIonly00');
+          }
+        });
+        const presenceRef = firebase.database().ref('presence');
+        const connectedRef = firebase.database().ref('.info/connected');
+        connectedRef.on('value', snap => {
+          if (snap.val() === true) {
+            presenceRef.push(screen.id);
+            presenceRef.onDisconnect().remove();
+            // TODO: FLAG LOCAL CONNECT
+          } else {
+            window.console.log('disconnected');
+            // TODO: FLAG LOCAL DISCONNECT
+          }
+        });
+      }
       // CONDITIONALLY CLEAR LOCAL STORAGE
       if (nextSlideDecks.length === 0) {
         window.localStorage.removeItem('futusign_slide_deck_url');
@@ -202,6 +253,7 @@ App.propTypes = {
   fetchScreen: PropTypes.func.isRequired,
   fetchSlideDecks: PropTypes.func.isRequired,
   fetchYoutubeVideos: PropTypes.func.isRequired,
+  monitor: PropTypes.object,
   offlinePlaying: PropTypes.bool.isRequired,
   resetSlideDecks: PropTypes.func.isRequired,
   resetYoutubeVideos: PropTypes.func.isRequired,
@@ -218,6 +270,7 @@ export default connect(
     badPlaying: fromBadPlaying.getBadPlaying(state),
     currentlyPlaying: fromCurrentlyPlaying.getCurrentlyPlaying(state),
     images: fromImages.getImages(state),
+    monitor: fromMonitor.getMonitor(state),
     offlinePlaying: fromOfflinePlaying.getOfflinePlaying(state),
     slideDecks: fromSlideDecks.getSlideDecks(state),
     youtubeVideos: fromYoutubeVideos.getYoutubeVideos(state),
