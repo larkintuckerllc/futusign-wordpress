@@ -14,8 +14,10 @@ import * as fromImages from '../../ducks/images';
 import * as fromOfflinePlaying from '../../ducks/offlinePlaying';
 import * as fromBadPlaying from '../../ducks/badPlaying';
 import * as fromCurrentlyPlaying from '../../ducks/currentlyPlaying';
+import * as fromConnected from '../../ducks/connected';
 import Blocking from './Blocking';
 import Offline from './Offline';
+import Connected from './Connected';
 import OfflineSlideDeck from './OfflineSlideDeck';
 import Bad from './Bad';
 import NoMedia from './NoMedia';
@@ -27,6 +29,10 @@ const firebaseConfig = {
   databaseURL: 'https://test-12880.firebaseio.com',
   storageBucket: 'test-12880.appspot.com',
   messagingSenderId: '68843491940',
+};
+const firebaseCredentials = {
+  email: 'john@larkintuckerllc.com',
+  password: 'FIonly00',
 };
 class App extends Component {
   constructor() {
@@ -60,19 +66,20 @@ class App extends Component {
       resetYoutubeVideos,
       setAppBlocking,
       setBadPlaying,
+      setConnected,
       setCurrentlyPlaying,
       setOfflinePlaying,
       slideDecks,
       youtubeVideos,
     } = this.props;
     fetchBase()
-    .then(() => (
-      fetchScreen()
-    ))
-    .then(screen => {
+    .then(() => {
       if (offlinePlaying) {
         window.location.reload();
       }
+      return fetchScreen();
+    })
+    .then(screen => {
       if (screen.subscribedPlaylistIds.length === 0) {
         resetSlideDecks();
         resetYoutubeVideos();
@@ -154,7 +161,10 @@ class App extends Component {
         firebase.initializeApp(firebaseConfig);
         firebase.auth().onAuthStateChanged(user => {
           if (!user) {
-            firebase.auth().signInWithEmailAndPassword('john@larkintuckerllc.com', 'FIonly00');
+            firebase.auth().signInWithEmailAndPassword(
+              firebaseCredentials.email,
+              firebaseCredentials.password
+          );
           }
         });
         const presenceRef = firebase.database().ref('presence');
@@ -163,10 +173,9 @@ class App extends Component {
           if (snap.val() === true) {
             presenceRef.push(screen.id);
             presenceRef.onDisconnect().remove();
-            // TODO: FLAG LOCAL CONNECT
+            setConnected(true);
           } else {
-            window.console.log('disconnected');
-            // TODO: FLAG LOCAL DISCONNECT
+            setConnected(false);
           }
         });
       }
@@ -205,8 +214,10 @@ class App extends Component {
     const {
       appBlocking,
       badPlaying,
+      connected,
       currentlyPlaying,
       images,
+      monitor,
       offlinePlaying,
       setBadPlaying,
       setCurrentlyPlaying,
@@ -231,21 +242,25 @@ class App extends Component {
       images.length === 0
     ) return <NoMedia />;
     return (
-      <Player
-        currentlyPlaying={currentlyPlaying}
-        images={images}
-        setBadPlaying={setBadPlaying}
-        setCurrentlyPlaying={setCurrentlyPlaying}
-        setOfflinePlaying={setOfflinePlaying}
-        slideDecks={slideDecks}
-        youtubeVideos={youtubeVideos}
-      />
+      <div>
+        {monitor !== null && <Connected connected={connected} />}
+        <Player
+          currentlyPlaying={currentlyPlaying}
+          images={images}
+          setBadPlaying={setBadPlaying}
+          setCurrentlyPlaying={setCurrentlyPlaying}
+          setOfflinePlaying={setOfflinePlaying}
+          slideDecks={slideDecks}
+          youtubeVideos={youtubeVideos}
+        />
+      </div>
     );
   }
 }
 App.propTypes = {
   appBlocking: PropTypes.bool.isRequired,
   badPlaying: PropTypes.bool.isRequired,
+  connected: PropTypes.bool.isRequired,
   currentlyPlaying: PropTypes.string.isRequired,
   images: PropTypes.array.isRequired,
   fetchImages: PropTypes.func.isRequired,
@@ -259,6 +274,7 @@ App.propTypes = {
   resetYoutubeVideos: PropTypes.func.isRequired,
   setAppBlocking: PropTypes.func.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
+  setConnected: PropTypes.func.isRequired,
   setCurrentlyPlaying: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
@@ -268,6 +284,7 @@ export default connect(
   state => ({
     appBlocking: fromAppBlocking.getAppBlocking(state),
     badPlaying: fromBadPlaying.getBadPlaying(state),
+    connected: fromConnected.getConnected(state),
     currentlyPlaying: fromCurrentlyPlaying.getCurrentlyPlaying(state),
     images: fromImages.getImages(state),
     monitor: fromMonitor.getMonitor(state),
@@ -285,6 +302,7 @@ export default connect(
     resetYoutubeVideos: fromYoutubeVideos.resetYoutubeVideos,
     setAppBlocking: fromAppBlocking.setAppBlocking,
     setBadPlaying: fromBadPlaying.setBadPlaying,
+    setConnected: fromConnected.setConnected,
     setCurrentlyPlaying: fromCurrentlyPlaying.setCurrentlyPlaying,
     setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
   }

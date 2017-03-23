@@ -8,6 +8,7 @@ import youtubeVideos from '../ducks/youtubeVideos';
 import currentlyPlaying from '../ducks/currentlyPlaying';
 import images from '../ducks/images';
 import monitor from '../ducks/monitor';
+import connected from '../ducks/connected';
 
 export default combineReducers({
   appBlocking,
@@ -19,4 +20,5 @@ export default combineReducers({
   currentlyPlaying,
   images,
   monitor,
+  connected,
 });
