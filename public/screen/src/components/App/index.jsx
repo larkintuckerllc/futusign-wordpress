@@ -23,17 +23,6 @@ import Bad from './Bad';
 import NoMedia from './NoMedia';
 import Player from './Player';
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyCHlnyTagJHHRutt6p11wyYFd27N5AQ7cc',
-  authDomain: 'test-12880.firebaseapp.com',
-  databaseURL: 'https://test-12880.firebaseio.com',
-  storageBucket: 'test-12880.appspot.com',
-  messagingSenderId: '68843491940',
-};
-const firebaseCredentials = {
-  email: 'john@larkintuckerllc.com',
-  password: 'FIonly00',
-};
 class App extends Component {
   constructor() {
     super();
@@ -143,41 +132,47 @@ class App extends Component {
         monitor !== null &&
         JSON.stringify(nextMonitor) !== JSON.stringify(monitor)
       ) {
-        // TODO: CHANGE TO MONITOR
-        firebase.initializeApp(firebaseConfig);
-        firebase.auth().onAuthStateChanged(user => {
-          if (user) {
-            firebase.auth().signOut()
-            .finally(() => window.location.reload());
-          } else {
-            window.location.reload();
-          }
-        });
+        try {
+          firebase.initializeApp(monitor);
+          firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+              firebase.auth().signOut()
+              .finally(() => window.location.reload());
+            } else {
+              window.location.reload();
+            }
+          });
+        } catch (err) {
+          window.location.reload();
+        }
         return null;
       }
       // MONITORING - LOGIN AND CHECK-IN
       if (monitor === null && nextMonitor !== null) {
-        // TODO: CHANGE TO NEXT MONITOR
-        firebase.initializeApp(firebaseConfig);
-        firebase.auth().onAuthStateChanged(user => {
-          if (!user) {
-            firebase.auth().signInWithEmailAndPassword(
-              firebaseCredentials.email,
-              firebaseCredentials.password
-          );
-          }
-        });
-        const presenceRef = firebase.database().ref('presence');
-        const connectedRef = firebase.database().ref('.info/connected');
-        connectedRef.on('value', snap => {
-          if (snap.val() === true) {
-            presenceRef.push(screen.id);
-            presenceRef.onDisconnect().remove();
-            setConnected(true);
-          } else {
-            setConnected(false);
-          }
-        });
+        try {
+          firebase.initializeApp(nextMonitor);
+          firebase.auth().onAuthStateChanged(user => {
+            if (!user) {
+              firebase.auth().signInWithEmailAndPassword(
+                nextMonitor.email,
+                nextMonitor.password
+              );
+            }
+          });
+          const presenceRef = firebase.database().ref('presence');
+          const connectedRef = firebase.database().ref('.info/connected');
+          connectedRef.on('value', snap => {
+            if (snap.val() === true) {
+              presenceRef.push(screen.id);
+              presenceRef.onDisconnect().remove();
+              setConnected(true);
+            } else {
+              setConnected(false);
+            }
+          });
+        } catch (err) {
+          // DO NOTHING
+        }
       }
       // CONDITIONALLY CLEAR LOCAL STORAGE
       if (nextSlideDecks.length === 0) {

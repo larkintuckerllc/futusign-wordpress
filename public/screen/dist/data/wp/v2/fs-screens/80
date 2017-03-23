@@ -1,0 +1,53 @@
+{
+  "id": 80,
+  "date": "2017-02-06T17:16:40",
+  "date_gmt": "2017-02-06T17:16:40",
+  "guid": {
+    "rendered": "http://futusign-plugin.dev/?post_type=futusign_screen&#038;p=80"
+  },
+  "modified": "2017-02-06T19:21:55",
+  "modified_gmt": "2017-02-06T19:21:55",
+  "slug": "test",
+  "type": "futusign_screen",
+  "link": "http://futusign-plugin.dev/fs-screens/test/",
+  "title": {
+    "rendered": "Test"
+  },
+  "content": {
+    "rendered": "",
+    "protected": false
+  },
+  "template": "",
+  "fs-playlists": [
+    11
+  ],
+  "_links": {
+    "self": [
+      {
+        "href": "http://futusign-plugin.dev/wp-json/wp/v2/fs-screens/80"
+      }
+    ],
+    "collection": [
+      {
+        "href": "http://futusign-plugin.dev/wp-json/wp/v2/fs-screens"
+      }
+    ],
+    "about": [
+      {
+        "href": "http://futusign-plugin.dev/wp-json/wp/v2/types/futusign_screen"
+      }
+    ],
+    "wp:attachment": [
+      {
+        "href": "http://futusign-plugin.dev/wp-json/wp/v2/media?parent=80"
+      }
+    ],
+    "curies": [
+      {
+        "name": "wp",
+        "href": "https://api.w.org/{rel}",
+        "templated": true
+      }
+    ]
+  }
+}
