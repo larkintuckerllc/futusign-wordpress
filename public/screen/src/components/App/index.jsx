@@ -159,11 +159,25 @@ class App extends Component {
               );
             } else {
               const presenceRef = firebase.database().ref('presence');
+              const logRef = firebase.database().ref('log');
               const connectedRef = firebase.database().ref('.info/connected');
               connectedRef.on('value', snap => {
                 if (snap.val() === true) {
                   presenceRef.push(screen.id);
+                  logRef.push({
+                    id: screen.id,
+                    title: screen.title,
+                    status: 'up',
+                    timestamp: firebase.database.ServerValue.TIMESTAMP,
+                  });
+                  const disconnectRef = logRef.push();
                   presenceRef.onDisconnect().remove();
+                  disconnectRef.onDisconnect().set({
+                    id: screen.id,
+                    title: screen.title,
+                    status: 'down',
+                    timestamp: firebase.database.ServerValue.TIMESTAMP,
+                  });
                   setConnected(true);
                 } else {
                   setConnected(false);

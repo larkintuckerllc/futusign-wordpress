@@ -89,6 +89,6 @@
   <!-- MANUALLY UPDATE -->
   <script src="<?php echo plugins_url( 'vendor.7aa670bbb5cdc75794ae.bundle.js', __FILE__ ); ?>"></script>
   <!-- MANUALLY UPDATE -->
-  <script src="<?php echo plugins_url( 'main.fc21966cc64b67dc4a73.bundle.js', __FILE__ ); ?>"></script>
+  <script src="<?php echo plugins_url( 'main.b4361fc4edb6b1db122c.bundle.js', __FILE__ ); ?>"></script>
 </body>
 </html>
