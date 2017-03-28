@@ -157,17 +157,18 @@ class App extends Component {
                 nextMonitor.email,
                 nextMonitor.password
               );
-            }
-          });
-          const presenceRef = firebase.database().ref('presence');
-          const connectedRef = firebase.database().ref('.info/connected');
-          connectedRef.on('value', snap => {
-            if (snap.val() === true) {
-              presenceRef.push(screen.id);
-              presenceRef.onDisconnect().remove();
-              setConnected(true);
             } else {
-              setConnected(false);
+              const presenceRef = firebase.database().ref('presence');
+              const connectedRef = firebase.database().ref('.info/connected');
+              connectedRef.on('value', snap => {
+                if (snap.val() === true) {
+                  presenceRef.push(screen.id);
+                  presenceRef.onDisconnect().remove();
+                  setConnected(true);
+                } else {
+                  setConnected(false);
+                }
+              });
             }
           });
         } catch (err) {
