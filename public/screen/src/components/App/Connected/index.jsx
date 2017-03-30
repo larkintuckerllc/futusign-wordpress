@@ -12,7 +12,7 @@ class Connected extends Component {
         id={styles.root}
         style={{
           opacity: connected ? 0 : 1,
-          borderColor: connected ? 'green' : 'red',
+          borderColor: connected ? '#5cb85c' : '#d9534f',
         }}
       />
     );
