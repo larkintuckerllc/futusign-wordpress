@@ -127,63 +127,53 @@ class App extends Component {
       const nextImages = list;
       // MONITORING
       const nextMonitor = monitorResponse;
-      // MONITORING - LOGOUT AND RELOAD
+      // MONITORING - RELOAD
       if (
         monitor !== null &&
         JSON.stringify(nextMonitor) !== JSON.stringify(monitor)
       ) {
-        try {
-          firebase.initializeApp(monitor);
-          firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-              firebase.auth().signOut()
-              .finally(() => window.location.reload());
-            } else {
-              window.location.reload();
-            }
-          });
-        } catch (err) {
-          window.location.reload();
-        }
+        window.location.reload();
         return null;
       }
       // MONITORING - LOGIN AND CHECK-IN
       if (monitor === null && nextMonitor !== null) {
         try {
           firebase.initializeApp(nextMonitor);
-          firebase.auth().onAuthStateChanged(user => {
-            if (!user) {
-              firebase.auth().signInWithEmailAndPassword(
-                nextMonitor.email,
-                nextMonitor.password
-              );
-            } else {
-              const presenceRef = firebase.database().ref('presence');
-              const logRef = firebase.database().ref('log');
-              const connectedRef = firebase.database().ref('.info/connected');
-              connectedRef.on('value', snap => {
-                if (snap.val() === true) {
-                  presenceRef.push(screen.id);
-                  logRef.push({
-                    id: screen.id,
-                    title: screen.title,
-                    status: 'up',
-                    timestamp: firebase.database.ServerValue.TIMESTAMP,
-                  });
-                  const disconnectRef = logRef.push();
-                  presenceRef.onDisconnect().remove();
-                  disconnectRef.onDisconnect().set({
-                    id: screen.id,
-                    title: screen.title,
-                    status: 'down',
-                    timestamp: firebase.database.ServerValue.TIMESTAMP,
-                  });
-                  setConnected(true);
-                } else {
-                  setConnected(false);
-                }
-              });
-            }
+          firebase.auth().signOut()
+          .then(() => {
+            firebase.auth().onAuthStateChanged(user => {
+              if (user) {
+                const presenceRef = firebase.database().ref('presence');
+                const logRef = firebase.database().ref('log');
+                const connectedRef = firebase.database().ref('.info/connected');
+                connectedRef.on('value', snap => {
+                  if (snap.val() === true) {
+                    presenceRef.push(screen.id);
+                    logRef.push({
+                      id: screen.id,
+                      title: screen.title,
+                      status: 'up',
+                      timestamp: firebase.database.ServerValue.TIMESTAMP,
+                    });
+                    const disconnectRef = logRef.push();
+                    presenceRef.onDisconnect().remove();
+                    disconnectRef.onDisconnect().set({
+                      id: screen.id,
+                      title: screen.title,
+                      status: 'down',
+                      timestamp: firebase.database.ServerValue.TIMESTAMP,
+                    });
+                    setConnected(true);
+                  } else {
+                    setConnected(false);
+                  }
+                });
+              }
+            });
+            firebase.auth().signInWithEmailAndPassword(
+              nextMonitor.email,
+              nextMonitor.password
+            );
           });
         } catch (err) {
           // DO NOTHING
