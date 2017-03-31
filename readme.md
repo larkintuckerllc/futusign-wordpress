@@ -15,7 +15,8 @@ Install and activate the *futusign* plugin via the WordPress *Plugins* admin
 screen or.
 
 Download the the *zip* file and upload and activate via the WordPress
-*Plugins* admin screen.
+*Plugins* admin screen. If you may get an error, `upload_max_filesize`,
+you can follow [these instructions](https://atlantisthemes.com/fix-upload_max_filesize/) to correct. 
 
 Usage
 ====

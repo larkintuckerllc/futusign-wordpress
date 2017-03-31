@@ -1,6 +1,6 @@
 {
   "name": "futusign-screen",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "futusign screen",
   "scripts": {
     "build": "NODE_ENV=production webpack -p -d source-map",
@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.13.0",
+    "firebase": "^3.7.3",
     "normalizr": "^2.2.1",
     "pdfjs-dist": "^1.7.258",
     "react": "^15.3.1",

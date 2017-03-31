@@ -1,8 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 import { CACHE_INTERVAL, POLLING_INTERVAL } from '../../strings';
 import { fetchBase } from '../../apis/base';
 import * as fromAppBlocking from '../../ducks/appBlocking';
+import * as fromMonitor from '../../ducks/monitor';
 import * as fromScreen from '../../ducks/screen';
 import * as fromSlideDecks from '../../ducks/slideDecks';
 import * as fromYoutubeVideos from '../../ducks/youtubeVideos';
@@ -10,8 +14,10 @@ import * as fromImages from '../../ducks/images';
 import * as fromOfflinePlaying from '../../ducks/offlinePlaying';
 import * as fromBadPlaying from '../../ducks/badPlaying';
 import * as fromCurrentlyPlaying from '../../ducks/currentlyPlaying';
+import * as fromConnected from '../../ducks/connected';
 import Blocking from './Blocking';
 import Offline from './Offline';
+import Connected from './Connected';
 import OfflineSlideDeck from './OfflineSlideDeck';
 import Bad from './Bad';
 import NoMedia from './NoMedia';
@@ -38,27 +44,30 @@ class App extends Component {
   fetch() {
     const {
       fetchImages,
+      fetchMonitor,
       fetchScreen,
       fetchSlideDecks,
       fetchYoutubeVideos,
       images,
+      monitor,
       offlinePlaying,
       resetSlideDecks,
       resetYoutubeVideos,
       setAppBlocking,
       setBadPlaying,
+      setConnected,
       setCurrentlyPlaying,
       setOfflinePlaying,
       slideDecks,
       youtubeVideos,
     } = this.props;
-    if (offlinePlaying) {
-      window.location.reload();
-    }
     fetchBase()
-    .then(() => (
-      fetchScreen()
-    ))
+    .then(() => {
+      if (offlinePlaying) {
+        window.location.reload();
+      }
+      return fetchScreen();
+    })
     .then(screen => {
       if (screen.subscribedPlaylistIds.length === 0) {
         resetSlideDecks();
@@ -90,30 +99,93 @@ class App extends Component {
         fetchSlideDecks(screen.subscribedPlaylistIds),
         fetchYoutubeVideos(screen.subscribedPlaylistIds),
         fetchImages(screen.subscribedPlaylistIds),
+        fetchMonitor(),
+        Promise.resolve(screen),
       ]);
     })
     .then(([
       slideDecksResponse,
       youtubeVideosResponse,
       imagesResponse,
+      monitorResponse,
+      screen,
     ]) => {
+      // NEXT SLIDE DECKS
       let keys = slideDecksResponse.response.result;
       let lookup = slideDecksResponse.response.entities.slideDecks;
       let list = keys.map(o => lookup[o]);
       const nextSlideDecks = list;
+      // NEXT YOUTUBE VIDEOS
       keys = youtubeVideosResponse.response.result;
       lookup = youtubeVideosResponse.response.entities.youtubeVideos;
       list = keys.map(o => lookup[o]);
       const nextYoutubeVideos = list;
+      // NEXT IMAGES
       keys = imagesResponse.response.result;
       lookup = imagesResponse.response.entities.images;
       list = keys.map(o => lookup[o]);
       const nextImages = list;
+      // MONITORING
+      const nextMonitor = monitorResponse;
+      // MONITORING - RELOAD
+      if (
+        monitor !== null &&
+        JSON.stringify(nextMonitor) !== JSON.stringify(monitor)
+      ) {
+        window.location.reload();
+        return null;
+      }
+      // MONITORING - LOGIN AND CHECK-IN
+      if (monitor === null && nextMonitor !== null) {
+        try {
+          firebase.initializeApp(nextMonitor);
+          firebase.auth().signOut()
+          .then(() => {
+            firebase.auth().onAuthStateChanged(user => {
+              if (user) {
+                const presenceRef = firebase.database().ref('presence');
+                const logRef = firebase.database().ref('log');
+                const connectedRef = firebase.database().ref('.info/connected');
+                connectedRef.on('value', snap => {
+                  if (snap.val() === true) {
+                    presenceRef.push(screen.id);
+                    logRef.push({
+                      id: screen.id,
+                      title: screen.title,
+                      status: 'up',
+                      timestamp: firebase.database.ServerValue.TIMESTAMP,
+                    });
+                    const disconnectRef = logRef.push();
+                    presenceRef.onDisconnect().remove();
+                    disconnectRef.onDisconnect().set({
+                      id: screen.id,
+                      title: screen.title,
+                      status: 'down',
+                      timestamp: firebase.database.ServerValue.TIMESTAMP,
+                    });
+                    setConnected(true);
+                  } else {
+                    setConnected(false);
+                  }
+                });
+              }
+            });
+            firebase.auth().signInWithEmailAndPassword(
+              nextMonitor.email,
+              nextMonitor.password
+            );
+          });
+        } catch (err) {
+          // DO NOTHING
+        }
+      }
+      // CONDITIONALLY CLEAR LOCAL STORAGE
       if (nextSlideDecks.length === 0) {
         window.localStorage.removeItem('futusign_slide_deck_url');
         window.localStorage.removeItem('futusign_slide_deck_file');
         window.localStorage.removeItem('futusign_slide_deck_slide_duration');
       }
+      // CONDITIONALLY RESTART PLAYING LOOP
       if (
         JSON.stringify(slideDecks) !== JSON.stringify(nextSlideDecks) ||
         JSON.stringify(youtubeVideos) !== JSON.stringify(nextYoutubeVideos) ||
@@ -121,6 +193,7 @@ class App extends Component {
       ) {
         setCurrentlyPlaying(fromCurrentlyPlaying.LOADING);
       }
+      // MISC
       setOfflinePlaying(false);
       setBadPlaying(false);
       setAppBlocking(false);
@@ -141,8 +214,10 @@ class App extends Component {
     const {
       appBlocking,
       badPlaying,
+      connected,
       currentlyPlaying,
       images,
+      monitor,
       offlinePlaying,
       setBadPlaying,
       setCurrentlyPlaying,
@@ -167,32 +242,39 @@ class App extends Component {
       images.length === 0
     ) return <NoMedia />;
     return (
-      <Player
-        currentlyPlaying={currentlyPlaying}
-        images={images}
-        setBadPlaying={setBadPlaying}
-        setCurrentlyPlaying={setCurrentlyPlaying}
-        setOfflinePlaying={setOfflinePlaying}
-        slideDecks={slideDecks}
-        youtubeVideos={youtubeVideos}
-      />
+      <div>
+        {monitor !== null && <Connected connected={connected} />}
+        <Player
+          currentlyPlaying={currentlyPlaying}
+          images={images}
+          setBadPlaying={setBadPlaying}
+          setCurrentlyPlaying={setCurrentlyPlaying}
+          setOfflinePlaying={setOfflinePlaying}
+          slideDecks={slideDecks}
+          youtubeVideos={youtubeVideos}
+        />
+      </div>
     );
   }
 }
 App.propTypes = {
   appBlocking: PropTypes.bool.isRequired,
   badPlaying: PropTypes.bool.isRequired,
+  connected: PropTypes.bool.isRequired,
   currentlyPlaying: PropTypes.string.isRequired,
   images: PropTypes.array.isRequired,
   fetchImages: PropTypes.func.isRequired,
+  fetchMonitor: PropTypes.func.isRequired,
   fetchScreen: PropTypes.func.isRequired,
   fetchSlideDecks: PropTypes.func.isRequired,
   fetchYoutubeVideos: PropTypes.func.isRequired,
+  monitor: PropTypes.object,
   offlinePlaying: PropTypes.bool.isRequired,
   resetSlideDecks: PropTypes.func.isRequired,
   resetYoutubeVideos: PropTypes.func.isRequired,
   setAppBlocking: PropTypes.func.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
+  setConnected: PropTypes.func.isRequired,
   setCurrentlyPlaying: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
@@ -202,14 +284,17 @@ export default connect(
   state => ({
     appBlocking: fromAppBlocking.getAppBlocking(state),
     badPlaying: fromBadPlaying.getBadPlaying(state),
+    connected: fromConnected.getConnected(state),
     currentlyPlaying: fromCurrentlyPlaying.getCurrentlyPlaying(state),
     images: fromImages.getImages(state),
+    monitor: fromMonitor.getMonitor(state),
     offlinePlaying: fromOfflinePlaying.getOfflinePlaying(state),
     slideDecks: fromSlideDecks.getSlideDecks(state),
     youtubeVideos: fromYoutubeVideos.getYoutubeVideos(state),
   }),
   {
     fetchImages: fromImages.fetchImages,
+    fetchMonitor: fromMonitor.fetchMonitor,
     fetchScreen: fromScreen.fetchScreen,
     fetchSlideDecks: fromSlideDecks.fetchSlideDecks,
     fetchYoutubeVideos: fromYoutubeVideos.fetchYoutubeVideos,
@@ -217,6 +302,7 @@ export default connect(
     resetYoutubeVideos: fromYoutubeVideos.resetYoutubeVideos,
     setAppBlocking: fromAppBlocking.setAppBlocking,
     setBadPlaying: fromBadPlaying.setBadPlaying,
+    setConnected: fromConnected.setConnected,
     setCurrentlyPlaying: fromCurrentlyPlaying.setCurrentlyPlaying,
     setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
   }

@@ -14,6 +14,7 @@ export const RESET_FETCH_SCREEN_ERROR = `${ACTION_PREFIX}RESET_FETCH_SCREEN_ERRO
 // REDUCERS
 const value = (state = {
   id: SCREEN_ID,
+  title: null,
   subscribedPlaylistIds: [],
 }, action) => {
   switch (action.type) {

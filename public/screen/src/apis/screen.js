@@ -9,6 +9,7 @@ export const get = (id) => {
   return fromRest.get(`${getBase()}${SCREENS_API_ENDPOINT}/${id}${getSeparator()}version=${version}`)
     .then(response => ({
       id: response.id,
+      title: response.title.rendered,
       subscribedPlaylistIds: response['fs-playlists'],
     }));
 };
