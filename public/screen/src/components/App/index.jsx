@@ -15,6 +15,8 @@ import * as fromOfflinePlaying from '../../ducks/offlinePlaying';
 import * as fromBadPlaying from '../../ducks/badPlaying';
 import * as fromCurrentlyPlaying from '../../ducks/currentlyPlaying';
 import * as fromConnected from '../../ducks/connected';
+import * as fromOverlay from '../../ducks/overlay';
+import * as fromOvWidgets from '../../ducks/ovWidgets';
 import Blocking from './Blocking';
 import Offline from './Offline';
 import Connected from './Connected';
@@ -45,6 +47,8 @@ class App extends Component {
     const {
       fetchImages,
       fetchMonitor,
+      fetchOverlay,
+      fetchOvWidgets,
       fetchScreen,
       fetchSlideDecks,
       fetchYoutubeVideos,
@@ -67,6 +71,25 @@ class App extends Component {
         window.location.reload();
       }
       return fetchScreen();
+    })
+    .then(screen => {
+      if (screen.overlay === null) {
+        return Promise.all([
+          Promise.resolve(null),
+          Promise.resolve(screen),
+        ]);
+      }
+      return Promise.all([
+        fetchOverlay(screen.overlay),
+        Promise.resolve(screen),
+      ]);
+    })
+    .then(([overlay, screen]) => {
+      if (overlay === null) {
+        return screen;
+      }
+      return fetchOvWidgets()
+      .then(() => screen);
     })
     .then(screen => {
       if (screen.subscribedPlaylistIds.length === 0) {
@@ -264,6 +287,8 @@ App.propTypes = {
   currentlyPlaying: PropTypes.string.isRequired,
   images: PropTypes.array.isRequired,
   fetchImages: PropTypes.func.isRequired,
+  fetchOverlay: PropTypes.func.isRequired,
+  fetchOvWidgets: PropTypes.func.isRequired,
   fetchMonitor: PropTypes.func.isRequired,
   fetchScreen: PropTypes.func.isRequired,
   fetchSlideDecks: PropTypes.func.isRequired,
@@ -295,6 +320,8 @@ export default connect(
   {
     fetchImages: fromImages.fetchImages,
     fetchMonitor: fromMonitor.fetchMonitor,
+    fetchOverlay: fromOverlay.fetchOverlay,
+    fetchOvWidgets: fromOvWidgets.fetchOvWidgets,
     fetchScreen: fromScreen.fetchScreen,
     fetchSlideDecks: fromSlideDecks.fetchSlideDecks,
     fetchYoutubeVideos: fromYoutubeVideos.fetchYoutubeVideos,

@@ -9,6 +9,8 @@ import currentlyPlaying from '../ducks/currentlyPlaying';
 import images from '../ducks/images';
 import monitor from '../ducks/monitor';
 import connected from '../ducks/connected';
+import overlay from '../ducks/overlay';
+import ovWidgets from '../ducks/ovWidgets';
 
 export default combineReducers({
   appBlocking,
@@ -21,4 +23,6 @@ export default combineReducers({
   images,
   monitor,
   connected,
+  overlay,
+  ovWidgets,
 });
