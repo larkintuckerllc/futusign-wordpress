@@ -2,7 +2,6 @@ import { OVERLAYS_API_ENDPOINT } from '../strings';
 import * as fromRest from '../util/rest';
 import { getBase, getSeparator } from './base';
 
-// TODO: WORRY ABOUT NULL CASE
 // eslint-disable-next-line
 export const get = (id) => {
   const version = Date.now();
@@ -10,10 +9,8 @@ export const get = (id) => {
   return fromRest.get(`${getBase()}${OVERLAYS_API_ENDPOINT}/${id}${getSeparator()}version=${version}`)
     .then(response => ({
       id,
-      upperLeft: response.acf.upper_left,
+      upperLeft: response.acf.upper_left !== false ?
+        response.acf.upper_left : null,
     }))
-    .catch(() => ({
-      id,
-      upperLeft: null,
-    }));
+    .catch(() => (null));
 };
