@@ -24,6 +24,7 @@ import OfflineSlideDeck from './OfflineSlideDeck';
 import Bad from './Bad';
 import NoMedia from './NoMedia';
 import Player from './Player';
+import Overlay from './Overlay';
 
 class App extends Component {
   constructor() {
@@ -238,10 +239,11 @@ class App extends Component {
       appBlocking,
       badPlaying,
       connected,
-      currentlyPlaying,
       images,
       monitor,
       offlinePlaying,
+      overlay,
+      ovWidgets,
       setBadPlaying,
       setCurrentlyPlaying,
       setOfflinePlaying,
@@ -267,8 +269,8 @@ class App extends Component {
     return (
       <div>
         {monitor !== null && <Connected connected={connected} />}
+        {overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
         <Player
-          currentlyPlaying={currentlyPlaying}
           images={images}
           setBadPlaying={setBadPlaying}
           setCurrentlyPlaying={setCurrentlyPlaying}
@@ -284,7 +286,6 @@ App.propTypes = {
   appBlocking: PropTypes.bool.isRequired,
   badPlaying: PropTypes.bool.isRequired,
   connected: PropTypes.bool.isRequired,
-  currentlyPlaying: PropTypes.string.isRequired,
   images: PropTypes.array.isRequired,
   fetchImages: PropTypes.func.isRequired,
   fetchOverlay: PropTypes.func.isRequired,
@@ -295,6 +296,8 @@ App.propTypes = {
   fetchYoutubeVideos: PropTypes.func.isRequired,
   monitor: PropTypes.object,
   offlinePlaying: PropTypes.bool.isRequired,
+  overlay: PropTypes.object,
+  ovWidgets: PropTypes.array.isRequired,
   resetSlideDecks: PropTypes.func.isRequired,
   resetYoutubeVideos: PropTypes.func.isRequired,
   setAppBlocking: PropTypes.func.isRequired,
@@ -310,10 +313,11 @@ export default connect(
     appBlocking: fromAppBlocking.getAppBlocking(state),
     badPlaying: fromBadPlaying.getBadPlaying(state),
     connected: fromConnected.getConnected(state),
-    currentlyPlaying: fromCurrentlyPlaying.getCurrentlyPlaying(state),
     images: fromImages.getImages(state),
     monitor: fromMonitor.getMonitor(state),
     offlinePlaying: fromOfflinePlaying.getOfflinePlaying(state),
+    overlay: fromOverlay.getOverlay(state),
+    ovWidgets: fromOvWidgets.getOvWidgets(state),
     slideDecks: fromSlideDecks.getSlideDecks(state),
     youtubeVideos: fromYoutubeVideos.getYoutubeVideos(state),
   }),

@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import {
+  getCurrentlyPlaying,
   BLANK,
   IMAGES,
   LOADING,
@@ -151,4 +153,9 @@ Player.propTypes = {
   slideDecks: PropTypes.array.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
 };
-export default Player;
+export default connect(
+  state => ({
+    currentlyPlaying: getCurrentlyPlaying(state),
+  }),
+  null
+)(Player);

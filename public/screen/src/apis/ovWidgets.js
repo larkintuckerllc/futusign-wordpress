@@ -9,5 +9,6 @@ export const get = () => {
   return fromRest.get(`${getBase()}${OV_WIDGETS_API_ENDPOINT}${getSeparator()}version=${version}`)
   .then(response => (response.map(o => ({
     id: o.id,
+    url: o.link,
   }))));
 };
