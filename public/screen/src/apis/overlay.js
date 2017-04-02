@@ -11,6 +11,20 @@ export const get = (id) => {
       id,
       upperLeft: response.acf.upper_left !== false ?
         response.acf.upper_left : null,
+      upperMiddle: response.acf.upper_middle !== false ?
+        response.acf.upper_middle : null,
+      upperRight: response.acf.upper_right !== false ?
+        response.acf.upper_right : null,
+      middleLeft: response.acf.middle_left !== false ?
+        response.acf.middle_left : null,
+      middleRight: response.acf.middle_right !== false ?
+        response.acf.middle_right : null,
+      lowerLeft: response.acf.lower_left !== false ?
+        response.acf.lower_left : null,
+      lowerMiddle: response.acf.lower_middle !== false ?
+        response.acf.lower_middle : null,
+      lowerRight: response.acf.lower_right !== false ?
+        response.acf.lower_right : null,
     }))
     .catch(() => (null));
 };

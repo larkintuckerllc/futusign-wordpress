@@ -1,16 +1,16 @@
-[{
+{
   "id": 170,
   "date": "2017-04-01T14:30:58",
   "date_gmt": "2017-04-01T14:30:58",
   "guid": {
-    "rendered": "https://www.w3schools.com"
+    "rendered": "http://localhost:8080/fs-ov-widgets/clock/"
   },
   "modified": "2017-04-01T14:30:58",
   "modified_gmt": "2017-04-01T14:30:58",
   "slug": "clock",
   "status": "publish",
   "type": "futusign_ov_widget",
-  "link": "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/cat-icon.png",
+  "link": "http://localhost:8080/fs-ov-widgets/clock/",
   "title": {
     "rendered": "Clock"
   },
@@ -49,4 +49,4 @@
       }
     ]
   }
-}]
+}
