@@ -10,16 +10,21 @@ class Overlay extends Component {
     if (overlay.upperLeft !== null) {
       const widget = ovWidgets.find(o => o.id === overlay.upperLeft);
       if (widget !== undefined) {
-        upperLeft = widget.url;
+        upperLeft = `${widget.url}?position=upper-left`;
       }
     }
-    window.console.log('RENDER');
-    window.console.log(upperLeft);
     return (
       <table id={styles.root}>
         <tbody>
           <tr>
-            <td>1</td>
+            <td>
+              {upperLeft !== null && (
+                <iframe
+                  className={styles.rootWidget}
+                  src={upperLeft}
+                />
+              )}
+            </td>
             <td>2</td>
             <td>3</td>
           </tr>
