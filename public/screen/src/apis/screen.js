@@ -11,7 +11,6 @@ export const get = (id) => {
       id: response.id,
       title: response.title.rendered,
       subscribedPlaylistIds: response['fs-playlists'],
-      overlay: response.acf !== undefined &&
-        response.acf.overlay !== undefined ? response.acf.overlay : null,
+      overlay: response.acf.overlay.ID !== undefined ? response.acf.overlay.ID : null,
     }));
 };

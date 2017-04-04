@@ -20,14 +20,30 @@
   },
   "template": "",
   "acf": {
-    "upper_left": 170,
-    "upper_middle": 170,
-    "upper_right": 170,
-    "middle_left": 170,
-    "middle_right": 170,
-    "lower_left": 170,
-    "lower_middle": 170,
-    "lower_right": 170
+    "upper_left": {
+      "ID": 170
+    },
+    "upper_middle": {
+      "ID": 170
+    },
+    "upper_right": {
+      "ID": 170
+    },
+    "middle_left": {
+      "ID": 170
+    },
+    "middle_right": {
+      "ID": 170
+    },
+    "lower_left": {
+      "ID": 170
+    },
+    "lower_middle": {
+      "ID": 170
+    },
+    "lower_right": {
+      "ID": 170
+    }
   },
   "_links": {
     "self": [

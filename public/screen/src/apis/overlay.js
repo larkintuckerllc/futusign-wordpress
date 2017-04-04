@@ -9,22 +9,22 @@ export const get = (id) => {
   return fromRest.get(`${getBase()}${OVERLAYS_API_ENDPOINT}/${id}${getSeparator()}version=${version}`)
     .then(response => ({
       id,
-      upperLeft: response.acf.upper_left !== false ?
-        response.acf.upper_left : null,
-      upperMiddle: response.acf.upper_middle !== false ?
-        response.acf.upper_middle : null,
-      upperRight: response.acf.upper_right !== false ?
-        response.acf.upper_right : null,
-      middleLeft: response.acf.middle_left !== false ?
-        response.acf.middle_left : null,
-      middleRight: response.acf.middle_right !== false ?
-        response.acf.middle_right : null,
-      lowerLeft: response.acf.lower_left !== false ?
-        response.acf.lower_left : null,
-      lowerMiddle: response.acf.lower_middle !== false ?
-        response.acf.lower_middle : null,
-      lowerRight: response.acf.lower_right !== false ?
-        response.acf.lower_right : null,
+      upperLeft: response.acf.upper_left.ID !== undefined ?
+        response.acf.upper_left.ID : null,
+      upperMiddle: response.acf.upper_middle.ID !== undefined ?
+        response.acf.upper_middle.ID : null,
+      upperRight: response.acf.upper_right.ID !== undefined ?
+        response.acf.upper_right.ID : null,
+      middleLeft: response.acf.middle_left.ID !== undefined ?
+        response.acf.middle_left.ID : null,
+      middleRight: response.acf.middle_right.ID !== undefined ?
+        response.acf.middle_right.ID : null,
+      lowerLeft: response.acf.lower_left.ID !== undefined ?
+        response.acf.lower_left.ID : null,
+      lowerMiddle: response.acf.lower_middle.ID !== undefined ?
+        response.acf.lower_middle.ID : null,
+      lowerRight: response.acf.lower_right.ID !== undefined ?
+        response.acf.lower_right.ID : null,
     }))
     .catch(() => (null));
 };
