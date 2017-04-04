@@ -15,6 +15,8 @@ import * as fromOfflinePlaying from '../../ducks/offlinePlaying';
 import * as fromBadPlaying from '../../ducks/badPlaying';
 import * as fromCurrentlyPlaying from '../../ducks/currentlyPlaying';
 import * as fromConnected from '../../ducks/connected';
+import * as fromOverlay from '../../ducks/overlay';
+import * as fromOvWidgets from '../../ducks/ovWidgets';
 import Blocking from './Blocking';
 import Offline from './Offline';
 import Connected from './Connected';
@@ -22,6 +24,7 @@ import OfflineSlideDeck from './OfflineSlideDeck';
 import Bad from './Bad';
 import NoMedia from './NoMedia';
 import Player from './Player';
+import Overlay from './Overlay';
 
 class App extends Component {
   constructor() {
@@ -45,6 +48,8 @@ class App extends Component {
     const {
       fetchImages,
       fetchMonitor,
+      fetchOverlay,
+      fetchOvWidgets,
       fetchScreen,
       fetchSlideDecks,
       fetchYoutubeVideos,
@@ -67,6 +72,25 @@ class App extends Component {
         window.location.reload();
       }
       return fetchScreen();
+    })
+    .then(screen => {
+      if (screen.overlay === null) {
+        return Promise.all([
+          Promise.resolve(null),
+          Promise.resolve(screen),
+        ]);
+      }
+      return Promise.all([
+        fetchOverlay(screen.overlay),
+        Promise.resolve(screen),
+      ]);
+    })
+    .then(([overlay, screen]) => {
+      if (overlay === null) {
+        return screen;
+      }
+      return fetchOvWidgets()
+      .then(() => screen);
     })
     .then(screen => {
       if (screen.subscribedPlaylistIds.length === 0) {
@@ -215,10 +239,11 @@ class App extends Component {
       appBlocking,
       badPlaying,
       connected,
-      currentlyPlaying,
       images,
       monitor,
       offlinePlaying,
+      overlay,
+      ovWidgets,
       setBadPlaying,
       setCurrentlyPlaying,
       setOfflinePlaying,
@@ -244,8 +269,8 @@ class App extends Component {
     return (
       <div>
         {monitor !== null && <Connected connected={connected} />}
+        {overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
         <Player
-          currentlyPlaying={currentlyPlaying}
           images={images}
           setBadPlaying={setBadPlaying}
           setCurrentlyPlaying={setCurrentlyPlaying}
@@ -261,15 +286,18 @@ App.propTypes = {
   appBlocking: PropTypes.bool.isRequired,
   badPlaying: PropTypes.bool.isRequired,
   connected: PropTypes.bool.isRequired,
-  currentlyPlaying: PropTypes.string.isRequired,
   images: PropTypes.array.isRequired,
   fetchImages: PropTypes.func.isRequired,
+  fetchOverlay: PropTypes.func.isRequired,
+  fetchOvWidgets: PropTypes.func.isRequired,
   fetchMonitor: PropTypes.func.isRequired,
   fetchScreen: PropTypes.func.isRequired,
   fetchSlideDecks: PropTypes.func.isRequired,
   fetchYoutubeVideos: PropTypes.func.isRequired,
   monitor: PropTypes.object,
   offlinePlaying: PropTypes.bool.isRequired,
+  overlay: PropTypes.object,
+  ovWidgets: PropTypes.array.isRequired,
   resetSlideDecks: PropTypes.func.isRequired,
   resetYoutubeVideos: PropTypes.func.isRequired,
   setAppBlocking: PropTypes.func.isRequired,
@@ -285,16 +313,19 @@ export default connect(
     appBlocking: fromAppBlocking.getAppBlocking(state),
     badPlaying: fromBadPlaying.getBadPlaying(state),
     connected: fromConnected.getConnected(state),
-    currentlyPlaying: fromCurrentlyPlaying.getCurrentlyPlaying(state),
     images: fromImages.getImages(state),
     monitor: fromMonitor.getMonitor(state),
     offlinePlaying: fromOfflinePlaying.getOfflinePlaying(state),
+    overlay: fromOverlay.getOverlay(state),
+    ovWidgets: fromOvWidgets.getOvWidgets(state),
     slideDecks: fromSlideDecks.getSlideDecks(state),
     youtubeVideos: fromYoutubeVideos.getYoutubeVideos(state),
   }),
   {
     fetchImages: fromImages.fetchImages,
     fetchMonitor: fromMonitor.fetchMonitor,
+    fetchOverlay: fromOverlay.fetchOverlay,
+    fetchOvWidgets: fromOvWidgets.fetchOvWidgets,
     fetchScreen: fromScreen.fetchScreen,
     fetchSlideDecks: fromSlideDecks.fetchSlideDecks,
     fetchYoutubeVideos: fromYoutubeVideos.fetchYoutubeVideos,

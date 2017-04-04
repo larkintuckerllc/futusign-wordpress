@@ -1,0 +1,24 @@
+#root {
+  position: fixed;
+  table-layout: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+  height: 100%;
+}
+#root td {
+  position: relative;
+  width: 34%;
+  height: 34%;
+}
+.rootWidget {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  border: none;
+  width: 100%;
+  height: 100%;
+}

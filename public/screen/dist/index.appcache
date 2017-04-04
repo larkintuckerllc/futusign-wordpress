@@ -1,19 +1,22 @@
 CACHE MANIFEST
-# 241e77ef7c8d7e8dc844
+# 2dbd47831ea9dc7b2c6c
 
 0.0.cdbf07fb50c01ab63d7b.bundle.js
-vendor.7aa670bbb5cdc75794ae.bundle.js
-main.6d2e2a1e579b3c6d2f15.bundle.js
+vendor.62841794a5f1187ed093.bundle.js
+main.55b62420502685e9e22d.bundle.js
 index.php
-data/bryce.pdf
+data/cat.jpg
 data/fs-monitor
+data/wp/v2/170
 data/sample.pdf
 data/wp/v2/fs-images?fs-playlists=11
+data/wp/v2/fs-ov-widgets
+data/wp/v2/fs-overlays/154
+data/sample.jpg
 data/wp/v2/fs-screens/80
 data/wp/v2/fs-slide-decks?fs-playlists=11
 data/wp/v2/fs-youtube-videos?fs-playlists=11
-data/cat.jpg
-data/sample.jpg
+data/bryce.pdf
 pdf.worker.js
 index.html
 
