@@ -33,7 +33,7 @@ class Futusign_Public {
 	public function single_template( $single ) {
 		global $post;
 		if ($post->post_type == 'futusign_screen'){
-			return plugin_dir_path( __FILE__ ) . 'screen/dist/index.php';
+			return plugin_dir_path( __FILE__ ) . 'screen/dist/futusign-screen.php';
 		}
 		return $single;
 	}

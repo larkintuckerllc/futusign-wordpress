@@ -87,7 +87,7 @@ module.exports = {
     new CleanWebpackPlugin(['dist']),
     new WebpackMd5Hash(),
     new CopyWebpackPlugin([
-      { from: 'src/index.php', to: 'index.php' },
+      { from: 'src/futusign-screen.php', to: 'futusign-screen.php' },
       { from: 'data', to: 'data' },
       { from: 'node_modules/pdfjs-dist/build/pdf.worker.js', to: 'pdf.worker.js' },
     ]),
@@ -100,6 +100,9 @@ module.exports = {
     new AppCachePlugin({
       exclude: [
         /.*\.map$/,
+        /futusign-screen.php/,
+        /data\/.*/,
+        /index.html/,
       ],
       output: 'index.appcache',
     }),

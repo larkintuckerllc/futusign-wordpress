@@ -4,21 +4,7 @@ CACHE MANIFEST
 0.0.cdbf07fb50c01ab63d7b.bundle.js
 vendor.62841794a5f1187ed093.bundle.js
 main.4490f2de9befca782da4.bundle.js
-index.php
-data/bryce.pdf
-data/fs-monitor
-data/cat.jpg
-data/sample.pdf
-data/wp/v2/170
-data/wp/v2/fs-ov-widgets
-data/sample.jpg
-data/wp/v2/fs-overlays/154
-data/wp/v2/fs-screens/80
-data/wp/v2/fs-slide-decks?fs-playlists=11
-data/wp/v2/fs-youtube-videos?fs-playlists=11
-data/wp/v2/fs-images?fs-playlists=11
 pdf.worker.js
-index.html
 
 NETWORK:
 *
