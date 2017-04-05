@@ -89,17 +89,6 @@
   <!-- MANUALLY UPDATE -->
   <script src="<?php echo plugins_url( 'vendor.62841794a5f1187ed093.bundle.js', __FILE__ ); ?>"></script>
   <!-- MANUALLY UPDATE -->
-  <script src="<?php echo plugins_url( 'main.cdbf07fb50c01ab63d7b.bundle.js', __FILE__ ); ?>"></script>
+  <script src="<?php echo plugins_url( 'main.4490f2de9befca782da4.bundle.js', __FILE__ ); ?>"></script>
 </body>
 </html>
-0.0.cdbf07fb50c01ab63d7b.bundle.js
-0.0.cdbf07fb50c01ab63d7b.bundle.js.map
-data
-index.appcache
-index.html
-index.php
-main.4490f2de9befca782da4.bundle.js
-main.4490f2de9befca782da4.bundle.js.map
-pdf.worker.js
-vendor.62841794a5f1187ed093.bundle.js
-vendor.62841794a5f1187ed093.bundle.js.map
