@@ -20,7 +20,7 @@ class OfflineSlideDeck extends Component {
     this.rootHeight = rootEl.offsetHeight;
     this.canvasOddEl = document.getElementById(styles.rootCanvasOdd);
     this.canvasEvenEl = document.getElementById(styles.rootCanvasEven);
-    this.slideDuration = 1;
+    this.slideDuration = 2;
     this.odd = true;
     this.iList = 0;
     this.renderSlideDeck();
@@ -72,12 +72,11 @@ class OfflineSlideDeck extends Component {
       this.renderTimeout = window.setTimeout(this.renderPage, this.slideDuration * 1000);
       this.slideDuration = window.localStorage.getItem('futusign_slide_deck_slide_duration');
     } else {
+      this.iPage = 1;
+      // DUPLICATED FOR THE CASE OF A SINGLE PAGE
+      this.slideDuration = window.localStorage.getItem('futusign_slide_deck_slide_duration');
       this.renderTimeout = window.setTimeout(() => {
-        this.slideDuration = window.localStorage.getItem('futusign_slide_deck_slide_duration');
-        this.showRendered();
-        this.renderTimeout = window.setTimeout(() => {
-          this.renderSlideDeck();
-        }, this.slideDuration * 1000);
+        this.renderPage();
       }, this.slideDuration * 1000);
     }
   }

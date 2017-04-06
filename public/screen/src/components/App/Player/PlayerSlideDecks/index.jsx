@@ -20,7 +20,7 @@ class PlayerSlideDecks extends Component {
     this.rootHeight = rootEl.offsetHeight;
     this.canvasOddEl = document.getElementById(styles.rootCanvasOdd);
     this.canvasEvenEl = document.getElementById(styles.rootCanvasEven);
-    this.slideDuration = 1;
+    this.slideDuration = 2;
     this.odd = true;
     this.iList = 0;
     this.renderSlideDeck();
@@ -105,13 +105,19 @@ class PlayerSlideDecks extends Component {
     });
     if (this.iList === 0) {
       const newSlideDeckURL = slideDecks[0].file;
+      const newSlideDeckDuration = slideDecks[0].slideDuration;
       const lastSlideDeckURL = window.localStorage.getItem('futusign_slide_deck_url');
-      if (newSlideDeckURL !== lastSlideDeckURL) {
+      const lastSlideDeckDuration =
+        window.localStorage.getItem('futusign_slide_deck_slide_duration');
+      if (
+        newSlideDeckURL !== lastSlideDeckURL ||
+        newSlideDeckDuration !== lastSlideDeckDuration
+      ) {
         window.localStorage.setItem('futusign_slide_deck_url', newSlideDeckURL);
         window.localStorage.setItem('futusign_slide_deck_file', file);
         window.localStorage.setItem(
           'futusign_slide_deck_slide_duration',
-          slideDecks[0].slideDuration
+          newSlideDeckDuration
         );
       }
     }
