@@ -1,3 +1,5 @@
+import { SITE_URL } from '../strings';
+
 const URL_REGEX = /^<([^>]*)>/;
 let base;
 let separator;
@@ -31,7 +33,7 @@ export const fetchBase = () => {
     xmlhttp.addEventListener('abort', () => {
       reject({ message: '500' });
     });
-    xmlhttp.open('HEAD', '/', true);
+    xmlhttp.open('HEAD', SITE_URL, true);
     xmlhttp.send();
   });
 };
