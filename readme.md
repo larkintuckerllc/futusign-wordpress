@@ -12,19 +12,10 @@ Installation
 ====
 
 Install and activate the *futusign* plugin via the WordPress *Plugins* admin
-screen or.
+screen.
 
-Download the the *zip* file and upload and activate via the WordPress
-*Plugins* admin screen. If you may get an error, `upload_max_filesize`,
-you can follow [these instructions](https://atlantisthemes.com/fix-upload_max_filesize/) to correct.
-
-**note**: The futusign plugin depends on both the *ACF to REST API* and
-*Advanced Custom Fields* plugins; futusign will automatically display
-warning messages (and action buttons) if the requirements are not met.
-
-The futusign plugin has been tested with WordPress multisite configurations;
-however the plugin dependencies need to be manually installed (the action
-buttons do not appear to work in this configuration).
+Additional details, including usage with Wordpress multisite, are available
+in the [Frequently Asked Questions](https://www.futusign.com/faq/).
 
 Usage
 ====

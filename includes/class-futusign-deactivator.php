@@ -9,6 +9,9 @@
  * @package    futusign
  * @subpackage futusign/includes
  */
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 /**
  * Fired during plugin deactiviation.
  *

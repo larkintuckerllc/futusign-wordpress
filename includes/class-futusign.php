@@ -8,6 +8,9 @@
  * @package    futusign
  * @subpackage futusign/includes
  */
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 /**
  * The core plugin class.
  *
@@ -89,7 +92,7 @@ class Futusign {
 	 */
 	public function __construct() {
 		$this->plugin_name = 'futusign';
-		$this->version = '1.2.2';
+		$this->version = '1.2.3';
 		$this->load_dependencies();
 		$this->set_locale();
 		if (Futusign::is_plugin_active('all')) {

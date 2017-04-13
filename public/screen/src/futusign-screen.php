@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+?>
 <!DOCTYPE html>
 <html lang="en" manifest="<?php echo trailingslashit( plugins_url( '', __FILE__ ) ); ?>index.appcache">
 <head>

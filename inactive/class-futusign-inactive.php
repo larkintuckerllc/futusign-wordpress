@@ -8,6 +8,9 @@
  * @package    futusign
  * @subpackage futusign/inactive
  */
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 /**
  * The inactive functionality of the plugin.
  *
