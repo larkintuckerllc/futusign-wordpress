@@ -8,6 +8,9 @@
  * @package    futusign
  * @subpackage futusign/common
  */
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 /**
  * Define the screen functionality.
  *

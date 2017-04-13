@@ -8,6 +8,9 @@
  * @package    futusign
  * @subpackage futusign/includes
  */
+if ( ! defined( 'WPINC' ) ) {
+	die;
+} 
 /**
  * Define the internationalization functionality.
  *

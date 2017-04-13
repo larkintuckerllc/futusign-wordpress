@@ -8,6 +8,9 @@
  * @package    futusign
  * @subpackage futusign/includes
  */
+if ( ! defined( 'WPINC' ) ) {
+	die;
+} 
 /**
  * Register all actions and filters for the plugin.
  *

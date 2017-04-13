@@ -8,6 +8,9 @@
  * @package    futusign
  * @subpackage futusign/public
  */
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 /**
  * The public-specific functionality of the plugin.
  *

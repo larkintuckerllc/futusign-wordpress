@@ -8,6 +8,9 @@
  * @package    futusign
  * @subpackage futusign/admin
  */
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 /**
  * The admin-specific functionality of the plugin.
  *
