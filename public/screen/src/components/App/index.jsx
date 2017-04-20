@@ -11,6 +11,7 @@ import * as fromScreen from '../../ducks/screen';
 import * as fromSlideDecks from '../../ducks/slideDecks';
 import * as fromYoutubeVideos from '../../ducks/youtubeVideos';
 import * as fromImages from '../../ducks/images';
+import * as fromLayers from '../../ducks/layers';
 import * as fromOfflinePlaying from '../../ducks/offlinePlaying';
 import * as fromBadPlaying from '../../ducks/badPlaying';
 import * as fromCurrentlyPlaying from '../../ducks/currentlyPlaying';
@@ -25,6 +26,7 @@ import Bad from './Bad';
 import NoMedia from './NoMedia';
 import Player from './Player';
 import Overlay from './Overlay';
+import Layers from './Layers';
 
 class App extends Component {
   constructor() {
@@ -47,6 +49,7 @@ class App extends Component {
   fetch() {
     const {
       fetchImages,
+      fetchLayers,
       fetchMonitor,
       fetchOverlay,
       fetchOvWidgets,
@@ -117,12 +120,20 @@ class App extends Component {
               images: {},
             },
           },
+        }, {
+          response: {
+            result: [],
+            entities: {
+              layers: {},
+            },
+          },
         }]);
       }
       return Promise.all([
         fetchSlideDecks(screen.subscribedPlaylistIds),
         fetchYoutubeVideos(screen.subscribedPlaylistIds),
         fetchImages(screen.subscribedPlaylistIds),
+        fetchLayers(screen.subscribedPlaylistIds),
         fetchMonitor(),
         Promise.resolve(screen),
       ]);
@@ -131,6 +142,8 @@ class App extends Component {
       slideDecksResponse,
       youtubeVideosResponse,
       imagesResponse,
+      // eslint-disable-next-line
+      layersResponse,
       monitorResponse,
       screen,
     ]) => {
@@ -240,6 +253,7 @@ class App extends Component {
       badPlaying,
       connected,
       images,
+      layers,
       monitor,
       offlinePlaying,
       overlay,
@@ -270,6 +284,7 @@ class App extends Component {
       <div>
         {monitor !== null && <Connected connected={connected} />}
         {overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
+        <Layers layers={layers} />
         <Player
           images={images}
           setBadPlaying={setBadPlaying}
@@ -288,12 +303,14 @@ App.propTypes = {
   connected: PropTypes.bool.isRequired,
   images: PropTypes.array.isRequired,
   fetchImages: PropTypes.func.isRequired,
+  fetchLayers: PropTypes.func.isRequired,
   fetchOverlay: PropTypes.func.isRequired,
   fetchOvWidgets: PropTypes.func.isRequired,
   fetchMonitor: PropTypes.func.isRequired,
   fetchScreen: PropTypes.func.isRequired,
   fetchSlideDecks: PropTypes.func.isRequired,
   fetchYoutubeVideos: PropTypes.func.isRequired,
+  layers: PropTypes.array.isRequired,
   monitor: PropTypes.object,
   offlinePlaying: PropTypes.bool.isRequired,
   overlay: PropTypes.object,
@@ -314,6 +331,7 @@ export default connect(
     badPlaying: fromBadPlaying.getBadPlaying(state),
     connected: fromConnected.getConnected(state),
     images: fromImages.getImages(state),
+    layers: fromLayers.getLayers(state),
     monitor: fromMonitor.getMonitor(state),
     offlinePlaying: fromOfflinePlaying.getOfflinePlaying(state),
     overlay: fromOverlay.getOverlay(state),
@@ -323,6 +341,7 @@ export default connect(
   }),
   {
     fetchImages: fromImages.fetchImages,
+    fetchLayers: fromLayers.fetchLayers,
     fetchMonitor: fromMonitor.fetchMonitor,
     fetchOverlay: fromOverlay.fetchOverlay,
     fetchOvWidgets: fromOvWidgets.fetchOvWidgets,
