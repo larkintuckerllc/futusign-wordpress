@@ -9,6 +9,19 @@
 </style>
 </head>
 <body>
-  <div style="display: inline-block; width: 50px; height: 50px; background-color: blue;"></div>
+  <div id="block" style="display: inline-block; width: 50px; height: 50px; background-color: yellow;"></div>
+  <div id="unblock" style="display: inline-block; width: 50px; height: 50px; background-color: green;"></div>
+  <script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var blockEl = document.getElementById('block');
+    var unblockEl = document.getElementById('unblock');
+    blockEl.addEventListener('click', function() {
+      window.parent.postMessage('block', '*');
+    });
+    unblockEl.addEventListener('click', function() {
+      window.parent.postMessage('unblock', '*');
+    });
+  });
+  </script>
 </body>
 </html>

@@ -20,6 +20,7 @@ class PlayerImages extends Component {
     return false;
   }
   componentWillUnmount() {
+    window.clearTimeout(this.renderTimeout);
     window.clearTimeout(this.coverTimeout);
   }
   showRendered() {

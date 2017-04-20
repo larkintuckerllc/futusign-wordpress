@@ -12,6 +12,7 @@ import monitor from '../ducks/monitor';
 import connected from '../ducks/connected';
 import overlay from '../ducks/overlay';
 import ovWidgets from '../ducks/ovWidgets';
+import layerBlocking from '../ducks/layerBlocking';
 
 export default combineReducers({
   appBlocking,
@@ -27,4 +28,5 @@ export default combineReducers({
   connected,
   overlay,
   ovWidgets,
+  layerBlocking,
 });

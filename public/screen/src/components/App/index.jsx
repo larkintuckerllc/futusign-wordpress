@@ -18,6 +18,7 @@ import * as fromCurrentlyPlaying from '../../ducks/currentlyPlaying';
 import * as fromConnected from '../../ducks/connected';
 import * as fromOverlay from '../../ducks/overlay';
 import * as fromOvWidgets from '../../ducks/ovWidgets';
+import * as fromLayerBlocking from '../../ducks/layerBlocking';
 import Blocking from './Blocking';
 import Offline from './Offline';
 import Connected from './Connected';
@@ -34,6 +35,7 @@ class App extends Component {
     this.fetch = this.fetch.bind(this);
   }
   componentDidMount() {
+    const { setCurrentlyPlaying, setLayerBlocking } = this.props;
     const appCache = window.applicationCache;
     const check = () => {
       appCache.update();
@@ -41,10 +43,23 @@ class App extends Component {
     const handleUpdateReady = () => {
       window.location.reload();
     };
+    const handleMessage = (message) => {
+      switch (message.data) {
+        case 'block':
+          setLayerBlocking(true);
+          setCurrentlyPlaying(fromCurrentlyPlaying.LOADING);
+          break;
+        case 'unblock':
+          setLayerBlocking(false);
+          break;
+        default:
+      }
+    };
     this.fetch();
     window.setInterval(this.fetch, POLLING_INTERVAL * 1000);
     window.setInterval(check, CACHE_INTERVAL * 1000);
     appCache.addEventListener('updateready', handleUpdateReady);
+    window.addEventListener('message', handleMessage);
   }
   fetch() {
     const {
@@ -147,6 +162,7 @@ class App extends Component {
       monitorResponse,
       screen,
     ]) => {
+      // TODO: WORRY ABOUT RESETTING WHEN LAYERS CHANGE
       // NEXT SLIDE DECKS
       let keys = slideDecksResponse.response.result;
       let lookup = slideDecksResponse.response.entities.slideDecks;
@@ -254,6 +270,7 @@ class App extends Component {
       connected,
       images,
       layers,
+      layerBlocking,
       monitor,
       offlinePlaying,
       overlay,
@@ -282,17 +299,19 @@ class App extends Component {
     ) return <NoMedia />;
     return (
       <div>
-        {monitor !== null && <Connected connected={connected} />}
-        {overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
         <Layers layers={layers} />
-        <Player
-          images={images}
-          setBadPlaying={setBadPlaying}
-          setCurrentlyPlaying={setCurrentlyPlaying}
-          setOfflinePlaying={setOfflinePlaying}
-          slideDecks={slideDecks}
-          youtubeVideos={youtubeVideos}
-        />
+        {!layerBlocking && monitor !== null && <Connected connected={connected} />}
+        {!layerBlocking && overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
+        {!layerBlocking &&
+          <Player
+            images={images}
+            setBadPlaying={setBadPlaying}
+            setCurrentlyPlaying={setCurrentlyPlaying}
+            setOfflinePlaying={setOfflinePlaying}
+            slideDecks={slideDecks}
+            youtubeVideos={youtubeVideos}
+          />
+        }
       </div>
     );
   }
@@ -311,6 +330,7 @@ App.propTypes = {
   fetchSlideDecks: PropTypes.func.isRequired,
   fetchYoutubeVideos: PropTypes.func.isRequired,
   layers: PropTypes.array.isRequired,
+  layerBlocking: PropTypes.bool.isRequired,
   monitor: PropTypes.object,
   offlinePlaying: PropTypes.bool.isRequired,
   overlay: PropTypes.object,
@@ -321,6 +341,7 @@ App.propTypes = {
   setBadPlaying: PropTypes.func.isRequired,
   setConnected: PropTypes.func.isRequired,
   setCurrentlyPlaying: PropTypes.func.isRequired,
+  setLayerBlocking: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
@@ -332,6 +353,7 @@ export default connect(
     connected: fromConnected.getConnected(state),
     images: fromImages.getImages(state),
     layers: fromLayers.getLayers(state),
+    layerBlocking: fromLayerBlocking.getLayerBlocking(state),
     monitor: fromMonitor.getMonitor(state),
     offlinePlaying: fromOfflinePlaying.getOfflinePlaying(state),
     overlay: fromOverlay.getOverlay(state),
@@ -354,6 +376,7 @@ export default connect(
     setBadPlaying: fromBadPlaying.setBadPlaying,
     setConnected: fromConnected.setConnected,
     setCurrentlyPlaying: fromCurrentlyPlaying.setCurrentlyPlaying,
+    setLayerBlocking: fromLayerBlocking.setLayerBlocking,
     setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
   }
 )(App);
