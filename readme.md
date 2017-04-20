@@ -55,7 +55,7 @@ the web application will display a *No Slide Decks* icon.
 
 **Tips**
 
-* *Slide Decks* play in the order shown (alphabetical).
+* *Slide Decks* play in the order shown (reverse chronological).
 * *Slide Decks* can be scheduled to be published in the future using the
 WordPress schedule feature.
 * *Slide Decks* can be scheduled to expire in the future using the third-party
