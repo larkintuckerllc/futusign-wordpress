@@ -72,6 +72,7 @@ class App extends Component {
       fetchSlideDecks,
       fetchYoutubeVideos,
       images,
+      layers,
       monitor,
       offlinePlaying,
       resetSlideDecks,
@@ -81,6 +82,7 @@ class App extends Component {
       setConnected,
       setCurrentlyPlaying,
       setOfflinePlaying,
+      setLayerBlocking,
       slideDecks,
       youtubeVideos,
     } = this.props;
@@ -157,12 +159,10 @@ class App extends Component {
       slideDecksResponse,
       youtubeVideosResponse,
       imagesResponse,
-      // eslint-disable-next-line
       layersResponse,
       monitorResponse,
       screen,
     ]) => {
-      // TODO: WORRY ABOUT RESETTING WHEN LAYERS CHANGE
       // NEXT SLIDE DECKS
       let keys = slideDecksResponse.response.result;
       let lookup = slideDecksResponse.response.entities.slideDecks;
@@ -178,6 +178,11 @@ class App extends Component {
       lookup = imagesResponse.response.entities.images;
       list = keys.map(o => lookup[o]);
       const nextImages = list;
+      // NEXT LAYERS
+      keys = layersResponse.response.result;
+      lookup = layersResponse.response.entities.layers;
+      list = keys.map(o => lookup[o]);
+      const nextLayers = list;
       // MONITORING
       const nextMonitor = monitorResponse;
       // MONITORING - RELOAD
@@ -242,9 +247,11 @@ class App extends Component {
       if (
         JSON.stringify(slideDecks) !== JSON.stringify(nextSlideDecks) ||
         JSON.stringify(youtubeVideos) !== JSON.stringify(nextYoutubeVideos) ||
-        JSON.stringify(images) !== JSON.stringify(nextImages)
+        JSON.stringify(images) !== JSON.stringify(nextImages) ||
+        JSON.stringify(layers) !== JSON.stringify(nextLayers)
       ) {
         setCurrentlyPlaying(fromCurrentlyPlaying.LOADING);
+        setLayerBlocking(false);
       }
       // MISC
       setOfflinePlaying(false);

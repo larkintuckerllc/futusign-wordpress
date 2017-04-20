@@ -1,0 +1,52 @@
+[{
+  "id": 170,
+  "date": "2017-04-01T14:30:58",
+  "date_gmt": "2017-04-01T14:30:58",
+  "guid": {
+    "rendered": "https://www.w3schools.com"
+  },
+  "modified": "2017-04-01T14:30:58",
+  "modified_gmt": "2017-04-01T14:30:58",
+  "slug": "clock",
+  "status": "publish",
+  "type": "futusign_ov_widget",
+  "link": "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/cat-icon.png",
+  "title": {
+    "rendered": "Clock"
+  },
+  "content": {
+    "rendered": "",
+    "protected": false
+  },
+  "template": "",
+  "acf": false,
+  "_links": {
+    "self": [
+      {
+        "href": "http://localhost:8080/wp-json/wp/v2/fs-ov-widgets/170"
+      }
+    ],
+    "collection": [
+      {
+        "href": "http://localhost:8080/wp-json/wp/v2/fs-ov-widgets"
+      }
+    ],
+    "about": [
+      {
+        "href": "http://localhost:8080/wp-json/wp/v2/types/futusign_ov_widget"
+      }
+    ],
+    "wp:attachment": [
+      {
+        "href": "http://localhost:8080/wp-json/wp/v2/media?parent=170"
+      }
+    ],
+    "curies": [
+      {
+        "name": "wp",
+        "href": "https://api.w.org/{rel}",
+        "templated": true
+      }
+    ]
+  }
+}]
