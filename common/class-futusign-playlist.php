@@ -40,6 +40,9 @@ class Futusign_Playlist {
 		if (class_exists( 'Futusign_Image' )) {
 			array_push( $object_types, 'futusign_image' );
 		}
+		if (class_exists( 'Futusign_Layer' )) {
+			array_push( $object_types, 'futusign_layer' );
+		}
 		$labels = array(
 			 'name' => __( 'Playlists', 'futusign' ),
 			 'singular_name' => __( 'Playlist', 'futusign' ),

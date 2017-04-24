@@ -58,9 +58,12 @@ the web application will display a *No Slide Decks* icon.
 
 **Tips**
 
+<<<<<<< HEAD
 
 * If required, the uploaded PDF file will be stretched / shrunk (centered and
 maintaining aspect ratio) to just cover the target display screen.
+=======
+>>>>>>> 1f01a15945e6ecc028e3f45380fa8561246835b9
 * *Slide Decks* play in the order shown (reverse chronological).
 * *Slide Decks* can be scheduled to be published in the future using the
 WordPress schedule feature.

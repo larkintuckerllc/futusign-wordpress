@@ -6,6 +6,7 @@ export const SCREENS_API_ENDPOINT = 'fs-screens';
 export const SLIDE_DECKS_API_ENDPOINT = 'fs-slide-decks';
 export const YOUTUBE_VIDEOS_API_ENDPOINT = 'fs-youtube-videos';
 export const IMAGES_API_ENDPOINT = 'fs-images';
+export const LAYERS_API_ENDPOINT = 'fs-layers';
 export const MONITOR_API_ENDPOINT = 'fs-monitor';
 export const OVERLAYS_API_ENDPOINT = 'fs-overlays';
 export const CACHE_INTERVAL = 300;

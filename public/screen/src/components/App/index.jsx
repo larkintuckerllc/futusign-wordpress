@@ -11,12 +11,14 @@ import * as fromScreen from '../../ducks/screen';
 import * as fromSlideDecks from '../../ducks/slideDecks';
 import * as fromYoutubeVideos from '../../ducks/youtubeVideos';
 import * as fromImages from '../../ducks/images';
+import * as fromLayers from '../../ducks/layers';
 import * as fromOfflinePlaying from '../../ducks/offlinePlaying';
 import * as fromBadPlaying from '../../ducks/badPlaying';
 import * as fromCurrentlyPlaying from '../../ducks/currentlyPlaying';
 import * as fromConnected from '../../ducks/connected';
 import * as fromOverlay from '../../ducks/overlay';
 import * as fromOvWidgets from '../../ducks/ovWidgets';
+import * as fromLayerBlocking from '../../ducks/layerBlocking';
 import Blocking from './Blocking';
 import Offline from './Offline';
 import Connected from './Connected';
@@ -25,6 +27,7 @@ import Bad from './Bad';
 import NoMedia from './NoMedia';
 import Player from './Player';
 import Overlay from './Overlay';
+import Layers from './Layers';
 
 class App extends Component {
   constructor() {
@@ -32,6 +35,7 @@ class App extends Component {
     this.fetch = this.fetch.bind(this);
   }
   componentDidMount() {
+    const { setCurrentlyPlaying, setLayerBlocking } = this.props;
     const appCache = window.applicationCache;
     const check = () => {
       appCache.update();
@@ -39,14 +43,28 @@ class App extends Component {
     const handleUpdateReady = () => {
       window.location.reload();
     };
+    const handleMessage = (message) => {
+      switch (message.data) {
+        case 'block':
+          setLayerBlocking(true);
+          setCurrentlyPlaying(fromCurrentlyPlaying.LOADING);
+          break;
+        case 'unblock':
+          setLayerBlocking(false);
+          break;
+        default:
+      }
+    };
     this.fetch();
     window.setInterval(this.fetch, POLLING_INTERVAL * 1000);
     window.setInterval(check, CACHE_INTERVAL * 1000);
     appCache.addEventListener('updateready', handleUpdateReady);
+    window.addEventListener('message', handleMessage);
   }
   fetch() {
     const {
       fetchImages,
+      fetchLayers,
       fetchMonitor,
       fetchOverlay,
       fetchOvWidgets,
@@ -54,6 +72,7 @@ class App extends Component {
       fetchSlideDecks,
       fetchYoutubeVideos,
       images,
+      layers,
       monitor,
       offlinePlaying,
       resetSlideDecks,
@@ -63,6 +82,7 @@ class App extends Component {
       setConnected,
       setCurrentlyPlaying,
       setOfflinePlaying,
+      setLayerBlocking,
       slideDecks,
       youtubeVideos,
     } = this.props;
@@ -117,12 +137,20 @@ class App extends Component {
               images: {},
             },
           },
+        }, {
+          response: {
+            result: [],
+            entities: {
+              layers: {},
+            },
+          },
         }]);
       }
       return Promise.all([
         fetchSlideDecks(screen.subscribedPlaylistIds),
         fetchYoutubeVideos(screen.subscribedPlaylistIds),
         fetchImages(screen.subscribedPlaylistIds),
+        fetchLayers(screen.subscribedPlaylistIds),
         fetchMonitor(),
         Promise.resolve(screen),
       ]);
@@ -131,6 +159,7 @@ class App extends Component {
       slideDecksResponse,
       youtubeVideosResponse,
       imagesResponse,
+      layersResponse,
       monitorResponse,
       screen,
     ]) => {
@@ -149,6 +178,11 @@ class App extends Component {
       lookup = imagesResponse.response.entities.images;
       list = keys.map(o => lookup[o]);
       const nextImages = list;
+      // NEXT LAYERS
+      keys = layersResponse.response.result;
+      lookup = layersResponse.response.entities.layers;
+      list = keys.map(o => lookup[o]);
+      const nextLayers = list;
       // MONITORING
       const nextMonitor = monitorResponse;
       // MONITORING - RELOAD
@@ -213,9 +247,11 @@ class App extends Component {
       if (
         JSON.stringify(slideDecks) !== JSON.stringify(nextSlideDecks) ||
         JSON.stringify(youtubeVideos) !== JSON.stringify(nextYoutubeVideos) ||
-        JSON.stringify(images) !== JSON.stringify(nextImages)
+        JSON.stringify(images) !== JSON.stringify(nextImages) ||
+        JSON.stringify(layers) !== JSON.stringify(nextLayers)
       ) {
         setCurrentlyPlaying(fromCurrentlyPlaying.LOADING);
+        setLayerBlocking(false);
       }
       // MISC
       setOfflinePlaying(false);
@@ -240,6 +276,8 @@ class App extends Component {
       badPlaying,
       connected,
       images,
+      layers,
+      layerBlocking,
       monitor,
       offlinePlaying,
       overlay,
@@ -268,16 +306,19 @@ class App extends Component {
     ) return <NoMedia />;
     return (
       <div>
-        {monitor !== null && <Connected connected={connected} />}
-        {overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
-        <Player
-          images={images}
-          setBadPlaying={setBadPlaying}
-          setCurrentlyPlaying={setCurrentlyPlaying}
-          setOfflinePlaying={setOfflinePlaying}
-          slideDecks={slideDecks}
-          youtubeVideos={youtubeVideos}
-        />
+        <Layers layers={layers} />
+        {!layerBlocking && monitor !== null && <Connected connected={connected} />}
+        {!layerBlocking && overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
+        {!layerBlocking &&
+          <Player
+            images={images}
+            setBadPlaying={setBadPlaying}
+            setCurrentlyPlaying={setCurrentlyPlaying}
+            setOfflinePlaying={setOfflinePlaying}
+            slideDecks={slideDecks}
+            youtubeVideos={youtubeVideos}
+          />
+        }
       </div>
     );
   }
@@ -288,12 +329,15 @@ App.propTypes = {
   connected: PropTypes.bool.isRequired,
   images: PropTypes.array.isRequired,
   fetchImages: PropTypes.func.isRequired,
+  fetchLayers: PropTypes.func.isRequired,
   fetchOverlay: PropTypes.func.isRequired,
   fetchOvWidgets: PropTypes.func.isRequired,
   fetchMonitor: PropTypes.func.isRequired,
   fetchScreen: PropTypes.func.isRequired,
   fetchSlideDecks: PropTypes.func.isRequired,
   fetchYoutubeVideos: PropTypes.func.isRequired,
+  layers: PropTypes.array.isRequired,
+  layerBlocking: PropTypes.bool.isRequired,
   monitor: PropTypes.object,
   offlinePlaying: PropTypes.bool.isRequired,
   overlay: PropTypes.object,
@@ -304,6 +348,7 @@ App.propTypes = {
   setBadPlaying: PropTypes.func.isRequired,
   setConnected: PropTypes.func.isRequired,
   setCurrentlyPlaying: PropTypes.func.isRequired,
+  setLayerBlocking: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
@@ -314,6 +359,8 @@ export default connect(
     badPlaying: fromBadPlaying.getBadPlaying(state),
     connected: fromConnected.getConnected(state),
     images: fromImages.getImages(state),
+    layers: fromLayers.getLayers(state),
+    layerBlocking: fromLayerBlocking.getLayerBlocking(state),
     monitor: fromMonitor.getMonitor(state),
     offlinePlaying: fromOfflinePlaying.getOfflinePlaying(state),
     overlay: fromOverlay.getOverlay(state),
@@ -323,6 +370,7 @@ export default connect(
   }),
   {
     fetchImages: fromImages.fetchImages,
+    fetchLayers: fromLayers.fetchLayers,
     fetchMonitor: fromMonitor.fetchMonitor,
     fetchOverlay: fromOverlay.fetchOverlay,
     fetchOvWidgets: fromOvWidgets.fetchOvWidgets,
@@ -335,6 +383,7 @@ export default connect(
     setBadPlaying: fromBadPlaying.setBadPlaying,
     setConnected: fromConnected.setConnected,
     setCurrentlyPlaying: fromCurrentlyPlaying.setCurrentlyPlaying,
+    setLayerBlocking: fromLayerBlocking.setLayerBlocking,
     setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
   }
 )(App);
