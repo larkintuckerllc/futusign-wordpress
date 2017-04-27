@@ -22,6 +22,11 @@ screen.
 
 == Changelog ==
 
+= X.X.X =
+
+Bug fix; with futusign Overlay, not removing widgets when removed
+overlay from screen or delete overlay entirely.
+
 = 1.3.0 =
 
 Add support for futusign Layer commercial plugin.

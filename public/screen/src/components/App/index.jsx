@@ -75,6 +75,7 @@ class App extends Component {
       layers,
       monitor,
       offlinePlaying,
+      resetOvWidgets,
       resetSlideDecks,
       resetYoutubeVideos,
       setAppBlocking,
@@ -95,6 +96,7 @@ class App extends Component {
     })
     .then(screen => {
       if (screen.overlay === null) {
+        resetOvWidgets();
         return Promise.all([
           Promise.resolve(null),
           Promise.resolve(screen),
@@ -107,6 +109,7 @@ class App extends Component {
     })
     .then(([overlay, screen]) => {
       if (overlay === null) {
+        resetOvWidgets();
         return screen;
       }
       return fetchOvWidgets()
@@ -342,6 +345,7 @@ App.propTypes = {
   offlinePlaying: PropTypes.bool.isRequired,
   overlay: PropTypes.object,
   ovWidgets: PropTypes.array.isRequired,
+  resetOvWidgets: PropTypes.func.isRequired,
   resetSlideDecks: PropTypes.func.isRequired,
   resetYoutubeVideos: PropTypes.func.isRequired,
   setAppBlocking: PropTypes.func.isRequired,
@@ -377,6 +381,7 @@ export default connect(
     fetchScreen: fromScreen.fetchScreen,
     fetchSlideDecks: fromSlideDecks.fetchSlideDecks,
     fetchYoutubeVideos: fromYoutubeVideos.fetchYoutubeVideos,
+    resetOvWidgets: fromOvWidgets.resetOvWidgets,
     resetSlideDecks: fromSlideDecks.resetSlideDecks,
     resetYoutubeVideos: fromYoutubeVideos.resetYoutubeVideos,
     setAppBlocking: fromAppBlocking.setAppBlocking,
