@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { LOADING } from '../../../../strings';
+import styles from './index.scss';
+import loading from './loading.png';
 
 class PlayerLoading extends Component {
   componentWillReceiveProps(upProps) {
@@ -22,10 +24,21 @@ class PlayerLoading extends Component {
   }
   render() {
     const { currentlyPlaying } = this.props;
-    if (currentlyPlaying === LOADING) {
-      window.console.log('SHOW SPINNER');
-    }
-    return <div>Player Loading</div>;
+    return (
+      <div
+        id={styles.root}
+      >
+        {currentlyPlaying === LOADING &&
+          <img
+            id={styles.rootSpinner}
+            src={loading}
+            alt="spinner"
+            width="150"
+            height="150"
+          />
+        }
+      </div>
+    );
   }
 }
 PlayerLoading.propTypes = {
