@@ -18,7 +18,8 @@ class PlayerSlideDecks extends Component {
     this.rootWidth = null;
     this.rootHeight = null;
     this.even = true;
-    this.playSlideDeck = this.playSlideDeck.bind(this);
+    this.slideDuration = null;
+    this.playSlide = this.playSlide.bind(this);
     this.loadSlideDeck = this.loadSlideDeck.bind(this);
     this.handleFile = this.handleFile.bind(this);
     this.handleDocument = this.handleDocument.bind(this);
@@ -54,7 +55,7 @@ class PlayerSlideDecks extends Component {
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
-      this.playSlideDeck();
+      this.playSlide();
     }
   }
   shouldComponentUpdate() {
@@ -110,7 +111,9 @@ class PlayerSlideDecks extends Component {
   }
   loadSlideDeck() {
     const { slideDecks } = this.props;
-    getFile(slideDecks[this.slideDeckIndex].file)
+    const slideDeck = slideDecks[this.slideDeckIndex];
+    this.slideDuration = slideDeck.slideDuration;
+    getFile(slideDeck.file)
     .then(
       this.handleFile,
       () => {
@@ -118,24 +121,29 @@ class PlayerSlideDecks extends Component {
       }
     );
   }
-  playSlideDeck() {
+  playSlide() {
     const { setCurrentlyIsPlaying, slideDecks } = this.props;
-    // TODO: NEED TO MOVE TO PAGE LEVEL
     const playCanvasEl = this.even ? this.rootCanvasEvenEl : this.rootCanvasOddEl;
     const hideCanvasEl = !this.even ? this.rootCanvasEvenEl : this.rootCanvasOddEl;
     playCanvasEl.style.opacity = 1;
     hideCanvasEl.style.opacity = 0.1;
     this.even = !this.even;
+    this.pageNumber += 1;
+    if (this.pageNumber <= this.numberOfPages) {
+      this.renderPage();
+      window.setTimeout(this.playSlide, this.slideDuration * 1000);
+      return;
+    }
     if (this.slideDeckIndex < slideDecks.length - 1) {
       this.slideDeckIndex += 1;
-      this.loadSlideDeck();
       // TODO: WORRY ABOUT CANCELING
-      window.setTimeout(this.playSlideDeck, 5000);
+      window.setTimeout(this.playSlide, this.slideDuration * 1000);
+      this.loadSlideDeck();
     } else {
       window.setTimeout(() => {
         playCanvasEl.style.opacity = 0.1;
         setCurrentlyIsPlaying(false);
-      }, 5000);
+      }, this.slideDuration * 1000);
     }
   }
   render() {
