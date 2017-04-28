@@ -1,36 +1,36 @@
 import React, { Component, PropTypes } from 'react';
-import styles from './index.scss';
-import loading from './loading.png';
+import { LOADING } from '../../../../strings';
 
 class PlayerLoading extends Component {
-  componentDidMount() {
-    const { done } = this.props;
-    document.getElementById('futusign_cover').style.opacity = 0;
-    this.coverTimeout = window.setTimeout(() => {
-      document.getElementById('futusign_cover').style.opacity = 1;
-      this.coverTimeout = window.setTimeout(done, 1000);
-    }, 3000);
+  componentWillReceiveProps(upProps) {
+    const { currentlyIsPlaying, currentlyPlaying, setCurrentlyIsPlaying } = this.props;
+    const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
+    if (
+      currentlyPlaying === LOADING &&
+      !currentlyIsPlaying &&
+      upCurrentlyIsPlaying
+    ) {
+      // TODO: WORRY ABOUT CANCELING
+      window.setTimeout(() => setCurrentlyIsPlaying(false), 5000);
+    }
   }
-  componentWillUnmount() {
-    window.clearTimeout(this.coverTimeout);
+  shouldComponentUpdate(upProps) {
+    const { currentlyPlaying } = this.props;
+    const upCurrentlyPlaying = upProps.currentlyPlaying;
+    if (currentlyPlaying !== upCurrentlyPlaying) return true;
+    return false;
   }
   render() {
-    return (
-      <div
-        id={styles.root}
-      >
-        <img
-          id={styles.rootSpinner}
-          src={loading}
-          alt="spinner"
-          width="150"
-          height="150"
-        />
-      </div>
-    );
+    const { currentlyPlaying } = this.props;
+    if (currentlyPlaying === LOADING) {
+      window.console.log('SHOW SPINNER');
+    }
+    return <div>Player Loading</div>;
   }
 }
 PlayerLoading.propTypes = {
-  done: PropTypes.func.isRequired,
+  currentlyIsPlaying: PropTypes.bool.isRequired,
+  currentlyPlaying: PropTypes.string,
+  setCurrentlyIsPlaying: PropTypes.func.isRequired,
 };
 export default PlayerLoading;

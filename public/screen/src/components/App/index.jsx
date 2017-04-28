@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import { CACHE_INTERVAL, POLLING_INTERVAL } from '../../strings';
+import { CACHE_INTERVAL, POLLING_INTERVAL, LOADING } from '../../strings';
 import { fetchBase } from '../../apis/base';
 import * as fromAppBlocking from '../../ducks/appBlocking';
 import * as fromMonitor from '../../ducks/monitor';
@@ -15,6 +15,7 @@ import * as fromLayers from '../../ducks/layers';
 import * as fromOfflinePlaying from '../../ducks/offlinePlaying';
 import * as fromBadPlaying from '../../ducks/badPlaying';
 import * as fromCurrentlyPlaying from '../../ducks/currentlyPlaying';
+import * as fromCurrentlyIsPlaying from '../../ducks/currentlyIsPlaying';
 import * as fromConnected from '../../ducks/connected';
 import * as fromOverlay from '../../ducks/overlay';
 import * as fromOvWidgets from '../../ducks/ovWidgets';
@@ -35,7 +36,7 @@ class App extends Component {
     this.fetch = this.fetch.bind(this);
   }
   componentDidMount() {
-    const { setCurrentlyPlaying, setLayerBlocking } = this.props;
+    const { setCurrentlyIsPlaying, setCurrentlyPlaying, setLayerBlocking } = this.props;
     const appCache = window.applicationCache;
     const check = () => {
       appCache.update();
@@ -47,7 +48,8 @@ class App extends Component {
       switch (message.data) {
         case 'block':
           setLayerBlocking(true);
-          setCurrentlyPlaying(fromCurrentlyPlaying.LOADING);
+          setCurrentlyPlaying(LOADING);
+          setCurrentlyIsPlaying(true);
           break;
         case 'unblock':
           setLayerBlocking(false);
@@ -82,6 +84,7 @@ class App extends Component {
       setBadPlaying,
       setConnected,
       setCurrentlyPlaying,
+      setCurrentlyIsPlaying,
       setOfflinePlaying,
       setLayerBlocking,
       slideDecks,
@@ -246,6 +249,10 @@ class App extends Component {
         window.localStorage.removeItem('futusign_slide_deck_file');
         window.localStorage.removeItem('futusign_slide_deck_slide_duration');
       }
+      // MISC
+      setOfflinePlaying(false);
+      setBadPlaying(false);
+      setAppBlocking(false);
       // CONDITIONALLY RESTART PLAYING LOOP
       if (
         JSON.stringify(slideDecks) !== JSON.stringify(nextSlideDecks) ||
@@ -253,13 +260,10 @@ class App extends Component {
         JSON.stringify(images) !== JSON.stringify(nextImages) ||
         JSON.stringify(layers) !== JSON.stringify(nextLayers)
       ) {
-        setCurrentlyPlaying(fromCurrentlyPlaying.LOADING);
         setLayerBlocking(false);
+        setCurrentlyPlaying(LOADING);
+        setCurrentlyIsPlaying(true);
       }
-      // MISC
-      setOfflinePlaying(false);
-      setBadPlaying(false);
-      setAppBlocking(false);
       return null;
     })
     .catch(error => {
@@ -286,8 +290,6 @@ class App extends Component {
       overlay,
       ovWidgets,
       setBadPlaying,
-      setCurrentlyPlaying,
-      setOfflinePlaying,
       slideDecks,
       youtubeVideos,
     } = this.props;
@@ -313,14 +315,7 @@ class App extends Component {
         {!layerBlocking && monitor !== null && <Connected connected={connected} />}
         {!layerBlocking && overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
         {!layerBlocking &&
-          <Player
-            images={images}
-            setBadPlaying={setBadPlaying}
-            setCurrentlyPlaying={setCurrentlyPlaying}
-            setOfflinePlaying={setOfflinePlaying}
-            slideDecks={slideDecks}
-            youtubeVideos={youtubeVideos}
-          />
+          <Player />
         }
       </div>
     );
@@ -352,6 +347,7 @@ App.propTypes = {
   setBadPlaying: PropTypes.func.isRequired,
   setConnected: PropTypes.func.isRequired,
   setCurrentlyPlaying: PropTypes.func.isRequired,
+  setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setLayerBlocking: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
@@ -387,6 +383,7 @@ export default connect(
     setAppBlocking: fromAppBlocking.setAppBlocking,
     setBadPlaying: fromBadPlaying.setBadPlaying,
     setConnected: fromConnected.setConnected,
+    setCurrentlyIsPlaying: fromCurrentlyIsPlaying.setCurrentlyIsPlaying,
     setCurrentlyPlaying: fromCurrentlyPlaying.setCurrentlyPlaying,
     setLayerBlocking: fromLayerBlocking.setLayerBlocking,
     setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,

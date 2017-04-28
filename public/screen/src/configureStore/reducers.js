@@ -7,6 +7,9 @@ import layers from '../ducks/layers';
 import slideDecks from '../ducks/slideDecks';
 import youtubeVideos from '../ducks/youtubeVideos';
 import currentlyPlaying from '../ducks/currentlyPlaying';
+import currentlyIsPlaying from '../ducks/currentlyIsPlaying';
+import nextPlaying from '../ducks/nextPlaying';
+import nextIsReady from '../ducks/nextIsReady';
 import images from '../ducks/images';
 import monitor from '../ducks/monitor';
 import connected from '../ducks/connected';
@@ -22,6 +25,9 @@ export default combineReducers({
   slideDecks,
   youtubeVideos,
   currentlyPlaying,
+  currentlyIsPlaying,
+  nextPlaying,
+  nextIsReady,
   images,
   layers,
   monitor,

@@ -1,161 +1,109 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import {
-  getCurrentlyPlaying,
-  BLANK,
-  IMAGES,
-  LOADING,
-  SLIDE_DECKS,
-  YOUTUBE_VIDEOS,
-} from '../../../ducks/currentlyPlaying';
-import PlayerBlank from './PlayerBlank';
+import { LOADING, SLIDE_DECKS, YOUTUBE_VIDEOS } from '../../../strings';
+import * as fromCurrentlyPlaying from '../../../ducks/currentlyPlaying';
+import * as fromCurrentlyIsPlaying from '../../../ducks/currentlyIsPlaying';
+import * as fromNextPlaying from '../../../ducks/nextPlaying';
+import * as fromNextIsReady from '../../../ducks/nextIsReady';
 import PlayerLoading from './PlayerLoading';
 import PlayerSlideDecks from './PlayerSlideDecks';
 import PlayerYoutubeVideos from './PlayerYoutubeVideos';
-import PlayerImages from './PlayerImages';
-import styles from './index.scss';
 
-const PLAY_ORDER = [
-  BLANK,
-  SLIDE_DECKS,
-  IMAGES,
-  YOUTUBE_VIDEOS,
-];
 class Player extends Component {
-  constructor() {
-    super();
-    this.setNextPlaying = this.setNextPlaying.bind(this);
-    this.resetPlaying = this.resetPlaying.bind(this);
-    this.checkPlaying = PLAY_ORDER[0];
-  }
-  componentWillUnmount() {
-    document.getElementById('futusign_cover').style.opacity = 0;
-  }
-  setNextPlaying() {
+  componentWillReceiveProps(upProps) {
     const {
-      images,
+      currentlyIsPlaying,
+      currentlyPlaying,
+      nextIsReady,
+      nextPlaying,
+      setCurrentlyIsPlaying,
       setCurrentlyPlaying,
-      slideDecks,
-      youtubeVideos,
+      setNextIsReady,
+      setNextPlaying,
     } = this.props;
-    const checkPlayingIndex = PLAY_ORDER.indexOf(this.checkPlaying);
-    const nextPlayingIndex = checkPlayingIndex < PLAY_ORDER.length - 1 ?
-      checkPlayingIndex + 1 : 0;
-    const nextPlaying = PLAY_ORDER[nextPlayingIndex];
-    switch (nextPlaying) {
-      case SLIDE_DECKS:
-        if (slideDecks.length === 0) {
-          this.checkPlaying = nextPlaying;
-          this.setNextPlaying();
-          return;
+    const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
+    const upNextIsReady = upProps.nextIsReady;
+    if (!currentlyIsPlaying && upCurrentlyIsPlaying) {
+      // TODO: CANCEL
+      window.setTimeout(() => {
+        let player;
+        if (currentlyPlaying === LOADING) {
+          player = SLIDE_DECKS;
         }
-        break;
-      case IMAGES:
-        if (images.length === 0) {
-          this.checkPlaying = nextPlaying;
-          this.setNextPlaying();
-          return;
+        if (currentlyPlaying === SLIDE_DECKS) {
+          player = YOUTUBE_VIDEOS;
         }
-        break;
-      case YOUTUBE_VIDEOS:
-        if (youtubeVideos.length === 0) {
-          this.checkPlaying = nextPlaying;
-          this.setNextPlaying();
-          return;
+        if (currentlyPlaying === YOUTUBE_VIDEOS) {
+          player = SLIDE_DECKS;
         }
-        break;
-      default:
+        setNextIsReady(false);
+        setNextPlaying(player);
+      }, 0);
     }
-    this.checkPlaying = nextPlaying;
-    setCurrentlyPlaying(nextPlaying);
-  }
-  resetPlaying() {
-    const { setCurrentlyPlaying } = this.props;
-    setCurrentlyPlaying(LOADING);
+    if (
+      (currentlyIsPlaying && !upCurrentlyIsPlaying && nextIsReady) ||
+      (!nextIsReady && upNextIsReady && !currentlyIsPlaying)
+    ) {
+      // TODO: CANCEL
+      window.setTimeout(() => {
+        setCurrentlyPlaying(nextPlaying);
+        setCurrentlyIsPlaying(true);
+      }, 0);
+    }
   }
   render() {
     const {
+      currentlyIsPlaying,
       currentlyPlaying,
-      images,
-      setBadPlaying,
-      setCurrentlyPlaying,
-      setOfflinePlaying,
-      slideDecks,
-      youtubeVideos,
+      nextPlaying,
+      setCurrentlyIsPlaying,
+      setNextIsReady,
     } = this.props;
-    let player;
-    switch (currentlyPlaying) {
-      case LOADING:
-        player = (
-          <PlayerLoading
-            done={() => {
-              setCurrentlyPlaying(PLAY_ORDER[0]);
-            }}
-          />
-        );
-        break;
-      case BLANK:
-        player = (
-          <PlayerBlank
-            done={this.setNextPlaying}
-          />
-        );
-        break;
-      case SLIDE_DECKS:
-        player = (
-          <PlayerSlideDecks
-            resetPlaying={this.resetPlaying}
-            setBadPlaying={setBadPlaying}
-            setOfflinePlaying={setOfflinePlaying}
-            slideDecks={slideDecks}
-            done={this.setNextPlaying}
-          />
-        );
-        break;
-      case IMAGES:
-        player = (
-          <PlayerImages
-            resetPlaying={this.resetPlaying}
-            setBadPlaying={setBadPlaying}
-            setOfflinePlaying={setOfflinePlaying}
-            images={images}
-            done={this.setNextPlaying}
-          />
-        );
-        break;
-      case YOUTUBE_VIDEOS:
-        player = (
-          <PlayerYoutubeVideos
-            resetPlaying={this.resetPlaying}
-            setBadPlaying={setBadPlaying}
-            setOfflinePlaying={setOfflinePlaying}
-            youtubeVideos={youtubeVideos}
-            done={this.setNextPlaying}
-          />
-        );
-        break;
-      default:
-        player = null;
-    }
     return (
-      <div id={styles.root}>
-        {player}
+      <div>
+        <PlayerLoading
+          currentlyIsPlaying={currentlyIsPlaying}
+          currentlyPlaying={currentlyPlaying}
+          setCurrentlyIsPlaying={setCurrentlyIsPlaying}
+        />
+        <PlayerSlideDecks
+          currentlyIsPlaying={currentlyIsPlaying}
+          currentlyPlaying={currentlyPlaying}
+          nextPlaying={nextPlaying}
+          setCurrentlyIsPlaying={setCurrentlyIsPlaying}
+          setNextIsReady={setNextIsReady}
+        />
+        <PlayerYoutubeVideos
+          currentlyIsPlaying={currentlyIsPlaying}
+          currentlyPlaying={currentlyPlaying}
+          nextPlaying={nextPlaying}
+          setCurrentlyIsPlaying={setCurrentlyIsPlaying}
+          setNextIsReady={setNextIsReady}
+        />
       </div>
     );
   }
 }
 Player.propTypes = {
-  currentlyPlaying: PropTypes.string.isRequired,
-  images: PropTypes.array.isRequired,
-  setBadPlaying: PropTypes.func.isRequired,
+  currentlyIsPlaying: PropTypes.bool.isRequired,
+  currentlyPlaying: PropTypes.string,
+  nextIsReady: PropTypes.bool.isRequired,
+  nextPlaying: PropTypes.string,
   setCurrentlyPlaying: PropTypes.func.isRequired,
-  setOfflinePlaying: PropTypes.func.isRequired,
-  slideDecks: PropTypes.array.isRequired,
-  youtubeVideos: PropTypes.array.isRequired,
+  setCurrentlyIsPlaying: PropTypes.func.isRequired,
+  setNextIsReady: PropTypes.func.isRequired,
+  setNextPlaying: PropTypes.func.isRequired,
 };
 export default connect(
   state => ({
-    currentlyPlaying: getCurrentlyPlaying(state),
-  }),
-  null
+    currentlyIsPlaying: fromCurrentlyIsPlaying.getCurrentlyIsPlaying(state),
+    currentlyPlaying: fromCurrentlyPlaying.getCurrentlyPlaying(state),
+    nextIsReady: fromNextIsReady.getNextIsReady(state),
+    nextPlaying: fromNextPlaying.getNextPlaying(state),
+  }), {
+    setCurrentlyPlaying: fromCurrentlyPlaying.setCurrentlyPlaying,
+    setCurrentlyIsPlaying: fromCurrentlyIsPlaying.setCurrentlyIsPlaying,
+    setNextIsReady: fromNextIsReady.setNextIsReady,
+    setNextPlaying: fromNextPlaying.setNextPlaying,
+  }
 )(Player);

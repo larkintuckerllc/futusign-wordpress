@@ -2,29 +2,29 @@ import { ACTION_PREFIX } from '../strings';
 
 // API
 // REDUCER MOUNT POINT
-const reducerMountPoint = 'currentlyPlaying';
+const reducerMountPoint = 'nextPlaying';
 // ACTIONS
-export const SET_CURRENTLY_PLAYING = `${ACTION_PREFIX}SET_CURRENTLY_PLAYING`;
+export const SET_NEXT_PLAYING = `${ACTION_PREFIX}SET_NEXT_PLAYING`;
 // SCHEMA
 // REDUCERS
 export default (state = null, action) => {
   switch (action.type) {
-    case SET_CURRENTLY_PLAYING:
+    case SET_NEXT_PLAYING:
       return action.value;
     default:
       return state;
   }
 };
 // ACCESSORS AKA SELECTORS
-export const getCurrentlyPlaying = (state) => state[reducerMountPoint];
+export const getNextPlaying = (state) => state[reducerMountPoint];
 // ACTION CREATOR VALIDATORS
-const validCurrentlyPlaying = value =>
+const validNextPlaying = value =>
   !(value === undefined || typeof value !== 'string');
 // ACTION CREATORS
-export const setCurrentlyPlaying = (value) => {
-  if (!validCurrentlyPlaying(value)) throw new Error();
+export const setNextPlaying = (value) => {
+  if (!validNextPlaying(value)) throw new Error();
   return ({
-    type: SET_CURRENTLY_PLAYING,
+    type: SET_NEXT_PLAYING,
     value,
   });
 };
