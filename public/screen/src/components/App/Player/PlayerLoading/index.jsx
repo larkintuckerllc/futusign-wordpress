@@ -4,6 +4,10 @@ import styles from './index.scss';
 import loading from './loading.png';
 
 class PlayerLoading extends Component {
+  constructor(props) {
+    super(props);
+    this.stopTimeout = null;
+  }
   componentWillReceiveProps(upProps) {
     const { currentlyIsPlaying, currentlyPlaying, setCurrentlyIsPlaying } = this.props;
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
@@ -12,8 +16,7 @@ class PlayerLoading extends Component {
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
-      // TODO: WORRY ABOUT CANCELING
-      window.setTimeout(() => setCurrentlyIsPlaying(false), 5000);
+      this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 5000);
     }
   }
   shouldComponentUpdate(upProps) {
@@ -21,6 +24,9 @@ class PlayerLoading extends Component {
     const upCurrentlyPlaying = upProps.currentlyPlaying;
     if (currentlyPlaying !== upCurrentlyPlaying) return true;
     return false;
+  }
+  componentWillUnmount() {
+    window.clearTimeout(this.stopTimeout);
   }
   render() {
     const { currentlyPlaying } = this.props;

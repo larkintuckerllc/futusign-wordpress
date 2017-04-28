@@ -24,6 +24,7 @@ class Player extends Component {
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
     const upNextIsReady = upProps.nextIsReady;
     if (!currentlyIsPlaying && upCurrentlyIsPlaying) {
+      // TODO: HAVE A PROBLEM HERE ON RESTARTING
       // TODO: CANCEL
       window.setTimeout(() => {
         let player;

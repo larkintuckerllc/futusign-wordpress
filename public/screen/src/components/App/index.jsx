@@ -16,6 +16,8 @@ import * as fromOfflinePlaying from '../../ducks/offlinePlaying';
 import * as fromBadPlaying from '../../ducks/badPlaying';
 import * as fromCurrentlyPlaying from '../../ducks/currentlyPlaying';
 import * as fromCurrentlyIsPlaying from '../../ducks/currentlyIsPlaying';
+import * as fromNextPlaying from '../../ducks/nextPlaying';
+import * as fromNextIsReady from '../../ducks/nextIsReady';
 import * as fromConnected from '../../ducks/connected';
 import * as fromOverlay from '../../ducks/overlay';
 import * as fromOvWidgets from '../../ducks/ovWidgets';
@@ -34,9 +36,10 @@ class App extends Component {
   constructor() {
     super();
     this.fetch = this.fetch.bind(this);
+    this.restartPlayingLoop = this.restartPlayingLoop.bind(this);
   }
   componentDidMount() {
-    const { setCurrentlyIsPlaying, setCurrentlyPlaying, setLayerBlocking } = this.props;
+    const { setLayerBlocking } = this.props;
     const appCache = window.applicationCache;
     const check = () => {
       appCache.update();
@@ -48,11 +51,9 @@ class App extends Component {
       switch (message.data) {
         case 'block':
           setLayerBlocking(true);
-          setCurrentlyPlaying(LOADING);
-          setCurrentlyIsPlaying(true);
           break;
         case 'unblock':
-          setLayerBlocking(false);
+          this.restartPlayingLoop();
           break;
         default:
       }
@@ -65,6 +66,7 @@ class App extends Component {
   }
   fetch() {
     const {
+      badPlaying,
       fetchImages,
       fetchLayers,
       fetchMonitor,
@@ -83,10 +85,7 @@ class App extends Component {
       setAppBlocking,
       setBadPlaying,
       setConnected,
-      setCurrentlyPlaying,
-      setCurrentlyIsPlaying,
       setOfflinePlaying,
-      setLayerBlocking,
       slideDecks,
       youtubeVideos,
     } = this.props;
@@ -255,14 +254,14 @@ class App extends Component {
       setAppBlocking(false);
       // CONDITIONALLY RESTART PLAYING LOOP
       if (
+        badPlaying ||
+        offlinePlaying ||
         JSON.stringify(slideDecks) !== JSON.stringify(nextSlideDecks) ||
         JSON.stringify(youtubeVideos) !== JSON.stringify(nextYoutubeVideos) ||
         JSON.stringify(images) !== JSON.stringify(nextImages) ||
         JSON.stringify(layers) !== JSON.stringify(nextLayers)
       ) {
-        setLayerBlocking(false);
-        setCurrentlyPlaying(LOADING);
-        setCurrentlyIsPlaying(true);
+        this.restartPlayingLoop();
       }
       return null;
     })
@@ -276,6 +275,23 @@ class App extends Component {
         return;
       }
     });
+  }
+  restartPlayingLoop() {
+    const {
+      resetCurrentlyPlaying,
+      resetNextPlaying,
+      setCurrentlyIsPlaying,
+      setCurrentlyPlaying,
+      setLayerBlocking,
+      setNextIsReady,
+    } = this.props;
+    resetCurrentlyPlaying();
+    resetNextPlaying();
+    setCurrentlyIsPlaying(false);
+    setNextIsReady(false);
+    setLayerBlocking(false);
+    setCurrentlyPlaying(LOADING);
+    setCurrentlyIsPlaying(true);
   }
   render() {
     const {
@@ -342,6 +358,8 @@ App.propTypes = {
   offlinePlaying: PropTypes.bool.isRequired,
   overlay: PropTypes.object,
   ovWidgets: PropTypes.array.isRequired,
+  resetCurrentlyPlaying: PropTypes.func.isRequired,
+  resetNextPlaying: PropTypes.func.isRequired,
   resetOvWidgets: PropTypes.func.isRequired,
   resetSlideDecks: PropTypes.func.isRequired,
   resetYoutubeVideos: PropTypes.func.isRequired,
@@ -351,6 +369,7 @@ App.propTypes = {
   setCurrentlyPlaying: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setLayerBlocking: PropTypes.func.isRequired,
+  setNextIsReady: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
@@ -379,6 +398,8 @@ export default connect(
     fetchScreen: fromScreen.fetchScreen,
     fetchSlideDecks: fromSlideDecks.fetchSlideDecks,
     fetchYoutubeVideos: fromYoutubeVideos.fetchYoutubeVideos,
+    resetCurrentlyPlaying: fromCurrentlyPlaying.resetCurrentlyPlaying,
+    resetNextPlaying: fromNextPlaying.resetNextPlaying,
     resetOvWidgets: fromOvWidgets.resetOvWidgets,
     resetSlideDecks: fromSlideDecks.resetSlideDecks,
     resetYoutubeVideos: fromYoutubeVideos.resetYoutubeVideos,
@@ -388,6 +409,7 @@ export default connect(
     setCurrentlyIsPlaying: fromCurrentlyIsPlaying.setCurrentlyIsPlaying,
     setCurrentlyPlaying: fromCurrentlyPlaying.setCurrentlyPlaying,
     setLayerBlocking: fromLayerBlocking.setLayerBlocking,
+    setNextIsReady: fromNextIsReady.setNextIsReady,
     setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
   }
 )(App);

@@ -28,3 +28,7 @@ export const setCurrentlyPlaying = (value) => {
     value,
   });
 };
+export const resetCurrentlyPlaying = () => ({
+  type: SET_CURRENTLY_PLAYING,
+  value: null,
+});

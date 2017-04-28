@@ -2,6 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { YOUTUBE_VIDEOS } from '../../../../strings';
 
 class PlayerYoutubeVideos extends Component {
+  constructor(props) {
+    super(props);
+    this.readyTimeout = null;
+    this.stopTimeout = null;
+  }
   componentWillReceiveProps(upProps) {
     const {
       currentlyIsPlaying,
@@ -17,8 +22,7 @@ class PlayerYoutubeVideos extends Component {
       nextPlaying !== YOUTUBE_VIDEOS &&
       upNextPlaying === YOUTUBE_VIDEOS
     ) {
-      // TODO: WORRY ABOUT CANCELING
-      window.setTimeout(() => setNextIsReady(true), 1000);
+      this.readyTimeout = window.setTimeout(() => setNextIsReady(true), 1000);
     }
     // START PLAYING
     if (
@@ -26,12 +30,15 @@ class PlayerYoutubeVideos extends Component {
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
-      // TODO: WORRY ABOUT CANCELING
-      window.setTimeout(() => setCurrentlyIsPlaying(false), 5000);
+      this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 5000);
     }
   }
   shouldComponentUpdate() {
     return false;
+  }
+  componentWillUnmount() {
+    window.clearTimeout(this.readyTimeout);
+    window.clearTimeout(this.stopTimeout);
   }
   render() {
     return <div>Player Slide Decks</div>;

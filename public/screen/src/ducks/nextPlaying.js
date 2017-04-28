@@ -28,3 +28,7 @@ export const setNextPlaying = (value) => {
     value,
   });
 };
+export const resetNextPlaying = () => ({
+  type: SET_NEXT_PLAYING,
+  value: null,
+});

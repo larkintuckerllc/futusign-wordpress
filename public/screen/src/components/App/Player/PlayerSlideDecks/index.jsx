@@ -19,6 +19,9 @@ class PlayerSlideDecks extends Component {
     this.rootHeight = null;
     this.even = true;
     this.slideDuration = null;
+    this.slideTimeout = null;
+    this.clearTimeout = null;
+    this.mounted = true;
     this.playSlide = this.playSlide.bind(this);
     this.loadSlideDeck = this.loadSlideDeck.bind(this);
     this.handleFile = this.handleFile.bind(this);
@@ -61,7 +64,13 @@ class PlayerSlideDecks extends Component {
   shouldComponentUpdate() {
     return false;
   }
+  componentWillUnmount() {
+    window.clearTimeout(this.slideTimeout);
+    window.clearTimeout(this.stopTimeout);
+    this.mounted = false;
+  }
   handlePage(pdfPage) {
+    if (!this.mounted) { return; }
     const { setNextIsReady } = this.props;
     let viewport = pdfPage.getViewport(1);
     const pdfWidth = viewport.width;
@@ -76,6 +85,7 @@ class PlayerSlideDecks extends Component {
       canvasContext: this.renderCanvasEl.getContext('2d'),
       viewport,
     }).then(() => {
+      if (!this.mounted) { return; }
       if (this.slideDeckIndex === 0 && this.pageNumber === 1) {
         setNextIsReady(true);
       }
@@ -91,12 +101,14 @@ class PlayerSlideDecks extends Component {
       });
   }
   handleDocument(pdfDocument) {
+    if (!this.mounted) { return; }
     this.pdfDocument = pdfDocument;
     this.pageNumber = 1;
     this.numberOfPages = pdfDocument.numPages;
     this.renderPage();
   }
   handleFile(file) {
+    if (!this.mounted) { return; }
     const loadingTask = pdfjsLib.getDocument({
       data: convertDataURIToBinary(file),
       worker: window.futusignPDFWorker,
@@ -131,16 +143,15 @@ class PlayerSlideDecks extends Component {
     this.pageNumber += 1;
     if (this.pageNumber <= this.numberOfPages) {
       this.renderPage();
-      window.setTimeout(this.playSlide, this.slideDuration * 1000);
+      this.slideTimeout = window.setTimeout(this.playSlide, this.slideDuration * 1000);
       return;
     }
     if (this.slideDeckIndex < slideDecks.length - 1) {
       this.slideDeckIndex += 1;
-      // TODO: WORRY ABOUT CANCELING
-      window.setTimeout(this.playSlide, this.slideDuration * 1000);
+      this.slideTimeout = window.setTimeout(this.playSlide, this.slideDuration * 1000);
       this.loadSlideDeck();
     } else {
-      window.setTimeout(() => {
+      this.stopTimeout = window.setTimeout(() => {
         playCanvasEl.style.opacity = 0.1;
         setCurrentlyIsPlaying(false);
       }, this.slideDuration * 1000);
