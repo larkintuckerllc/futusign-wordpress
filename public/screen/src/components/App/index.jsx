@@ -315,7 +315,9 @@ class App extends Component {
         {!layerBlocking && monitor !== null && <Connected connected={connected} />}
         {!layerBlocking && overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
         {!layerBlocking &&
-          <Player />
+          <Player
+            slideDecks={slideDecks}
+          />
         }
       </div>
     );

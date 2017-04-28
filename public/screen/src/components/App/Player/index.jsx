@@ -58,6 +58,7 @@ class Player extends Component {
       nextPlaying,
       setCurrentlyIsPlaying,
       setNextIsReady,
+      slideDecks,
     } = this.props;
     return (
       <div>
@@ -72,6 +73,7 @@ class Player extends Component {
           nextPlaying={nextPlaying}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
+          slideDecks={slideDecks}
         />
         <PlayerYoutubeVideos
           currentlyIsPlaying={currentlyIsPlaying}
@@ -93,6 +95,7 @@ Player.propTypes = {
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
   setNextPlaying: PropTypes.func.isRequired,
+  slideDecks: PropTypes.array.isRequired,
 };
 export default connect(
   state => ({
