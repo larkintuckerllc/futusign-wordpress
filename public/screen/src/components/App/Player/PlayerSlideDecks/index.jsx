@@ -1,18 +1,42 @@
 import React, { Component, PropTypes } from 'react';
+import pdfjsLib from 'pdfjs-dist';
+import { convertDataURIToBinary } from '../../../../util/misc';
+import { getFile } from '../../../../util/rest';
 import { SLIDE_DECKS } from '../../../../strings';
+import styles from './index.scss';
 
 class PlayerSlideDecks extends Component {
   constructor(props) {
     super(props);
     this.slideDeckIndex = null;
+    this.pdfDocument = null;
+    this.pageNumber = null;
+    this.numberOfPages = null;
+    this.rootCanvasEvenEl = null;
+    this.rootCanvasOddEl = null;
+    this.renderCanvasEl = null;
+    this.rootWidth = null;
+    this.rootHeight = null;
+    this.even = true;
     this.playSlideDeck = this.playSlideDeck.bind(this);
+    this.loadSlideDeck = this.loadSlideDeck.bind(this);
+    this.handleFile = this.handleFile.bind(this);
+    this.handleDocument = this.handleDocument.bind(this);
+    this.renderPage = this.renderPage.bind(this);
+    this.handlePage = this.handlePage.bind(this);
+  }
+  componentDidMount() {
+    const rootEl = document.getElementById(styles.root);
+    this.rootWidth = rootEl.offsetWidth;
+    this.rootHeight = rootEl.offsetHeight;
+    this.rootCanvasEvenEl = document.getElementById(styles.rootCanvasEven);
+    this.rootCanvasOddEl = document.getElementById(styles.rootCanvasOdd);
   }
   componentWillReceiveProps(upProps) {
     const {
       currentlyIsPlaying,
       currentlyPlaying,
       nextPlaying,
-      setNextIsReady,
     } = this.props;
     const upNextPlaying = upProps.nextPlaying;
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
@@ -22,8 +46,7 @@ class PlayerSlideDecks extends Component {
       upNextPlaying === SLIDE_DECKS
     ) {
       this.slideDeckIndex = 0;
-      // TODO: WORRY ABOUT CANCELING
-      window.setTimeout(() => setNextIsReady(true), 1000);
+      this.loadSlideDeck();
     }
     // START PLAYING
     if (
@@ -37,20 +60,101 @@ class PlayerSlideDecks extends Component {
   shouldComponentUpdate() {
     return false;
   }
+  handlePage(pdfPage) {
+    const { setNextIsReady } = this.props;
+    let viewport = pdfPage.getViewport(1);
+    const pdfWidth = viewport.width;
+    const pdfHeight = viewport.height;
+    const scaleX = this.rootWidth / pdfWidth;
+    const scaleY = this.rootHeight / pdfHeight;
+    const scale = Math.max(scaleX, scaleY);
+    this.renderCanvasEl.width = pdfWidth * scale;
+    this.renderCanvasEl.height = pdfHeight * scale;
+    viewport = pdfPage.getViewport(scale);
+    pdfPage.render({
+      canvasContext: this.renderCanvasEl.getContext('2d'),
+      viewport,
+    }).then(() => {
+      if (this.slideDeckIndex === 0 && this.pageNumber === 1) {
+        setNextIsReady(true);
+      }
+    });
+  }
+  // eslint-disable-next-line
+  renderPage() {
+    this.renderCanvasEl = this.even ? this.rootCanvasEvenEl : this.rootCanvasOddEl;
+    this.pdfDocument.getPage(this.pageNumber).then(
+      this.handlePage,
+      () => {
+        // TODO: ERROR
+      });
+  }
+  handleDocument(pdfDocument) {
+    this.pdfDocument = pdfDocument;
+    this.pageNumber = 1;
+    this.numberOfPages = pdfDocument.numPages;
+    this.renderPage();
+  }
+  handleFile(file) {
+    const loadingTask = pdfjsLib.getDocument({
+      data: convertDataURIToBinary(file),
+      worker: window.futusignPDFWorker,
+    });
+    // TODO: HANDLE CACHING
+    loadingTask.promise.then(
+      this.handleDocument,
+      () => {
+        // TODO: HANDLE ERROR
+      }
+    );
+  }
+  loadSlideDeck() {
+    const { slideDecks } = this.props;
+    getFile(slideDecks[this.slideDeckIndex].file)
+    .then(
+      this.handleFile,
+      () => {
+        // TODO: HANDLE ERRORS
+      }
+    );
+  }
   playSlideDeck() {
     const { setCurrentlyIsPlaying, slideDecks } = this.props;
-    const slideDeck = slideDecks[this.slideDeckIndex];
-    window.console.log(slideDeck);
+    // TODO: NEED TO MOVE TO PAGE LEVEL
+    const playCanvasEl = this.even ? this.rootCanvasEvenEl : this.rootCanvasOddEl;
+    const hideCanvasEl = !this.even ? this.rootCanvasEvenEl : this.rootCanvasOddEl;
+    playCanvasEl.style.opacity = 1;
+    hideCanvasEl.style.opacity = 0.1;
+    this.even = !this.even;
     if (this.slideDeckIndex < slideDecks.length - 1) {
       this.slideDeckIndex += 1;
+      this.loadSlideDeck();
       // TODO: WORRY ABOUT CANCELING
       window.setTimeout(this.playSlideDeck, 5000);
     } else {
-      setCurrentlyIsPlaying(false);
+      window.setTimeout(() => {
+        playCanvasEl.style.opacity = 0.1;
+        setCurrentlyIsPlaying(false);
+      }, 5000);
     }
   }
   render() {
-    return <div>Player Slide Decks</div>;
+    return (
+      <div id={styles.temp}>
+        <div id={styles.root}>
+          <canvas
+            style={{ opacity: 0.1 }}
+            id={styles.rootCanvasEven}
+          />
+        </div>
+        <div id={styles.root2}>
+          <canvas
+            style={{ opacity: 0.1 }}
+            id={styles.rootCanvasOdd}
+          />
+        </div>
+      </div>
+    );
   }
 }
 PlayerSlideDecks.propTypes = {
