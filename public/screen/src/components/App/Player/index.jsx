@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { LOADING, SLIDE_DECKS, YOUTUBE_VIDEOS } from '../../../strings';
+import { IMAGES, LOADING, SLIDE_DECKS, YOUTUBE_VIDEOS } from '../../../strings';
 import * as fromCurrentlyPlaying from '../../../ducks/currentlyPlaying';
 import * as fromCurrentlyIsPlaying from '../../../ducks/currentlyIsPlaying';
 import * as fromNextPlaying from '../../../ducks/nextPlaying';
 import * as fromNextIsReady from '../../../ducks/nextIsReady';
 import PlayerLoading from './PlayerLoading';
 import PlayerSlideDecks from './PlayerSlideDecks';
+import PlayerImages from './PlayerImages';
 import PlayerYoutubeVideos from './PlayerYoutubeVideos';
 
 class Player extends Component {
@@ -31,6 +32,9 @@ class Player extends Component {
           player = SLIDE_DECKS;
         }
         if (currentlyPlaying === SLIDE_DECKS) {
+          player = IMAGES;
+        }
+        if (currentlyPlaying === IMAGES) {
           player = YOUTUBE_VIDEOS;
         }
         if (currentlyPlaying === YOUTUBE_VIDEOS) {
@@ -55,6 +59,7 @@ class Player extends Component {
     const {
       currentlyIsPlaying,
       currentlyPlaying,
+      images,
       nextPlaying,
       setBadPlaying,
       setCurrentlyIsPlaying,
@@ -77,6 +82,15 @@ class Player extends Component {
           setNextIsReady={setNextIsReady}
           slideDecks={slideDecks}
         />
+        <PlayerImages
+          currentlyIsPlaying={currentlyIsPlaying}
+          currentlyPlaying={currentlyPlaying}
+          images={images}
+          nextPlaying={nextPlaying}
+          setBadPlaying={setBadPlaying}
+          setCurrentlyIsPlaying={setCurrentlyIsPlaying}
+          setNextIsReady={setNextIsReady}
+        />
         <PlayerYoutubeVideos
           currentlyIsPlaying={currentlyIsPlaying}
           currentlyPlaying={currentlyPlaying}
@@ -91,6 +105,7 @@ class Player extends Component {
 Player.propTypes = {
   currentlyIsPlaying: PropTypes.bool.isRequired,
   currentlyPlaying: PropTypes.string,
+  images: PropTypes.array.isRequired,
   nextIsReady: PropTypes.bool.isRequired,
   nextPlaying: PropTypes.string,
   setBadPlaying: PropTypes.func.isRequired,

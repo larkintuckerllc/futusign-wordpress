@@ -333,7 +333,9 @@ class App extends Component {
         {!layerBlocking &&
           <Player
             setBadPlaying={setBadPlaying}
+            images={images}
             slideDecks={slideDecks}
+            youtubeVideos={youtubeVideos}
           />
         }
       </div>
