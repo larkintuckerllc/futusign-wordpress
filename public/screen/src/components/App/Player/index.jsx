@@ -64,7 +64,9 @@ class Player extends Component {
       setBadPlaying,
       setCurrentlyIsPlaying,
       setNextIsReady,
+      setOfflinePlaying,
       slideDecks,
+      youtubeVideos,
     } = this.props;
     return (
       <div>
@@ -95,8 +97,11 @@ class Player extends Component {
           currentlyIsPlaying={currentlyIsPlaying}
           currentlyPlaying={currentlyPlaying}
           nextPlaying={nextPlaying}
+          setBadPlaying={setBadPlaying}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
+          setOfflinePlaying={setOfflinePlaying}
+          youtubeVideos={youtubeVideos}
         />
       </div>
     );
@@ -113,7 +118,9 @@ Player.propTypes = {
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
   setNextPlaying: PropTypes.func.isRequired,
+  setOfflinePlaying: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
+  youtubeVideos: PropTypes.array.isRequired,
 };
 export default connect(
   state => ({

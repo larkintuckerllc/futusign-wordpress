@@ -306,6 +306,7 @@ class App extends Component {
       overlay,
       ovWidgets,
       setBadPlaying,
+      setOfflinePlaying,
       slideDecks,
       youtubeVideos,
     } = this.props;
@@ -332,8 +333,9 @@ class App extends Component {
         {!layerBlocking && overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
         {!layerBlocking &&
           <Player
-            setBadPlaying={setBadPlaying}
             images={images}
+            setBadPlaying={setBadPlaying}
+            setOfflinePlaying={setOfflinePlaying}
             slideDecks={slideDecks}
             youtubeVideos={youtubeVideos}
           />

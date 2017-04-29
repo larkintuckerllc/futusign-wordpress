@@ -1,3 +1,4 @@
+// TODO: REFACTOR INTO NEW
 import React, { Component, PropTypes } from 'react';
 import pdfjsLib from 'pdfjs-dist';
 import { convertDataURIToBinary } from '../../../util/misc';
