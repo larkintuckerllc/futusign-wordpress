@@ -71,7 +71,7 @@ class PlayerSlideDecks extends Component {
   }
   handlePage(pdfPage) {
     if (!this.mounted) { return; }
-    const { setNextIsReady } = this.props;
+    const { setBadPlaying, setNextIsReady } = this.props;
     let viewport = pdfPage.getViewport(1);
     const pdfWidth = viewport.width;
     const pdfHeight = viewport.height;
@@ -89,16 +89,15 @@ class PlayerSlideDecks extends Component {
       if (this.slideDeckIndex === 0 && this.pageNumber === 1) {
         setNextIsReady(true);
       }
-    });
+    }, () => setBadPlaying(true));
   }
   // eslint-disable-next-line
   renderPage() {
+    const { setBadPlaying } = this.props;
     this.renderCanvasEl = this.even ? this.rootCanvasEvenEl : this.rootCanvasOddEl;
     this.pdfDocument.getPage(this.pageNumber).then(
-      this.handlePage,
-      () => {
-        // TODO: ERROR
-      });
+      this.handlePage, () => setBadPlaying(true)
+    );
   }
   handleDocument(pdfDocument) {
     if (!this.mounted) { return; }
@@ -108,30 +107,21 @@ class PlayerSlideDecks extends Component {
     this.renderPage();
   }
   handleFile(file) {
+    const { setBadPlaying } = this.props;
     if (!this.mounted) { return; }
     const loadingTask = pdfjsLib.getDocument({
       data: convertDataURIToBinary(file),
       worker: window.futusignPDFWorker,
     });
     // TODO: HANDLE CACHING
-    loadingTask.promise.then(
-      this.handleDocument,
-      () => {
-        // TODO: HANDLE ERROR
-      }
-    );
+    loadingTask.promise.then(this.handleDocument, () => setBadPlaying(true));
   }
   loadSlideDeck() {
-    const { slideDecks } = this.props;
+    const { setBadPlaying, slideDecks } = this.props;
     const slideDeck = slideDecks[this.slideDeckIndex];
     this.slideDuration = slideDeck.slideDuration;
     getFile(slideDeck.file)
-    .then(
-      this.handleFile,
-      () => {
-        // TODO: HANDLE ERRORS
-      }
-    );
+    .then(this.handleFile, () => setBadPlaying(true));
   }
   playSlide() {
     const { setCurrentlyIsPlaying, slideDecks } = this.props;
@@ -180,6 +170,7 @@ PlayerSlideDecks.propTypes = {
   currentlyIsPlaying: PropTypes.bool.isRequired,
   currentlyPlaying: PropTypes.string,
   nextPlaying: PropTypes.string,
+  setBadPlaying: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,

@@ -332,6 +332,7 @@ class App extends Component {
         {!layerBlocking && overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
         {!layerBlocking &&
           <Player
+            setBadPlaying={setBadPlaying}
             slideDecks={slideDecks}
           />
         }

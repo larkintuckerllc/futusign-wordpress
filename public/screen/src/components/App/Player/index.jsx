@@ -25,7 +25,6 @@ class Player extends Component {
     const upNextIsReady = upProps.nextIsReady;
     // TRIGGER NEXT LOAD
     if (!currentlyIsPlaying && upCurrentlyIsPlaying) {
-      // TODO: CANCEL
       window.setTimeout(() => {
         let player;
         if (currentlyPlaying === LOADING) {
@@ -46,7 +45,6 @@ class Player extends Component {
       (currentlyIsPlaying && !upCurrentlyIsPlaying && nextIsReady) ||
       (!nextIsReady && upNextIsReady && !currentlyIsPlaying)
     ) {
-      // TODO: CANCEL
       window.setTimeout(() => {
         setCurrentlyPlaying(nextPlaying);
         setCurrentlyIsPlaying(true);
@@ -58,6 +56,7 @@ class Player extends Component {
       currentlyIsPlaying,
       currentlyPlaying,
       nextPlaying,
+      setBadPlaying,
       setCurrentlyIsPlaying,
       setNextIsReady,
       slideDecks,
@@ -73,6 +72,7 @@ class Player extends Component {
           currentlyIsPlaying={currentlyIsPlaying}
           currentlyPlaying={currentlyPlaying}
           nextPlaying={nextPlaying}
+          setBadPlaying={setBadPlaying}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
           slideDecks={slideDecks}
@@ -93,6 +93,7 @@ Player.propTypes = {
   currentlyPlaying: PropTypes.string,
   nextIsReady: PropTypes.bool.isRequired,
   nextPlaying: PropTypes.string,
+  setBadPlaying: PropTypes.func.isRequired,
   setCurrentlyPlaying: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
