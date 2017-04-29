@@ -2,6 +2,7 @@ import { Component, PropTypes } from 'react';
 import { YOUTUBE_VIDEOS } from '../../../../strings';
 
 const URL_REGEX = /^https:\/\/youtu\.be\/(.*)/;
+const VIDEO_DELAY = 2;
 class PlayerYoutubeVideos extends Component {
   constructor(props) {
     super(props);
@@ -12,8 +13,9 @@ class PlayerYoutubeVideos extends Component {
     this.numberOfVideos = null;
     this.handleYoutubeStateChange = this.handleYoutubeStateChange.bind(this);
     this.handleYoutubeError = this.handleYoutubeError.bind(this);
-    this.playVideo = this.playVideo.bind(this);
+    this.validVideos = this.validVideos.bind(this);
     this.futusignYoutubeEl = window.document.getElementById('futusign_youtube');
+    this.futusignCoverEl = window.document.getElementById('futusign_cover');
   }
   componentDidMount() {
     window.futusignYoutubeStateChange.addEventListener(this.handleYoutubeStateChange);
@@ -24,10 +26,14 @@ class PlayerYoutubeVideos extends Component {
       currentlyIsPlaying,
       currentlyPlaying,
       nextPlaying,
+      setBadPlaying,
       setOfflinePlaying,
+      setNextIsReady,
+      youtubeVideos,
     } = this.props;
     const upNextPlaying = upProps.nextPlaying;
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
+    // const upCurrentlyPlaying = upProps.currentlyPlaying;
     // GETTING READY TO PLAY
     if (
       nextPlaying !== YOUTUBE_VIDEOS &&
@@ -40,11 +46,24 @@ class PlayerYoutubeVideos extends Component {
             setOfflinePlaying(true);
             return;
           }
-          this.cueFirstVideo();
+          if (!this.validVideos()) {
+            setBadPlaying(true);
+            return;
+          }
+          // TODO: CLEARTIMEOUT
+          window.setTimeout(() => setNextIsReady(true), 1000);
         }, 5000);
         return;
       }
-      this.cueFirstVideo();
+      // INVALID VIDEOS
+      if (!this.validVideos()) {
+        // TODO: CLEARTIMEOUT
+        window.setTimeout(() => setBadPlaying(true), 0);
+        return;
+      }
+      // READY
+      // TODO: CLEARTIMEOUT
+      window.setTimeout(() => setNextIsReady(true), 1000);
     }
     // START PLAYING
     if (
@@ -52,7 +71,17 @@ class PlayerYoutubeVideos extends Component {
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
-      this.playVideo();
+      this.videoIndex = 0;
+      this.futusignCoverEl.style.visibility = 'visible';
+      window.futusignYoutubePlayer.cueVideoById(
+        this.videoIds[this.videoIndex],
+        0,
+        youtubeVideos[this.videoIndex].suggestedQuality
+      );
+      this.futusignYoutubeEl.style.visibility = 'visible';
+      window.setTimeout(() => {
+        this.futusignCoverEl.style.visibility = 'hidden';
+      }, VIDEO_DELAY * 1000);
     }
   }
   shouldComponentUpdate() {
@@ -60,39 +89,35 @@ class PlayerYoutubeVideos extends Component {
   }
   componentWillUnmount() {
     // HANDLE STOPPING VIDEO
+    // ADD ANIMATION TO COVER
     window.futusignYoutubeStateChange.removeEventListener(this.handleYoutubeStateChange);
     window.futusignYoutubeError.removeEventListener(this.handleYoutubeError);
     window.clearTimeout(this.readyTimeout);
     window.clearTimeout(this.stopTimeout);
   }
-  playVideo() {
-    window.futusignYoutubePlayer.playVideo();
-    this.futusignYoutubeEl.style.visibility = 'visible';
-  }
   handleYoutubeStateChange(event) {
-    const { setCurrentlyIsPlaying, setNextIsReady, youtubeVideos } = this.props;
+    const { setCurrentlyIsPlaying, youtubeVideos } = this.props;
     switch (event.detail) {
       case window.YT.PlayerState.CUED:
-        if (this.videoIndex === 0) {
-          setNextIsReady(true);
-          return;
-        }
         window.futusignYoutubePlayer.playVideo();
         break;
       case window.YT.PlayerState.ENDED:
         if (this.videoIndex >= this.numberOfVideos - 1) {
-          // TODO: NEED TO FIX TO HIDE WHEN NEXT IS READY
-          // TODO: NEED TO WIPE OUT LAST VIDEO
           this.futusignYoutubeEl.style.visibility = 'hidden';
           setCurrentlyIsPlaying(false);
           return;
         }
         this.videoIndex += 1;
+        this.futusignCoverEl.style.visibility = 'visible';
         window.futusignYoutubePlayer.cueVideoById(
           this.videoIds[this.videoIndex],
           0,
           youtubeVideos[this.videoIndex].suggestedQuality
         );
+        this.futusignYoutubeEl.style.visibility = 'visible';
+        window.setTimeout(() => {
+          this.futusignCoverEl.style.visibility = 'hidden';
+        }, VIDEO_DELAY * 1000);
         break;
       default:
     }
@@ -101,32 +126,21 @@ class PlayerYoutubeVideos extends Component {
     const { setOfflinePlaying } = this.props;
     setOfflinePlaying(true);
   }
-  cueFirstVideo() {
-    const { setBadPlaying, youtubeVideos } = this.props;
-    // CHECKING VALIDITY
+  validVideos() {
+    const { youtubeVideos } = this.props;
     this.videoIds = [];
     this.numberOfVideos = youtubeVideos.length;
-    let validVideos = true;
+    let valid = true;
     for (let i = 0; i < this.numberOfVideos; i += 1) {
       const url = youtubeVideos[i].url;
       const match = URL_REGEX.exec(url);
       if (match === null) {
-        validVideos = false;
+        valid = false;
       } else {
         this.videoIds.push(match[1]);
       }
     }
-    if (!validVideos) {
-      setBadPlaying(true);
-      return;
-    }
-    // CUE FIRST VIDEO
-    this.videoIndex = 0;
-    window.futusignYoutubePlayer.cueVideoById(
-      this.videoIds[this.videoIndex],
-      0,
-      youtubeVideos[this.videoIndex].suggestedQuality
-    );
+    return valid;
   }
   render() {
     return null;
