@@ -285,10 +285,10 @@ class App extends Component {
       setLayerBlocking,
       setNextIsReady,
     } = this.props;
+    setNextIsReady(false);
+    setCurrentlyIsPlaying(false);
     resetCurrentlyPlaying();
     resetNextPlaying();
-    setCurrentlyIsPlaying(false);
-    setNextIsReady(false);
     setLayerBlocking(false);
     setCurrentlyPlaying(LOADING);
     setCurrentlyIsPlaying(true);

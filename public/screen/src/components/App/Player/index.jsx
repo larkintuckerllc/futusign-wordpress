@@ -23,8 +23,8 @@ class Player extends Component {
     } = this.props;
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
     const upNextIsReady = upProps.nextIsReady;
+    // TRIGGER NEXT LOAD
     if (!currentlyIsPlaying && upCurrentlyIsPlaying) {
-      // TODO: HAVE A PROBLEM HERE ON RESTARTING
       // TODO: CANCEL
       window.setTimeout(() => {
         let player;
@@ -41,6 +41,7 @@ class Player extends Component {
         setNextPlaying(player);
       }, 0);
     }
+    // TRIGGER PLAYING
     if (
       (currentlyIsPlaying && !upCurrentlyIsPlaying && nextIsReady) ||
       (!nextIsReady && upNextIsReady && !currentlyIsPlaying)
