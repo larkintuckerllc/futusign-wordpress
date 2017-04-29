@@ -26,19 +26,20 @@ class PlayerYoutubeVideos extends Component {
       currentlyPlaying,
       nextPlaying,
       setBadPlaying,
+      setCover,
       setOfflinePlaying,
       setNextIsReady,
       youtubeVideos,
     } = this.props;
     const upNextPlaying = upProps.nextPlaying;
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
-    // const upCurrentlyPlaying = upProps.currentlyPlaying;
+    const upCurrentlyPlaying = upProps.currentlyPlaying;
     // GETTING READY TO PLAY
     if (
       nextPlaying !== YOUTUBE_VIDEOS &&
       upNextPlaying === YOUTUBE_VIDEOS
     ) {
-      // YOUTUBE PLAYING NOT READY
+      // YOUTUBE PLAYING CHECK READY
       if (window.futusignYoutubePlayer === undefined) {
         this.readyTimeout = window.setTimeout(() => {
           if (window.futusignYoutubePlayer === undefined) {
@@ -49,20 +50,18 @@ class PlayerYoutubeVideos extends Component {
             setBadPlaying(true);
             return;
           }
-          // TODO: CLEARTIMEOUT
-          window.setTimeout(() => setNextIsReady(true), 1000);
+          setNextIsReady(true);
         }, 5000);
         return;
       }
-      // INVALID VIDEOS
+      // CHECK VIDEOS VALID
       if (!this.validVideos()) {
         // TODO: CLEARTIMEOUT
         window.setTimeout(() => setBadPlaying(true), 0);
         return;
       }
       // READY
-      // TODO: CLEARTIMEOUT
-      window.setTimeout(() => setNextIsReady(true), 1000);
+      window.setTimeout(() => setNextIsReady(true), 0);
     }
     // START PLAYING
     if (
@@ -71,16 +70,27 @@ class PlayerYoutubeVideos extends Component {
       upCurrentlyIsPlaying
     ) {
       this.videoIndex = 0;
-      // TODO: NEW COVER
       window.futusignYoutubePlayer.cueVideoById(
         this.videoIds[this.videoIndex],
         0,
         youtubeVideos[this.videoIndex].suggestedQuality
       );
-      this.futusignYoutubeEl.style.visibility = 'visible';
       window.setTimeout(() => {
-        // TODO: NEW COVER
+        setCover(true);
+        this.futusignYoutubeEl.style.visibility = 'visible';
+      }, 0);
+      window.setTimeout(() => {
+        setCover(false);
       }, VIDEO_DELAY * 1000);
+    }
+    // STOP SHOWING
+    if (
+      currentlyPlaying === YOUTUBE_VIDEOS &&
+      upCurrentlyPlaying !== YOUTUBE_VIDEOS
+    ) {
+      window.setTimeout(() => {
+        setCover(false);
+      }, 0);
     }
   }
   shouldComponentUpdate() {
@@ -88,14 +98,13 @@ class PlayerYoutubeVideos extends Component {
   }
   componentWillUnmount() {
     // HANDLE STOPPING VIDEO
-    // ADD ANIMATION TO COVER
     window.futusignYoutubeStateChange.removeEventListener(this.handleYoutubeStateChange);
     window.futusignYoutubeError.removeEventListener(this.handleYoutubeError);
     window.clearTimeout(this.readyTimeout);
     window.clearTimeout(this.stopTimeout);
   }
   handleYoutubeStateChange(event) {
-    const { setCurrentlyIsPlaying, youtubeVideos } = this.props;
+    const { setCover, setCurrentlyIsPlaying, youtubeVideos } = this.props;
     switch (event.detail) {
       case window.YT.PlayerState.CUED:
         window.futusignYoutubePlayer.playVideo();
@@ -104,18 +113,22 @@ class PlayerYoutubeVideos extends Component {
         if (this.videoIndex >= this.numberOfVideos - 1) {
           this.futusignYoutubeEl.style.visibility = 'hidden';
           setCurrentlyIsPlaying(false);
+          window.setTimeout(() => {
+            setCover(true);
+          }, 0);
           return;
         }
         this.videoIndex += 1;
-        // TODO: NEW COVER
         window.futusignYoutubePlayer.cueVideoById(
           this.videoIds[this.videoIndex],
           0,
           youtubeVideos[this.videoIndex].suggestedQuality
         );
-        this.futusignYoutubeEl.style.visibility = 'visible';
         window.setTimeout(() => {
-          // TODO: NEW COVER
+          setCover(true);
+        }, 0);
+        window.setTimeout(() => {
+          setCover(false);
         }, VIDEO_DELAY * 1000);
         break;
       default:
@@ -150,6 +163,7 @@ PlayerYoutubeVideos.propTypes = {
   currentlyPlaying: PropTypes.string,
   nextPlaying: PropTypes.string,
   setBadPlaying: PropTypes.func.isRequired,
+  setCover: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,

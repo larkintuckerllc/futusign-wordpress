@@ -100,6 +100,7 @@ class Player extends Component {
           currentlyPlaying={currentlyPlaying}
           nextPlaying={nextPlaying}
           setBadPlaying={setBadPlaying}
+          setCover={setCover}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
           setOfflinePlaying={setOfflinePlaying}
