@@ -10,6 +10,7 @@ import * as fromMonitor from '../../ducks/monitor';
 import * as fromScreen from '../../ducks/screen';
 import * as fromSlideDecks from '../../ducks/slideDecks';
 import * as fromYoutubeVideos from '../../ducks/youtubeVideos';
+import * as fromCover from '../../ducks/cover';
 import * as fromImages from '../../ducks/images';
 import * as fromLayers from '../../ducks/layers';
 import * as fromOfflinePlaying from '../../ducks/offlinePlaying';
@@ -31,6 +32,7 @@ import NoMedia from './NoMedia';
 import Player from './Player';
 import Overlay from './Overlay';
 import Layers from './Layers';
+import Cover from './Cover';
 
 class App extends Component {
   constructor() {
@@ -298,6 +300,7 @@ class App extends Component {
       appBlocking,
       badPlaying,
       connected,
+      cover,
       images,
       layers,
       layerBlocking,
@@ -306,6 +309,7 @@ class App extends Component {
       overlay,
       ovWidgets,
       setBadPlaying,
+      setCover,
       setOfflinePlaying,
       slideDecks,
       youtubeVideos,
@@ -329,12 +333,14 @@ class App extends Component {
     return (
       <div>
         <Layers layers={layers} />
+        {!layerBlocking && cover && <Cover />}
         {!layerBlocking && monitor !== null && <Connected connected={connected} />}
         {!layerBlocking && overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
         {!layerBlocking &&
           <Player
             images={images}
             setBadPlaying={setBadPlaying}
+            setCover={setCover}
             setOfflinePlaying={setOfflinePlaying}
             slideDecks={slideDecks}
             youtubeVideos={youtubeVideos}
@@ -348,6 +354,7 @@ App.propTypes = {
   appBlocking: PropTypes.bool.isRequired,
   badPlaying: PropTypes.bool.isRequired,
   connected: PropTypes.bool.isRequired,
+  cover: PropTypes.bool.isRequired,
   images: PropTypes.array.isRequired,
   fetchImages: PropTypes.func.isRequired,
   fetchLayers: PropTypes.func.isRequired,
@@ -371,6 +378,7 @@ App.propTypes = {
   setAppBlocking: PropTypes.func.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
   setConnected: PropTypes.func.isRequired,
+  setCover: PropTypes.func.isRequired,
   setCurrentlyPlaying: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setLayerBlocking: PropTypes.func.isRequired,
@@ -384,6 +392,7 @@ export default connect(
     appBlocking: fromAppBlocking.getAppBlocking(state),
     badPlaying: fromBadPlaying.getBadPlaying(state),
     connected: fromConnected.getConnected(state),
+    cover: fromCover.getCover(state),
     images: fromImages.getImages(state),
     layers: fromLayers.getLayers(state),
     layerBlocking: fromLayerBlocking.getLayerBlocking(state),
@@ -410,6 +419,7 @@ export default connect(
     resetYoutubeVideos: fromYoutubeVideos.resetYoutubeVideos,
     setAppBlocking: fromAppBlocking.setAppBlocking,
     setBadPlaying: fromBadPlaying.setBadPlaying,
+    setCover: fromCover.setCover,
     setConnected: fromConnected.setConnected,
     setCurrentlyIsPlaying: fromCurrentlyIsPlaying.setCurrentlyIsPlaying,
     setCurrentlyPlaying: fromCurrentlyPlaying.setCurrentlyPlaying,

@@ -62,6 +62,7 @@ class Player extends Component {
       images,
       nextPlaying,
       setBadPlaying,
+      setCover,
       setCurrentlyIsPlaying,
       setNextIsReady,
       setOfflinePlaying,
@@ -73,6 +74,7 @@ class Player extends Component {
         <PlayerLoading
           currentlyIsPlaying={currentlyIsPlaying}
           currentlyPlaying={currentlyPlaying}
+          setCover={setCover}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
         />
         <PlayerSlideDecks
@@ -114,6 +116,7 @@ Player.propTypes = {
   nextIsReady: PropTypes.bool.isRequired,
   nextPlaying: PropTypes.string,
   setBadPlaying: PropTypes.func.isRequired,
+  setCover: PropTypes.func.isRequired,
   setCurrentlyPlaying: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
