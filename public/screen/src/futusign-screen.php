@@ -17,7 +17,6 @@ if ( ! defined( 'WPINC' ) ) {
     frameborder="0"
     src="https://www.youtube.com/embed/XIMLoLxmTDw?enablejsapi=1"
   ></iframe>
-  <div id="futusign_cover" style="opacity: 0;"></div>
   <script>
     (function(){
       // SET WIDTH OF YOUTUBE

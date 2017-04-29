@@ -13,7 +13,6 @@ class OfflineSlideDeck extends Component {
     this.renderSlideDeck = this.renderSlideDeck.bind(this);
     this.renderPage = this.renderPage.bind(this);
     this.handlePage = this.handlePage.bind(this);
-    this.futusignCoverEl = document.getElementById('futusign_cover');
   }
   componentDidMount() {
     const rootEl = document.getElementById(styles.root);
@@ -53,9 +52,9 @@ class OfflineSlideDeck extends Component {
     const renderedCanvasEl = !this.odd ? this.canvasOddEl : this.canvasEvenEl;
     this.renderCanvasEl.style.display = 'none';
     renderedCanvasEl.style.display = 'block';
-    this.futusignCoverEl.style.opacity = 0;
+    // TODO: NEW COVER
     this.coverTimeout = window.setTimeout(() => {
-      this.futusignCoverEl.style.opacity = 1;
+      // TODO: NEW COVER
     }, (this.slideDuration - 1) * 1000);
   }
   // eslint-disable-next-line

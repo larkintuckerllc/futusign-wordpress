@@ -15,7 +15,6 @@ class PlayerYoutubeVideos extends Component {
     this.handleYoutubeError = this.handleYoutubeError.bind(this);
     this.validVideos = this.validVideos.bind(this);
     this.futusignYoutubeEl = window.document.getElementById('futusign_youtube');
-    this.futusignCoverEl = window.document.getElementById('futusign_cover');
   }
   componentDidMount() {
     window.futusignYoutubeStateChange.addEventListener(this.handleYoutubeStateChange);
@@ -72,7 +71,7 @@ class PlayerYoutubeVideos extends Component {
       upCurrentlyIsPlaying
     ) {
       this.videoIndex = 0;
-      this.futusignCoverEl.style.visibility = 'visible';
+      // TODO: NEW COVER
       window.futusignYoutubePlayer.cueVideoById(
         this.videoIds[this.videoIndex],
         0,
@@ -80,7 +79,7 @@ class PlayerYoutubeVideos extends Component {
       );
       this.futusignYoutubeEl.style.visibility = 'visible';
       window.setTimeout(() => {
-        this.futusignCoverEl.style.visibility = 'hidden';
+        // TODO: NEW COVER
       }, VIDEO_DELAY * 1000);
     }
   }
@@ -108,7 +107,7 @@ class PlayerYoutubeVideos extends Component {
           return;
         }
         this.videoIndex += 1;
-        this.futusignCoverEl.style.visibility = 'visible';
+        // TODO: NEW COVER
         window.futusignYoutubePlayer.cueVideoById(
           this.videoIds[this.videoIndex],
           0,
@@ -116,7 +115,7 @@ class PlayerYoutubeVideos extends Component {
         );
         this.futusignYoutubeEl.style.visibility = 'visible';
         window.setTimeout(() => {
-          this.futusignCoverEl.style.visibility = 'hidden';
+          // TODO: NEW COVER
         }, VIDEO_DELAY * 1000);
         break;
       default:

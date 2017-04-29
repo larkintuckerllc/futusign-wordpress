@@ -16,6 +16,7 @@ import connected from '../ducks/connected';
 import overlay from '../ducks/overlay';
 import ovWidgets from '../ducks/ovWidgets';
 import layerBlocking from '../ducks/layerBlocking';
+import cover from '../ducks/cover';
 
 export default combineReducers({
   appBlocking,
@@ -35,4 +36,5 @@ export default combineReducers({
   overlay,
   ovWidgets,
   layerBlocking,
+  cover,
 });
