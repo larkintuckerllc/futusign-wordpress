@@ -36,6 +36,8 @@ class PlayerLoading extends Component {
     return false;
   }
   componentWillUnmount() {
+    const { setCover } = this.props;
+    setCover(false);
     window.clearTimeout(this.stopTimeout);
   }
   render() {

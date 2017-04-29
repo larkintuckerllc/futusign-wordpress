@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import { Component, PropTypes } from 'react';
 import { TEMPLATE } from '../../../../strings';
 
 class PlayerTemplate extends Component {
@@ -17,6 +17,7 @@ class PlayerTemplate extends Component {
     } = this.props;
     const upNextPlaying = upProps.nextPlaying;
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
+    const upCurrentlyPlaying = upProps.currentlyPlaying;
     // GETTING READY TO PLAY
     if (
       nextPlaying !== TEMPLATE &&
@@ -32,6 +33,13 @@ class PlayerTemplate extends Component {
     ) {
       this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 5000);
     }
+    // STOP SHOWING
+    if (
+      currentlyPlaying === TEMPLATE &&
+      upCurrentlyPlaying !== TEMPLATE
+    ) {
+      window.console.log('STOP SHOWING');
+    }
   }
   shouldComponentUpdate() {
     return false;
@@ -41,7 +49,7 @@ class PlayerTemplate extends Component {
     window.clearTimeout(this.stopTimeout);
   }
   render() {
-    return <div>Player Slide Decks</div>;
+    return null;
   }
 }
 PlayerTemplate.propTypes = {
