@@ -29,6 +29,7 @@ class PlayerImages extends Component {
     } = this.props;
     const upNextPlaying = upProps.nextPlaying;
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
+    const upCurrentlyPlaying = upProps.currentlyPlaying;
     // GETTING READY TO PLAY
     if (
       nextPlaying !== IMAGES &&
@@ -44,6 +45,14 @@ class PlayerImages extends Component {
       upCurrentlyIsPlaying
     ) {
       this.playImage();
+    }
+    // STOP SHOWING
+    if (
+      currentlyPlaying === IMAGES &&
+      upCurrentlyPlaying !== IMAGES
+    ) {
+      this.rootEvenEl.style.opacity = 0.1;
+      this.rootOddEl.style.opacity = 0.1;
     }
   }
   shouldComponentUpdate() {
@@ -81,7 +90,6 @@ class PlayerImages extends Component {
       this.loadImage();
     } else {
       this.stopTimeout = window.setTimeout(() => {
-        playEl.style.opacity = 0.1;
         setCurrentlyIsPlaying(false);
       }, this.imageDuration * 1000);
     }

@@ -44,6 +44,7 @@ class PlayerSlideDecks extends Component {
     } = this.props;
     const upNextPlaying = upProps.nextPlaying;
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
+    const upCurrentlyPlaying = upProps.currentlyPlaying;
     // GETTING READY TO PLAY
     if (
       nextPlaying !== SLIDE_DECKS &&
@@ -59,6 +60,14 @@ class PlayerSlideDecks extends Component {
       upCurrentlyIsPlaying
     ) {
       this.playSlide();
+    }
+    // STOP SHOWING
+    if (
+      currentlyPlaying === SLIDE_DECKS &&
+      upCurrentlyPlaying !== SLIDE_DECKS
+    ) {
+      this.rootCanvasEvenEl.style.opacity = 0.1;
+      this.rootCanvasOddEl.style.opacity = 0.1;
     }
   }
   shouldComponentUpdate() {
@@ -142,7 +151,6 @@ class PlayerSlideDecks extends Component {
       this.loadSlideDeck();
     } else {
       this.stopTimeout = window.setTimeout(() => {
-        playCanvasEl.style.opacity = 0.1;
         setCurrentlyIsPlaying(false);
       }, this.slideDuration * 1000);
     }
