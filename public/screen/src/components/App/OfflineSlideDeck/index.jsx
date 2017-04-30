@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import pdfjsLib from 'pdfjs-dist';
 import { convertDataURIToBinary } from '../../../util/misc';
 import styles from './index.scss';
-// import offline from './offline.png';
+import offline from './offline.png';
 
 class OfflineSlideDeck extends Component {
   constructor() {
@@ -95,8 +95,8 @@ class OfflineSlideDeck extends Component {
   playSlide() {
     const playCanvasEl = this.even ? this.rootCanvasEvenEl : this.rootCanvasOddEl;
     const hideCanvasEl = !this.even ? this.rootCanvasEvenEl : this.rootCanvasOddEl;
-    playCanvasEl.style.opacity = 1;
-    hideCanvasEl.style.opacity = 0.1;
+    playCanvasEl.style.display = 'block';
+    hideCanvasEl.style.display = 'none';
     this.even = !this.even;
     this.pageNumber = this.pageNumber < this.numberOfPages ?
       this.pageNumber + 1 : 1;
@@ -105,19 +105,19 @@ class OfflineSlideDeck extends Component {
   }
   render() {
     return (
-      <div id={styles.temp}>
-        <div id={styles.root}>
-          <canvas
-            style={{ opacity: 0.1 }}
-            id={styles.rootCanvasEven}
-          />
-        </div>
-        <div id={styles.root2}>
-          <canvas
-            style={{ opacity: 0.1 }}
-            id={styles.rootCanvasOdd}
-          />
-        </div>
+      <div id={styles.root}>
+        <canvas
+          style={{ display: 'none' }}
+          id={styles.rootCanvasEven}
+        />
+        <canvas
+          style={{ display: 'none' }}
+          id={styles.rootCanvasOdd}
+        />
+        <div
+          id={styles.rootOffline}
+          style={{ backgroundImage: `url(${offline})` }}
+        />
       </div>
     );
   }

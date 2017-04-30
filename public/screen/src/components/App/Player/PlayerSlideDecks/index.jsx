@@ -66,8 +66,8 @@ class PlayerSlideDecks extends Component {
       currentlyPlaying === SLIDE_DECKS &&
       upCurrentlyPlaying !== SLIDE_DECKS
     ) {
-      this.rootCanvasEvenEl.style.opacity = 0.1;
-      this.rootCanvasOddEl.style.opacity = 0.1;
+      this.rootCanvasEvenEl.style.display = 'none';
+      this.rootCanvasOddEl.style.display = 'none';
     }
   }
   shouldComponentUpdate() {
@@ -123,7 +123,7 @@ class PlayerSlideDecks extends Component {
       worker: window.futusignPDFWorker,
     });
     // CACHING OFFLINE
-    if (this.iList === 0) {
+    if (this.slideDeckIndex === 0) {
       const newSlideDeckURL = slideDecks[0].file;
       const newSlideDeckDuration = slideDecks[0].slideDuration;
       const lastSlideDeckURL = window.localStorage.getItem('futusign_slide_deck_url');
@@ -154,8 +154,8 @@ class PlayerSlideDecks extends Component {
     const { setCurrentlyIsPlaying, slideDecks } = this.props;
     const playCanvasEl = this.even ? this.rootCanvasEvenEl : this.rootCanvasOddEl;
     const hideCanvasEl = !this.even ? this.rootCanvasEvenEl : this.rootCanvasOddEl;
-    playCanvasEl.style.opacity = 1;
-    hideCanvasEl.style.opacity = 0.1;
+    playCanvasEl.style.display = 'block';
+    hideCanvasEl.style.display = 'none';
     this.even = !this.even;
     this.pageNumber += 1;
     if (this.pageNumber <= this.numberOfPages) {
@@ -175,19 +175,15 @@ class PlayerSlideDecks extends Component {
   }
   render() {
     return (
-      <div id={styles.temp}>
-        <div id={styles.root}>
-          <canvas
-            style={{ opacity: 0.1 }}
-            id={styles.rootCanvasEven}
-          />
-        </div>
-        <div id={styles.root2}>
-          <canvas
-            style={{ opacity: 0.1 }}
-            id={styles.rootCanvasOdd}
-          />
-        </div>
+      <div id={styles.root}>
+        <canvas
+          style={{ display: 'none' }}
+          id={styles.rootCanvasEven}
+        />
+        <canvas
+          style={{ display: 'none' }}
+          id={styles.rootCanvasOdd}
+        />
       </div>
     );
   }

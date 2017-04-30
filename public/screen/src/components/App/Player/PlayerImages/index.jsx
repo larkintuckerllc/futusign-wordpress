@@ -51,8 +51,8 @@ class PlayerImages extends Component {
       currentlyPlaying === IMAGES &&
       upCurrentlyPlaying !== IMAGES
     ) {
-      this.rootEvenEl.style.opacity = 0.1;
-      this.rootOddEl.style.opacity = 0.1;
+      this.rootEvenEl.style.display = 'none';
+      this.rootOddEl.style.display = 'none';
     }
   }
   shouldComponentUpdate() {
@@ -81,8 +81,8 @@ class PlayerImages extends Component {
     const { setCurrentlyIsPlaying, images } = this.props;
     const playEl = this.even ? this.rootEvenEl : this.rootOddEl;
     const hideEl = !this.even ? this.rootEvenEl : this.rootOddEl;
-    playEl.style.opacity = 1;
-    hideEl.style.opacity = 0.1;
+    playEl.style.display = 'block';
+    hideEl.style.display = 'none';
     this.even = !this.even;
     if (this.imageIndex < images.length - 1) {
       this.imageIndex += 1;
@@ -96,21 +96,17 @@ class PlayerImages extends Component {
   }
   render() {
     return (
-      <div id={styles.temp}>
-        <div id={styles.root}>
-          <div
-            style={{ opacity: 0.1 }}
-            id={styles.rootEven}
-            className={styles.rootDiv}
-          />
-        </div>
-        <div id={styles.root2}>
-          <div
-            style={{ opacity: 0.1 }}
-            id={styles.rootOdd}
-            className={styles.rootDiv}
-          />
-        </div>
+      <div id={styles.root}>
+        <div
+          style={{ display: 'none' }}
+          id={styles.rootEven}
+          className={styles.rootDiv}
+        />
+        <div
+          style={{ display: 'none' }}
+          id={styles.rootOdd}
+          className={styles.rootDiv}
+        />
       </div>
     );
   }
