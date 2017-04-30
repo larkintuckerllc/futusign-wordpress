@@ -93,6 +93,7 @@ class App extends Component {
     } = this.props;
     fetchBase()
     .then(() => {
+      // DETECT COMING BACK ONLINE
       if (offlinePlaying) {
         window.location.reload();
       }
