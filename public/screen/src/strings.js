@@ -11,7 +11,7 @@ export const MONITOR_API_ENDPOINT = 'fs-monitor';
 export const OVERLAYS_API_ENDPOINT = 'fs-overlays';
 export const CACHE_INTERVAL = 300;
 // TODO: SET BACK TO 60
-export const POLLING_INTERVAL = 10;
+export const POLLING_INTERVAL = 100000;
 export const OV_WIDGETS_API_ENDPOINT = 'fs-ov-widgets';
 // PLAYER
 export const LOADING = 'LOADING';

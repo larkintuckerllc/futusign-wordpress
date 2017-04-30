@@ -1,3 +1,4 @@
+// TODO: POLLING IS BREAKING FLOW
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { IMAGES, LOADING, SLIDE_DECKS, YOUTUBE_VIDEOS } from '../../../strings';

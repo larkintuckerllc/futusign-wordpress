@@ -53,8 +53,14 @@ if ( ! defined( 'WPINC' ) ) {
       var firstScriptTag = document.getElementsByTagName('script')[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       window.onYouTubeIframeAPIReady = function() {
+        // REL DOES NOT SEEM TO WORK AS DOCUMENT; COVER WORKAROUND
         var player = new window.YT.Player('futusign_youtube', {
-          playerVars: { 'controls': 0 },
+          playerVars: {
+            'controls': 0,
+            'enablejsapi': 1,
+            'showinfo': 0,
+            'rel': 0,
+          },
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange,
