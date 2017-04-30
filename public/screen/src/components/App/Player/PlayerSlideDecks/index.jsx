@@ -116,13 +116,31 @@ class PlayerSlideDecks extends Component {
     this.renderPage();
   }
   handleFile(file) {
-    const { setBadPlaying } = this.props;
+    const { setBadPlaying, slideDecks } = this.props;
     if (!this.mounted) { return; }
     const loadingTask = pdfjsLib.getDocument({
       data: convertDataURIToBinary(file),
       worker: window.futusignPDFWorker,
     });
-    // TODO: HANDLE CACHING
+    // CACHING OFFLINE
+    if (this.iList === 0) {
+      const newSlideDeckURL = slideDecks[0].file;
+      const newSlideDeckDuration = slideDecks[0].slideDuration;
+      const lastSlideDeckURL = window.localStorage.getItem('futusign_slide_deck_url');
+      const lastSlideDeckDuration =
+        window.localStorage.getItem('futusign_slide_deck_slide_duration');
+      if (
+        newSlideDeckURL !== lastSlideDeckURL ||
+        newSlideDeckDuration !== lastSlideDeckDuration
+      ) {
+        window.localStorage.setItem('futusign_slide_deck_url', newSlideDeckURL);
+        window.localStorage.setItem('futusign_slide_deck_file', file);
+        window.localStorage.setItem(
+          'futusign_slide_deck_slide_duration',
+          newSlideDeckDuration
+        );
+      }
+    }
     loadingTask.promise.then(this.handleDocument, () => setBadPlaying(true));
   }
   loadSlideDeck() {
