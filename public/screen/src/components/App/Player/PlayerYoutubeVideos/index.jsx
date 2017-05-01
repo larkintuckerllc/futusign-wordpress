@@ -84,7 +84,14 @@ class PlayerYoutubeVideos extends Component {
       currentlyPlaying === YOUTUBE_VIDEOS &&
       upCurrentlyPlaying !== YOUTUBE_VIDEOS
     ) {
-      // TODO: HANDLE STOPPING IN MIDDLE OF PLAYING
+      // EXIT RELOAD
+      if (window.futusignYoutubePlayer !== undefined) {
+        window.futusignYoutubePlayer.pauseVideo();
+      }
+      this.futusignYoutubeEl.style.visibility = 'hidden';
+      window.clearTimeout(this.readyTimeout);
+      window.clearTimeout(this.coverTimeout);
+      // ALL EXITS
       window.setTimeout(() => setCover(false), 0);
     }
   }
@@ -98,10 +105,10 @@ class PlayerYoutubeVideos extends Component {
     }
     this.futusignYoutubeEl.style.visibility = 'hidden';
     setCover(false);
-    window.futusignYoutubeStateChange.removeEventListener(this.handleYoutubeStateChange);
-    window.futusignYoutubeError.removeEventListener(this.handleYoutubeError);
     window.clearTimeout(this.readyTimeout);
     window.clearTimeout(this.coverTimeout);
+    window.futusignYoutubeStateChange.removeEventListener(this.handleYoutubeStateChange);
+    window.futusignYoutubeError.removeEventListener(this.handleYoutubeError);
   }
   handleYoutubeStateChange(event) {
     const { setCover, setCurrentlyIsPlaying, youtubeVideos } = this.props;

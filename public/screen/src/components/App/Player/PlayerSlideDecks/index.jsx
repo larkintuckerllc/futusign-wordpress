@@ -66,7 +66,10 @@ class PlayerSlideDecks extends Component {
       currentlyPlaying === SLIDE_DECKS &&
       upCurrentlyPlaying !== SLIDE_DECKS
     ) {
-      // TODO: HANDLE STOP IN MIDDLE OF LOOP
+      // EXIT ON RELOAD
+      window.clearTimeout(this.slideTimeout);
+      window.clearTimeout(this.stopTimeout);
+      // ALL EXITS
       this.rootCanvasEvenEl.style.display = 'none';
       this.rootCanvasOddEl.style.display = 'none';
     }

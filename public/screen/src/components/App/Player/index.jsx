@@ -1,4 +1,4 @@
-// TODO: ADD SUPPORT FOR PRIORITY
+// TODO: TEST EXITS ON CHANGE
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { IMAGES, SLIDE_DECKS, TRANSITION, TRANSITION2, YOUTUBE_VIDEOS } from '../../../strings';
@@ -54,8 +54,8 @@ class Player extends Component {
       TRANSITION: [null],
       TRANSITION2: [null],
       SLIDE_DECKS: this.filteredSlideDecks,
-      IMAGES: images,
-      YOUTUBE_VIDEOS: youtubeVideos,
+      IMAGES: this.filteredImages,
+      YOUTUBE_VIDEOS: this.filteredYoutubeVideos,
     };
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
     const upNextIsReady = upProps.nextIsReady;

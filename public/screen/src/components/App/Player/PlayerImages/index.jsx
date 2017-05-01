@@ -51,6 +51,10 @@ class PlayerImages extends Component {
       currentlyPlaying === IMAGES &&
       upCurrentlyPlaying !== IMAGES
     ) {
+      // EXIT ON RELOAD
+      window.clearTimeout(this.slideTimeout);
+      window.clearTimeout(this.stopTimeout);
+      // ALL EXITS
       this.rootEvenEl.style.display = 'none';
       this.rootOddEl.style.display = 'none';
     }
