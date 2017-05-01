@@ -1,4 +1,3 @@
-// TODO: ADD CHECKS FOR EMPTY PLAY
 // TODO: ADD SUPPORT FOR PRIORITY
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
@@ -23,20 +22,37 @@ class Player extends Component {
     const {
       currentlyIsPlaying,
       currentlyPlaying,
+      images,
       nextIsReady,
       nextPlaying,
       setCurrentlyIsPlaying,
       setCurrentlyPlaying,
       setNextIsReady,
       setNextPlaying,
+      slideDecks,
+      youtubeVideos,
     } = this.props;
+    const mediaById = {
+      TRANSITION: [null],
+      SLIDE_DECKS: slideDecks,
+      IMAGES: images,
+      YOUTUBE_VIDEOS: youtubeVideos,
+    };
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
     const upNextIsReady = upProps.nextIsReady;
     // TRIGGER NEXT LOAD
     if (!currentlyIsPlaying && upCurrentlyIsPlaying) {
       window.setTimeout(() => {
+        let isEmpty = true;
         let nextIndex = PLAY_ORDER.indexOf(currentlyPlaying) + 1;
         nextIndex = nextIndex < PLAY_ORDER.length ? nextIndex : 0;
+        while (isEmpty) {
+          isEmpty = mediaById[PLAY_ORDER[nextIndex]].length === 0;
+          if (isEmpty) {
+            nextIndex += 1;
+            nextIndex = nextIndex < PLAY_ORDER.length ? nextIndex : 0;
+          }
+        }
         setNextIsReady(false);
         setNextPlaying(PLAY_ORDER[nextIndex]);
       }, 0);
