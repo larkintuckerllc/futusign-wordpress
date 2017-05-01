@@ -11,6 +11,7 @@ export const get = (playlistIds) => {
     id: o.id,
     url: o.acf.url,
     suggestedQuality: o.acf.suggested_quality,
+    priority: o.acf.priority !== undefined ? Number(o.acf.priority) : 1,
   }))))
   .catch(() => ([]));
 };

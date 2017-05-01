@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import { CACHE_INTERVAL, POLLING_INTERVAL, LOADING } from '../../strings';
+import { CACHE_INTERVAL, POLLING_INTERVAL, TRANSITION } from '../../strings';
 import { fetchBase } from '../../apis/base';
 import * as fromAppBlocking from '../../ducks/appBlocking';
 import * as fromMonitor from '../../ducks/monitor';
@@ -293,7 +293,7 @@ class App extends Component {
     resetCurrentlyPlaying();
     resetNextPlaying();
     setLayerBlocking(false);
-    setCurrentlyPlaying(LOADING);
+    setCurrentlyPlaying(TRANSITION);
     setCurrentlyIsPlaying(true);
   }
   render() {

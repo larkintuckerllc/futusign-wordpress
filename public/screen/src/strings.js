@@ -13,7 +13,7 @@ export const CACHE_INTERVAL = 300;
 export const POLLING_INTERVAL = 60;
 export const OV_WIDGETS_API_ENDPOINT = 'fs-ov-widgets';
 // PLAYERS
-export const LOADING = 'LOADING';
+export const TRANSITION = 'TRANSITION';
 export const SLIDE_DECKS = 'SLIDE_DECKS';
 export const IMAGES = 'IMAGES';
 export const YOUTUBE_VIDEOS = 'YOUTUBE_VIDEOS';

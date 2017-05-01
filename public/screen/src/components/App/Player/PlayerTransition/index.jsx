@@ -1,33 +1,44 @@
 import { Component, PropTypes } from 'react';
-import { LOADING } from '../../../../strings';
+import { TRANSITION } from '../../../../strings';
 
-class PlayerLoading extends Component {
+class PlayerTransition extends Component {
   constructor(props) {
     super(props);
+    this.readyTimeout = null;
     this.stopTimeout = null;
   }
   componentWillReceiveProps(upProps) {
     const {
       currentlyIsPlaying,
       currentlyPlaying,
+      nextPlaying,
       setCover,
       setCurrentlyIsPlaying,
+      setNextIsReady,
     } = this.props;
+    const upNextPlaying = upProps.nextPlaying;
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
     const upCurrentlyPlaying = upProps.currentlyPlaying;
+    // GETTING READY TO PLAY
+    if (
+      nextPlaying !== TRANSITION &&
+      upNextPlaying === TRANSITION
+    ) {
+      this.readyTimeout = window.setTimeout(() => setNextIsReady(true), 0);
+    }
     // START PLAYING
     if (
-      currentlyPlaying === LOADING &&
+      currentlyPlaying === TRANSITION &&
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
       window.setTimeout(() => setCover(true), 0);
-      this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 5000);
+      this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 2000);
     }
     // STOP SHOWING
     if (
-      currentlyPlaying === LOADING &&
-      upCurrentlyPlaying !== LOADING
+      currentlyPlaying === TRANSITION &&
+      upCurrentlyPlaying !== TRANSITION
     ) {
       window.setTimeout(() => setCover(false), 0);
     }
@@ -36,20 +47,19 @@ class PlayerLoading extends Component {
     return false;
   }
   componentWillUnmount() {
-    const { setCover } = this.props;
-    setCover(false);
+    window.clearTimeout(this.readyTimeout);
     window.clearTimeout(this.stopTimeout);
   }
   render() {
-    return (
-      null
-    );
+    return null;
   }
 }
-PlayerLoading.propTypes = {
+PlayerTransition.propTypes = {
   currentlyIsPlaying: PropTypes.bool.isRequired,
   currentlyPlaying: PropTypes.string,
+  nextPlaying: PropTypes.string,
   setCover: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
+  setNextIsReady: PropTypes.func.isRequired,
 };
-export default PlayerLoading;
+export default PlayerTransition;

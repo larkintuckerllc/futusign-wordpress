@@ -2,12 +2,12 @@
 // TODO: ADD SUPPORT FOR PRIORITY
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { IMAGES, LOADING, SLIDE_DECKS, YOUTUBE_VIDEOS } from '../../../strings';
+import { IMAGES, SLIDE_DECKS, TRANSITION, YOUTUBE_VIDEOS } from '../../../strings';
 import * as fromCurrentlyPlaying from '../../../ducks/currentlyPlaying';
 import * as fromCurrentlyIsPlaying from '../../../ducks/currentlyIsPlaying';
 import * as fromNextPlaying from '../../../ducks/nextPlaying';
 import * as fromNextIsReady from '../../../ducks/nextIsReady';
-import PlayerLoading from './PlayerLoading';
+import PlayerTransition from './PlayerTransition';
 import PlayerSlideDecks from './PlayerSlideDecks';
 import PlayerImages from './PlayerImages';
 import PlayerYoutubeVideos from './PlayerYoutubeVideos';
@@ -30,7 +30,7 @@ class Player extends Component {
     if (!currentlyIsPlaying && upCurrentlyIsPlaying) {
       window.setTimeout(() => {
         let player;
-        if (currentlyPlaying === LOADING) {
+        if (currentlyPlaying === TRANSITION) {
           player = SLIDE_DECKS;
         }
         if (currentlyPlaying === SLIDE_DECKS) {
@@ -73,11 +73,13 @@ class Player extends Component {
     } = this.props;
     return (
       <div>
-        <PlayerLoading
+        <PlayerTransition
           currentlyIsPlaying={currentlyIsPlaying}
           currentlyPlaying={currentlyPlaying}
+          nextPlaying={nextPlaying}
           setCover={setCover}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
+          setNextIsReady={setNextIsReady}
         />
         <PlayerSlideDecks
           currentlyIsPlaying={currentlyIsPlaying}
