@@ -33,7 +33,8 @@ class PlayerTransition extends Component {
       upCurrentlyIsPlaying
     ) {
       window.setTimeout(() => setCover(true), 0);
-      this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 2000);
+      // TODO: SHORTEN
+      this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 10000);
     }
     // STOP SHOWING
     if (

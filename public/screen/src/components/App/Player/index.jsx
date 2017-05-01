@@ -40,7 +40,7 @@ class Player extends Component {
           player = YOUTUBE_VIDEOS;
         }
         if (currentlyPlaying === YOUTUBE_VIDEOS) {
-          player = SLIDE_DECKS;
+          player = TRANSITION;
         }
         setNextIsReady(false);
         setNextPlaying(player);
