@@ -1,4 +1,3 @@
-// TODO: TEST EXITS ON CHANGE
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { IMAGES, SLIDE_DECKS, TRANSITION, TRANSITION2, YOUTUBE_VIDEOS } from '../../../strings';
@@ -11,6 +10,7 @@ import * as fromBadPlaying from '../../../ducks/badPlaying';
 import * as fromCover from '../../../ducks/cover';
 import * as fromOfflinePlaying from '../../../ducks/offlinePlaying';
 import * as fromPriority from '../../../ducks/priority';
+import { getMinSlideDeckPriority } from '../../../ducks/minSlideDeckPriority';
 import { getImages } from '../../../ducks/images';
 import { getSlideDecks } from '../../../ducks/slideDecks';
 import { getYoutubeVideos } from '../../../ducks/youtubeVideos';
@@ -33,6 +33,7 @@ class Player extends Component {
     this.filteredSlideDecks = [];
     this.filteredImages = [];
     this.filteredYoutubeVideos = [];
+    this.minSlideDeckPriority = null;
   }
   componentWillReceiveProps(upProps) {
     const {
@@ -113,7 +114,9 @@ class Player extends Component {
     const {
       currentlyIsPlaying,
       currentlyPlaying,
+      minSlideDeckPriority,
       nextPlaying,
+      priority,
       setBadPlaying,
       setCover,
       setCurrentlyIsPlaying,
@@ -145,6 +148,7 @@ class Player extends Component {
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
           slideDecks={this.filteredSlideDecks}
+          storeOffline={priority === minSlideDeckPriority}
         />
         <PlayerImages
           currentlyIsPlaying={currentlyIsPlaying}
@@ -173,6 +177,7 @@ class Player extends Component {
 Player.propTypes = {
   currentlyIsPlaying: PropTypes.bool.isRequired,
   currentlyPlaying: PropTypes.string,
+  minSlideDeckPriority: PropTypes.number.isRequired,
   images: PropTypes.array.isRequired,
   nextIsReady: PropTypes.bool.isRequired,
   nextPlaying: PropTypes.string,
@@ -193,6 +198,7 @@ export default connect(
     currentlyIsPlaying: fromCurrentlyIsPlaying.getCurrentlyIsPlaying(state),
     currentlyPlaying: fromCurrentlyPlaying.getCurrentlyPlaying(state),
     images: getImages(state),
+    minSlideDeckPriority: getMinSlideDeckPriority(state),
     nextIsReady: fromNextIsReady.getNextIsReady(state),
     nextPlaying: fromNextPlaying.getNextPlaying(state),
     priority: fromPriority.getPriority(state),

@@ -25,6 +25,7 @@ import * as fromOverlay from '../../ducks/overlay';
 import * as fromOvWidgets from '../../ducks/ovWidgets';
 import * as fromLayerBlocking from '../../ducks/layerBlocking';
 import * as fromPriority from '../../ducks/priority';
+import * as fromMinSlideDeckPriority from '../../ducks/minSlideDeckPriority';
 import Blocking from './Blocking';
 import Offline from './Offline';
 import Connected from './Connected';
@@ -289,6 +290,7 @@ class App extends Component {
       setCurrentlyIsPlaying,
       setCurrentlyPlaying,
       setLayerBlocking,
+      setMinSlideDeckPriority,
       setNextIsReady,
       setPriority,
       slideDecks,
@@ -301,6 +303,7 @@ class App extends Component {
     setLayerBlocking(false);
     setCurrentlyPlaying(TRANSITION);
     setCurrentlyIsPlaying(true);
+    setMinSlideDeckPriority(minLargerPriority(0, slideDecks));
     setPriority(minLargerPriority(0, [
       ...slideDecks,
       ...images,
@@ -383,6 +386,7 @@ App.propTypes = {
   setCurrentlyPlaying: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setLayerBlocking: PropTypes.func.isRequired,
+  setMinSlideDeckPriority: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   setPriority: PropTypes.func.isRequired,
@@ -426,6 +430,7 @@ export default connect(
     setCurrentlyIsPlaying: fromCurrentlyIsPlaying.setCurrentlyIsPlaying,
     setCurrentlyPlaying: fromCurrentlyPlaying.setCurrentlyPlaying,
     setLayerBlocking: fromLayerBlocking.setLayerBlocking,
+    setMinSlideDeckPriority: fromMinSlideDeckPriority.setMinSlideDeckPriority,
     setNextIsReady: fromNextIsReady.setNextIsReady,
     setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
     setPriority: fromPriority.setPriority,

@@ -18,6 +18,7 @@ import ovWidgets from '../ducks/ovWidgets';
 import layerBlocking from '../ducks/layerBlocking';
 import cover from '../ducks/cover';
 import priority from '../ducks/priority';
+import minSlideDeckPriority from '../ducks/minSlideDeckPriority';
 
 export default combineReducers({
   appBlocking,
@@ -39,4 +40,5 @@ export default combineReducers({
   layerBlocking,
   cover,
   priority,
+  minSlideDeckPriority,
 });
