@@ -12,6 +12,12 @@ import PlayerSlideDecks from './PlayerSlideDecks';
 import PlayerImages from './PlayerImages';
 import PlayerYoutubeVideos from './PlayerYoutubeVideos';
 
+const PLAY_ORDER = [
+  TRANSITION,
+  SLIDE_DECKS,
+  IMAGES,
+  YOUTUBE_VIDEOS,
+];
 class Player extends Component {
   componentWillReceiveProps(upProps) {
     const {
@@ -29,21 +35,10 @@ class Player extends Component {
     // TRIGGER NEXT LOAD
     if (!currentlyIsPlaying && upCurrentlyIsPlaying) {
       window.setTimeout(() => {
-        let player;
-        if (currentlyPlaying === TRANSITION) {
-          player = SLIDE_DECKS;
-        }
-        if (currentlyPlaying === SLIDE_DECKS) {
-          player = IMAGES;
-        }
-        if (currentlyPlaying === IMAGES) {
-          player = YOUTUBE_VIDEOS;
-        }
-        if (currentlyPlaying === YOUTUBE_VIDEOS) {
-          player = TRANSITION;
-        }
+        let nextIndex = PLAY_ORDER.indexOf(currentlyPlaying) + 1;
+        nextIndex = nextIndex < PLAY_ORDER.length ? nextIndex : 0;
         setNextIsReady(false);
-        setNextPlaying(player);
+        setNextPlaying(PLAY_ORDER[nextIndex]);
       }, 0);
     }
     // TRIGGER PLAYING
