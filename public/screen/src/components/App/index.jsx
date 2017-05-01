@@ -5,6 +5,7 @@ import 'firebase/auth';
 import 'firebase/database';
 import { CACHE_INTERVAL, POLLING_INTERVAL, TRANSITION } from '../../strings';
 import { fetchBase } from '../../apis/base';
+import { minLargerPriority } from '../../util/misc';
 import * as fromAppBlocking from '../../ducks/appBlocking';
 import * as fromMonitor from '../../ducks/monitor';
 import * as fromScreen from '../../ducks/screen';
@@ -23,6 +24,7 @@ import * as fromConnected from '../../ducks/connected';
 import * as fromOverlay from '../../ducks/overlay';
 import * as fromOvWidgets from '../../ducks/ovWidgets';
 import * as fromLayerBlocking from '../../ducks/layerBlocking';
+import * as fromPriority from '../../ducks/priority';
 import Blocking from './Blocking';
 import Offline from './Offline';
 import Connected from './Connected';
@@ -281,12 +283,16 @@ class App extends Component {
   }
   restartPlayingLoop() {
     const {
+      images,
       resetCurrentlyPlaying,
       resetNextPlaying,
       setCurrentlyIsPlaying,
       setCurrentlyPlaying,
       setLayerBlocking,
       setNextIsReady,
+      setPriority,
+      slideDecks,
+      youtubeVideos,
     } = this.props;
     setNextIsReady(false);
     setCurrentlyIsPlaying(false);
@@ -295,6 +301,11 @@ class App extends Component {
     setLayerBlocking(false);
     setCurrentlyPlaying(TRANSITION);
     setCurrentlyIsPlaying(true);
+    setPriority(minLargerPriority(0, [
+      ...slideDecks,
+      ...images,
+      ...youtubeVideos,
+    ]));
   }
   render() {
     const {
@@ -310,8 +321,6 @@ class App extends Component {
       overlay,
       ovWidgets,
       setBadPlaying,
-      setCover,
-      setOfflinePlaying,
       slideDecks,
       youtubeVideos,
     } = this.props;
@@ -337,16 +346,7 @@ class App extends Component {
         {!layerBlocking && cover && <Cover />}
         {!layerBlocking && monitor !== null && <Connected connected={connected} />}
         {!layerBlocking && overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
-        {!layerBlocking &&
-          <Player
-            images={images}
-            setBadPlaying={setBadPlaying}
-            setCover={setCover}
-            setOfflinePlaying={setOfflinePlaying}
-            slideDecks={slideDecks}
-            youtubeVideos={youtubeVideos}
-          />
-        }
+        {!layerBlocking && <Player />}
       </div>
     );
   }
@@ -385,6 +385,7 @@ App.propTypes = {
   setLayerBlocking: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
+  setPriority: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
 };
@@ -427,5 +428,6 @@ export default connect(
     setLayerBlocking: fromLayerBlocking.setLayerBlocking,
     setNextIsReady: fromNextIsReady.setNextIsReady,
     setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
+    setPriority: fromPriority.setPriority,
   }
 )(App);

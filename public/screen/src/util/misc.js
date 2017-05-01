@@ -1,6 +1,5 @@
 const BASE64_MARKER = ';base64,';
 
-// eslint-disable-next-line
 export const convertDataURIToBinary = (dataUri) => {
   const base64Index = dataUri.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
   const base64 = dataUri.substring(base64Index);
@@ -11,4 +10,12 @@ export const convertDataURIToBinary = (dataUri) => {
     array[i] = raw.charCodeAt(i);
   }
   return array;
+};
+export const minLargerPriority = (start, media) => {
+  let priority = Infinity;
+  for (let i = 0; i < media.length; i += 1) {
+    const iPriority = media[i].priority;
+    priority = (iPriority > start && iPriority < priority) ? iPriority : priority;
+  }
+  return priority;
 };

@@ -24,7 +24,8 @@
     ],
     "acf": {
       "file": "http://localhost:8080/data/sample.pdf",
-      "slide_duration": "4"
+      "slide_duration": "4",
+      "priority": "1"
     },
     "_links": {
       "self": [
@@ -88,7 +89,8 @@
     ],
     "acf": {
       "file": "http://localhost:8080/data/bryce.pdf",
-      "slide_duration": "2"
+      "slide_duration": "2",
+      "priority": "2"
     },
     "_links": {
       "self": [

@@ -84,6 +84,7 @@ class PlayerYoutubeVideos extends Component {
       currentlyPlaying === YOUTUBE_VIDEOS &&
       upCurrentlyPlaying !== YOUTUBE_VIDEOS
     ) {
+      // TODO: HANDLE STOPPING IN MIDDLE OF PLAYING
       window.setTimeout(() => setCover(false), 0);
     }
   }

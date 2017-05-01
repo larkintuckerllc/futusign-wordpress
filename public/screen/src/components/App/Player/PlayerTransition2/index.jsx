@@ -1,7 +1,7 @@
 import { Component, PropTypes } from 'react';
-import { TRANSITION } from '../../../../strings';
+import { TRANSITION2 } from '../../../../strings';
 
-class PlayerTransition extends Component {
+class PlayerTransition2 extends Component {
   constructor(props) {
     super(props);
     this.readyTimeout = null;
@@ -12,36 +12,25 @@ class PlayerTransition extends Component {
       currentlyIsPlaying,
       currentlyPlaying,
       nextPlaying,
-      setCover,
       setCurrentlyIsPlaying,
       setNextIsReady,
     } = this.props;
     const upNextPlaying = upProps.nextPlaying;
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
-    const upCurrentlyPlaying = upProps.currentlyPlaying;
     // GETTING READY TO PLAY
     if (
-      nextPlaying !== TRANSITION &&
-      upNextPlaying === TRANSITION
+      nextPlaying !== TRANSITION2 &&
+      upNextPlaying === TRANSITION2
     ) {
       this.readyTimeout = window.setTimeout(() => setNextIsReady(true), 0);
     }
     // START PLAYING
     if (
-      currentlyPlaying === TRANSITION &&
+      currentlyPlaying === TRANSITION2 &&
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
-      window.setTimeout(() => setCover(true), 0);
-      // TODO: SHORTEN
-      this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 3000);
-    }
-    // STOP SHOWING
-    if (
-      currentlyPlaying === TRANSITION &&
-      upCurrentlyPlaying !== TRANSITION
-    ) {
-      window.setTimeout(() => setCover(false), 0);
+      this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 0);
     }
   }
   shouldComponentUpdate() {
@@ -55,12 +44,11 @@ class PlayerTransition extends Component {
     return null;
   }
 }
-PlayerTransition.propTypes = {
+PlayerTransition2.propTypes = {
   currentlyIsPlaying: PropTypes.bool.isRequired,
   currentlyPlaying: PropTypes.string,
   nextPlaying: PropTypes.string,
-  setCover: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
 };
-export default PlayerTransition;
+export default PlayerTransition2;

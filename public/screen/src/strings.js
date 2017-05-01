@@ -14,6 +14,7 @@ export const POLLING_INTERVAL = 60;
 export const OV_WIDGETS_API_ENDPOINT = 'fs-ov-widgets';
 // PLAYERS
 export const TRANSITION = 'TRANSITION';
+export const TRANSITION2 = 'TRANSITION2';
 export const SLIDE_DECKS = 'SLIDE_DECKS';
 export const IMAGES = 'IMAGES';
 export const YOUTUBE_VIDEOS = 'YOUTUBE_VIDEOS';

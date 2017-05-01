@@ -1,23 +1,39 @@
 // TODO: ADD SUPPORT FOR PRIORITY
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { IMAGES, SLIDE_DECKS, TRANSITION, YOUTUBE_VIDEOS } from '../../../strings';
+import { IMAGES, SLIDE_DECKS, TRANSITION, TRANSITION2, YOUTUBE_VIDEOS } from '../../../strings';
+import { minLargerPriority } from '../../../util/misc';
 import * as fromCurrentlyPlaying from '../../../ducks/currentlyPlaying';
 import * as fromCurrentlyIsPlaying from '../../../ducks/currentlyIsPlaying';
 import * as fromNextPlaying from '../../../ducks/nextPlaying';
 import * as fromNextIsReady from '../../../ducks/nextIsReady';
+import * as fromBadPlaying from '../../../ducks/badPlaying';
+import * as fromCover from '../../../ducks/cover';
+import * as fromOfflinePlaying from '../../../ducks/offlinePlaying';
+import * as fromPriority from '../../../ducks/priority';
+import { getImages } from '../../../ducks/images';
+import { getSlideDecks } from '../../../ducks/slideDecks';
+import { getYoutubeVideos } from '../../../ducks/youtubeVideos';
 import PlayerTransition from './PlayerTransition';
+import PlayerTransition2 from './PlayerTransition2';
 import PlayerSlideDecks from './PlayerSlideDecks';
 import PlayerImages from './PlayerImages';
 import PlayerYoutubeVideos from './PlayerYoutubeVideos';
 
 const PLAY_ORDER = [
   TRANSITION,
+  TRANSITION2,
   SLIDE_DECKS,
   IMAGES,
   YOUTUBE_VIDEOS,
 ];
 class Player extends Component {
+  constructor(props) {
+    super(props);
+    this.filteredSlideDecks = [];
+    this.filteredImages = [];
+    this.filteredYoutubeVideos = [];
+  }
   componentWillReceiveProps(upProps) {
     const {
       currentlyIsPlaying,
@@ -25,16 +41,19 @@ class Player extends Component {
       images,
       nextIsReady,
       nextPlaying,
+      priority,
       setCurrentlyIsPlaying,
       setCurrentlyPlaying,
       setNextIsReady,
       setNextPlaying,
+      setPriority,
       slideDecks,
       youtubeVideos,
     } = this.props;
     const mediaById = {
       TRANSITION: [null],
-      SLIDE_DECKS: slideDecks,
+      TRANSITION2: [null],
+      SLIDE_DECKS: this.filteredSlideDecks,
       IMAGES: images,
       YOUTUBE_VIDEOS: youtubeVideos,
     };
@@ -53,6 +72,13 @@ class Player extends Component {
             nextIndex = nextIndex < PLAY_ORDER.length ? nextIndex : 0;
           }
         }
+        // FILTER MEDIA BASED ON PRIORITY
+        if (PLAY_ORDER[nextIndex] === TRANSITION2) {
+          this.filteredSlideDecks = slideDecks.filter(o => o.priority === priority);
+          this.filteredImages = images.filter(o => o.priority === priority);
+          this.filteredYoutubeVideos = youtubeVideos.filter(o => o.priority === priority);
+        }
+        // TRIGGER NEXT LOAD
         setNextIsReady(false);
         setNextPlaying(PLAY_ORDER[nextIndex]);
       }, 0);
@@ -63,6 +89,21 @@ class Player extends Component {
       (!nextIsReady && upNextIsReady && !currentlyIsPlaying)
     ) {
       window.setTimeout(() => {
+        if (nextPlaying === TRANSITION) {
+          let nextPriority = minLargerPriority(priority, [
+            ...slideDecks,
+            ...images,
+            ...youtubeVideos,
+          ]);
+          if (nextPriority === Infinity) {
+            nextPriority = minLargerPriority(0, [
+              ...slideDecks,
+              ...images,
+              ...youtubeVideos,
+            ]);
+          }
+          setPriority(nextPriority);
+        }
         setCurrentlyPlaying(nextPlaying);
         setCurrentlyIsPlaying(true);
       }, 0);
@@ -72,15 +113,12 @@ class Player extends Component {
     const {
       currentlyIsPlaying,
       currentlyPlaying,
-      images,
       nextPlaying,
       setBadPlaying,
       setCover,
       setCurrentlyIsPlaying,
       setNextIsReady,
       setOfflinePlaying,
-      slideDecks,
-      youtubeVideos,
     } = this.props;
     return (
       <div>
@@ -92,6 +130,13 @@ class Player extends Component {
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
         />
+        <PlayerTransition2
+          currentlyIsPlaying={currentlyIsPlaying}
+          currentlyPlaying={currentlyPlaying}
+          nextPlaying={nextPlaying}
+          setCurrentlyIsPlaying={setCurrentlyIsPlaying}
+          setNextIsReady={setNextIsReady}
+        />
         <PlayerSlideDecks
           currentlyIsPlaying={currentlyIsPlaying}
           currentlyPlaying={currentlyPlaying}
@@ -99,12 +144,12 @@ class Player extends Component {
           setBadPlaying={setBadPlaying}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
-          slideDecks={slideDecks}
+          slideDecks={this.filteredSlideDecks}
         />
         <PlayerImages
           currentlyIsPlaying={currentlyIsPlaying}
           currentlyPlaying={currentlyPlaying}
-          images={images}
+          images={this.filteredImages}
           nextPlaying={nextPlaying}
           setBadPlaying={setBadPlaying}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
@@ -119,7 +164,7 @@ class Player extends Component {
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
           setOfflinePlaying={setOfflinePlaying}
-          youtubeVideos={youtubeVideos}
+          youtubeVideos={this.filteredYoutubeVideos}
         />
       </div>
     );
@@ -131,6 +176,7 @@ Player.propTypes = {
   images: PropTypes.array.isRequired,
   nextIsReady: PropTypes.bool.isRequired,
   nextPlaying: PropTypes.string,
+  priority: PropTypes.number.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
   setCover: PropTypes.func.isRequired,
   setCurrentlyPlaying: PropTypes.func.isRequired,
@@ -138,6 +184,7 @@ Player.propTypes = {
   setNextIsReady: PropTypes.func.isRequired,
   setNextPlaying: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
+  setPriority: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
 };
@@ -145,12 +192,20 @@ export default connect(
   state => ({
     currentlyIsPlaying: fromCurrentlyIsPlaying.getCurrentlyIsPlaying(state),
     currentlyPlaying: fromCurrentlyPlaying.getCurrentlyPlaying(state),
+    images: getImages(state),
     nextIsReady: fromNextIsReady.getNextIsReady(state),
     nextPlaying: fromNextPlaying.getNextPlaying(state),
+    priority: fromPriority.getPriority(state),
+    slideDecks: getSlideDecks(state),
+    youtubeVideos: getYoutubeVideos(state),
   }), {
+    setBadPlaying: fromBadPlaying.setBadPlaying,
+    setCover: fromCover.setCover,
     setCurrentlyPlaying: fromCurrentlyPlaying.setCurrentlyPlaying,
     setCurrentlyIsPlaying: fromCurrentlyIsPlaying.setCurrentlyIsPlaying,
     setNextIsReady: fromNextIsReady.setNextIsReady,
     setNextPlaying: fromNextPlaying.setNextPlaying,
+    setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
+    setPriority: fromPriority.setPriority,
   }
 )(Player);
