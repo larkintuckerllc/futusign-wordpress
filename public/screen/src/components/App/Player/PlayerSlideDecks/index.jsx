@@ -22,12 +22,14 @@ class PlayerSlideDecks extends Component {
     this.slideTimeout = null;
     this.clearTimeout = null;
     this.mounted = true;
+    this.loadingTask = null;
     this.playSlide = this.playSlide.bind(this);
     this.loadSlideDeck = this.loadSlideDeck.bind(this);
     this.handleFile = this.handleFile.bind(this);
     this.handleDocument = this.handleDocument.bind(this);
     this.renderPage = this.renderPage.bind(this);
     this.handlePage = this.handlePage.bind(this);
+    this.handleDestroy = this.handleDestroy.bind(this);
   }
   componentDidMount() {
     const rootEl = document.getElementById(styles.root);
@@ -80,6 +82,9 @@ class PlayerSlideDecks extends Component {
   componentWillUnmount() {
     window.clearTimeout(this.slideTimeout);
     window.clearTimeout(this.stopTimeout);
+    if (this.loadingTask !== null) {
+      this.loadingTask.destroy();
+    }
     this.mounted = false;
   }
   handlePage(pdfPage) {
@@ -122,7 +127,7 @@ class PlayerSlideDecks extends Component {
   handleFile(file) {
     const { setBadPlaying, slideDecks, storeOffline } = this.props;
     if (!this.mounted) { return; }
-    const loadingTask = pdfjsLib.getDocument({
+    this.loadingTask = pdfjsLib.getDocument({
       data: convertDataURIToBinary(file),
       worker: window.futusignPDFWorker,
     });
@@ -145,14 +150,25 @@ class PlayerSlideDecks extends Component {
         );
       }
     }
-    loadingTask.promise.then(this.handleDocument, () => setBadPlaying(true));
+    this.loadingTask.promise.then(this.handleDocument, () => setBadPlaying(true));
   }
-  loadSlideDeck() {
+  handleDestroy() {
+    if (!this.mounted) { return; }
+    this.loadingTask = null;
     const { setBadPlaying, slideDecks } = this.props;
     const slideDeck = slideDecks[this.slideDeckIndex];
     this.slideDuration = slideDeck.slideDuration;
     getFile(slideDeck.file)
     .then(this.handleFile, () => setBadPlaying(true));
+  }
+  loadSlideDeck() {
+    const { setBadPlaying } = this.props;
+    if (this.loadingTask === null) {
+      this.handleDestroy();
+    } else {
+      this.loadingTask.destroy()
+        .then(this.handleDestroy, () => setBadPlaying(true));
+    }
   }
   playSlide() {
     const { setCurrentlyIsPlaying, slideDecks } = this.props;

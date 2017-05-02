@@ -3,7 +3,7 @@ Contributors: sckmkny
 Tags: digital, signage
 Requires at least: 4.3
 Tested up to: 4.7
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -22,10 +22,18 @@ screen.
 
 == Changelog ==
 
-= X.X.X =
+= 1.4.0 =
+
+Bug fix; slow memory leak when playing Slide Decks.
 
 Bug fix; with futusign Overlay, not removing widgets when removed
 overlay from screen or delete overlay entirely.
+
+Refactor player; Replace fade with spinner (when required).
+
+Supporting futusign Priority.
+
+Supporting futusign Web.
 
 = 1.3.0 =
 

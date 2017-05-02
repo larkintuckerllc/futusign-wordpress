@@ -19,12 +19,14 @@ class OfflineSlideDeck extends Component {
     this.slideDuration = null;
     this.slideTimeout = null;
     this.mounted = true;
+    this.loadingTask = null;
     this.playSlide = this.playSlide.bind(this);
     this.loadSlideDeck = this.loadSlideDeck.bind(this);
     this.handleFile = this.handleFile.bind(this);
     this.handleDocument = this.handleDocument.bind(this);
     this.renderPage = this.renderPage.bind(this);
     this.handlePage = this.handlePage.bind(this);
+    this.handleDestroy = this.handleDestroy.bind(this);
   }
   componentDidMount() {
     const rootEl = document.getElementById(styles.root);
@@ -39,6 +41,9 @@ class OfflineSlideDeck extends Component {
   }
   componentWillUnmount() {
     window.clearTimeout(this.slideTimeout);
+    if (this.loadingTask !== null) {
+      this.loadingTask.destroy();
+    }
     this.mounted = false;
   }
   handlePage(pdfPage) {
@@ -87,10 +92,19 @@ class OfflineSlideDeck extends Component {
     });
     loadingTask.promise.then(this.handleDocument, () => setBadPlaying(true));
   }
-  loadSlideDeck() {
+  handleDestroy() {
     const file = window.localStorage.getItem('futusign_slide_deck_file');
     this.slideDuration = window.localStorage.getItem('futusign_slide_deck_slide_duration');
     this.handleFile(file);
+  }
+  loadSlideDeck() {
+    const { setBadPlaying } = this.props;
+    if (this.loadingTask === null) {
+      this.handleDestroy();
+    } else {
+      this.loadingTask.destroy()
+        .then(this.handleDestroy, () => setBadPlaying(true));
+    }
   }
   playSlide() {
     const playCanvasEl = this.even ? this.rootCanvasEvenEl : this.rootCanvasOddEl;
