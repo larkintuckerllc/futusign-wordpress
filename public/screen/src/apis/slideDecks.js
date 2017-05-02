@@ -11,5 +11,6 @@ export const get = (playlistIds) => {
       id: o.id,
       file: o.acf.file,
       slideDuration: Number(o.acf.slide_duration),
+      priority: o.acf.priority !== undefined ? Number(o.acf.priority) : 1,
     }))));
 };

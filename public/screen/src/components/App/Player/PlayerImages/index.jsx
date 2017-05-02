@@ -1,83 +1,130 @@
 import React, { Component, PropTypes } from 'react';
 import { getFile } from '../../../../util/rest';
+import { IMAGES } from '../../../../strings';
 import styles from './index.scss';
 
 class PlayerImages extends Component {
-  constructor() {
-    super();
-    this.renderImage = this.renderImage.bind(this);
+  constructor(props) {
+    super(props);
+    this.imageDuration = null;
+    this.readyTimeout = null;
+    this.stopTimeout = null;
+    this.imageIndex = null;
+    this.rootEvenEl = null;
+    this.rootOddEl = null;
+    this.mounted = true;
+    this.even = true;
+    this.loadImage = this.loadImage.bind(this);
     this.handleFile = this.handleFile.bind(this);
-    this.futusignCoverEl = document.getElementById('futusign_cover');
+    this.playImage = this.playImage.bind(this);
   }
   componentDidMount() {
-    this.rootOddEl = document.getElementById(styles.rootDivOdd);
-    this.rootEvenEl = document.getElementById(styles.rootDivEven);
-    this.imageDuration = 1;
-    this.iList = 0;
-    this.renderImage();
+    this.rootEvenEl = document.getElementById(styles.rootEven);
+    this.rootOddEl = document.getElementById(styles.rootOdd);
+  }
+  componentWillReceiveProps(upProps) {
+    const {
+      currentlyIsPlaying,
+      currentlyPlaying,
+      nextPlaying,
+    } = this.props;
+    const upNextPlaying = upProps.nextPlaying;
+    const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
+    const upCurrentlyPlaying = upProps.currentlyPlaying;
+    // GETTING READY TO PLAY
+    if (
+      nextPlaying !== IMAGES &&
+      upNextPlaying === IMAGES
+    ) {
+      this.imageIndex = 0;
+      this.loadImage();
+    }
+    // START PLAYING
+    if (
+      currentlyPlaying === IMAGES &&
+      !currentlyIsPlaying &&
+      upCurrentlyIsPlaying
+    ) {
+      this.playImage();
+    }
+    // STOP SHOWING
+    if (
+      currentlyPlaying === IMAGES &&
+      upCurrentlyPlaying !== IMAGES
+    ) {
+      // EXIT ON RELOAD
+      window.clearTimeout(this.slideTimeout);
+      window.clearTimeout(this.stopTimeout);
+      // ALL EXITS
+      this.rootEvenEl.style.display = 'none';
+      this.rootOddEl.style.display = 'none';
+    }
   }
   shouldComponentUpdate() {
     return false;
   }
   componentWillUnmount() {
-    window.clearTimeout(this.renderTimeout);
-    window.clearTimeout(this.coverTimeout);
-  }
-  showRendered() {
-    const renderEl = this.iList % 2 ? this.rootOddEl : this.rootEvenEl;
-    const renderedEl = this.iList % 2 ? this.rootEvenEl : this.rootOddEl;
-    renderEl.style.display = 'none';
-    renderedEl.style.display = 'block';
-    this.futusignCoverEl.style.opacity = 0;
-    this.coverTimeout = window.setTimeout(() => {
-      this.futusignCoverEl.style.opacity = 1;
-    }, (this.imageDuration - 1) * 1000);
+    window.clearTimeout(this.slideTimeout);
+    window.clearTimeout(this.stopTimeout);
+    this.mounted = false;
   }
   handleFile(file) {
-    const { done, images } = this.props;
-    const renderEl = this.iList % 2 ? this.rootOddEl : this.rootEvenEl;
-    this.showRendered();
+    if (!this.mounted) { return; }
+    const { setNextIsReady } = this.props;
+    const renderEl = this.even ? this.rootEvenEl : this.rootOddEl;
     renderEl.style.backgroundImage = `url(${file})`;
-    if (this.iList < images.length - 1) {
-      this.renderTimeout = window.setTimeout(this.renderImage, this.imageDuration * 1000);
-      this.imageDuration = images[this.iList].imageDuration;
-      this.iList += 1;
-    } else {
-      this.renderTimeout = window.setTimeout(() => {
-        this.imageDuration = images[this.iList].imageDuration;
-        this.iList += 1;
-        this.showRendered();
-        this.renderTimeout = window.setTimeout(() => {
-          done();
-        }, this.imageDuration * 1000);
-      }, this.imageDuration * 1000);
+    if (this.imageIndex === 0) {
+      setNextIsReady(true);
     }
   }
-  renderImage() {
-    const { images, resetPlaying, setOfflinePlaying } = this.props;
-    getFile(images[this.iList].file)
-    .then(
-      this.handleFile,
-      () => {
-        setOfflinePlaying(true);
-        resetPlaying();
-      }
-    );
+  loadImage() {
+    const { setBadPlaying, images } = this.props;
+    const image = images[this.imageIndex];
+    this.imageDuration = image.imageDuration;
+    getFile(image.file)
+    .then(this.handleFile, () => setBadPlaying(true));
+  }
+  playImage() {
+    const { setCurrentlyIsPlaying, images } = this.props;
+    const playEl = this.even ? this.rootEvenEl : this.rootOddEl;
+    const hideEl = !this.even ? this.rootEvenEl : this.rootOddEl;
+    playEl.style.display = 'block';
+    hideEl.style.display = 'none';
+    this.even = !this.even;
+    if (this.imageIndex < images.length - 1) {
+      this.imageIndex += 1;
+      this.imageTimeout = window.setTimeout(this.playImage, this.imageDuration * 1000);
+      this.loadImage();
+    } else {
+      this.stopTimeout = window.setTimeout(() => {
+        setCurrentlyIsPlaying(false);
+      }, this.imageDuration * 1000);
+    }
   }
   render() {
     return (
       <div id={styles.root}>
-        <div id={styles.rootDivOdd} className={styles.rootDiv} />
-        <div id={styles.rootDivEven} className={styles.rootDiv} />
+        <div
+          style={{ display: 'none' }}
+          id={styles.rootEven}
+          className={styles.rootDiv}
+        />
+        <div
+          style={{ display: 'none' }}
+          id={styles.rootOdd}
+          className={styles.rootDiv}
+        />
       </div>
     );
   }
 }
 PlayerImages.propTypes = {
-  done: PropTypes.func.isRequired,
-  resetPlaying: PropTypes.func.isRequired,
-  setBadPlaying: PropTypes.func.isRequired,
-  setOfflinePlaying: PropTypes.func.isRequired,
+  currentlyIsPlaying: PropTypes.bool.isRequired,
+  currentlyPlaying: PropTypes.string,
   images: PropTypes.array.isRequired,
+  nextPlaying: PropTypes.string,
+  setCurrentlyIsPlaying: PropTypes.func.isRequired,
+  setBadPlaying: PropTypes.func.isRequired,
+  setNextIsReady: PropTypes.func.isRequired,
 };
 export default PlayerImages;

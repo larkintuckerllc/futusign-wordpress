@@ -1,108 +1,172 @@
-import React, { Component, PropTypes } from 'react';
+import { Component, PropTypes } from 'react';
+import { YOUTUBE_VIDEOS } from '../../../../strings';
 
 const URL_REGEX = /^https:\/\/youtu\.be\/(.*)/;
+const PLAYER_DELAY = 5;
+const VIDEO_DELAY = 2;
 class PlayerYoutubeVideos extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.readyTimeout = null;
+    this.coverTimeout = null;
+    this.videoIds = null;
+    this.videoIndex = null;
+    this.numberOfVideos = null;
     this.handleYoutubeStateChange = this.handleYoutubeStateChange.bind(this);
     this.handleYoutubeError = this.handleYoutubeError.bind(this);
-    this.futusignCoverEl = document.getElementById('futusign_cover');
+    this.validVideos = this.validVideos.bind(this);
     this.futusignYoutubeEl = window.document.getElementById('futusign_youtube');
-    this.started = false;
-  }
-  componentDidMount() {
-    const { resetPlaying, setBadPlaying, setOfflinePlaying, youtubeVideos } = this.props;
-    if (window.futusignYoutubePlayer === undefined) {
-      setOfflinePlaying(true);
-      resetPlaying();
-      return;
-    }
-    this.videoIds = [];
-    this.numberVideos = youtubeVideos.length;
-    let validVideos = true;
-    for (let i = 0; i < this.numberVideos; i += 1) {
-      const url = youtubeVideos[i].url;
-      const match = URL_REGEX.exec(url);
-      if (match === null) {
-        validVideos = false;
-      } else {
-        this.videoIds.push(match[1]);
-      }
-    }
-    if (!validVideos) {
-      setBadPlaying(true);
-      resetPlaying();
-      return;
-    }
-    this.started = true;
-    this.iVideo = 0;
     window.futusignYoutubeStateChange.addEventListener(this.handleYoutubeStateChange);
     window.futusignYoutubeError.addEventListener(this.handleYoutubeError);
-    window.futusignYoutubePlayer.cueVideoById(
-      this.videoIds[this.iVideo],
-      0,
-      youtubeVideos[this.iVideo].suggestedQuality
-    );
+  }
+  componentWillReceiveProps(upProps) {
+    const {
+      currentlyIsPlaying,
+      currentlyPlaying,
+      nextPlaying,
+      setBadPlaying,
+      setCover,
+      setOfflinePlaying,
+      setNextIsReady,
+      youtubeVideos,
+    } = this.props;
+    const upNextPlaying = upProps.nextPlaying;
+    const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
+    const upCurrentlyPlaying = upProps.currentlyPlaying;
+    // GETTING READY TO PLAY
+    if (
+      nextPlaying !== YOUTUBE_VIDEOS &&
+      upNextPlaying === YOUTUBE_VIDEOS
+    ) {
+      // YOUTUBE PLAYING CHECK READY
+      if (window.futusignYoutubePlayer === undefined) {
+        this.readyTimeout = window.setTimeout(() => {
+          if (window.futusignYoutubePlayer === undefined) {
+            setOfflinePlaying(true);
+            return;
+          }
+          if (!this.validVideos()) {
+            setBadPlaying(true);
+            return;
+          }
+          setNextIsReady(true);
+        }, PLAYER_DELAY * 1000);
+        return;
+      }
+      // CHECK VIDEOS VALID
+      if (!this.validVideos()) {
+        window.setTimeout(() => setBadPlaying(true), 0);
+        return;
+      }
+      // READY
+      window.setTimeout(() => setNextIsReady(true), 0);
+    }
+    // START PLAYING
+    if (
+      currentlyPlaying === YOUTUBE_VIDEOS &&
+      !currentlyIsPlaying &&
+      upCurrentlyIsPlaying
+    ) {
+      this.videoIndex = 0;
+      window.futusignYoutubePlayer.cueVideoById(
+        this.videoIds[this.videoIndex],
+        0,
+        youtubeVideos[this.videoIndex].suggestedQuality
+      );
+      window.setTimeout(() => {
+        setCover(true);
+        this.futusignYoutubeEl.style.visibility = 'visible';
+      }, 0);
+      this.coverTimeout = window.setTimeout(() => setCover(false), VIDEO_DELAY * 1000);
+    }
+    // STOP SHOWING
+    if (
+      currentlyPlaying === YOUTUBE_VIDEOS &&
+      upCurrentlyPlaying !== YOUTUBE_VIDEOS
+    ) {
+      // EXIT RELOAD
+      if (window.futusignYoutubePlayer !== undefined) {
+        window.futusignYoutubePlayer.pauseVideo();
+      }
+      this.futusignYoutubeEl.style.visibility = 'hidden';
+      window.clearTimeout(this.readyTimeout);
+      window.clearTimeout(this.coverTimeout);
+      // ALL EXITS
+      window.setTimeout(() => setCover(false), 0);
+    }
   }
   shouldComponentUpdate() {
     return false;
   }
   componentWillUnmount() {
-    if (!this.started) return;
+    const { setCover } = this.props;
+    if (window.futusignYoutubePlayer !== undefined) {
+      window.futusignYoutubePlayer.pauseVideo();
+    }
+    this.futusignYoutubeEl.style.visibility = 'hidden';
+    setCover(false);
+    window.clearTimeout(this.readyTimeout);
     window.clearTimeout(this.coverTimeout);
     window.futusignYoutubeStateChange.removeEventListener(this.handleYoutubeStateChange);
     window.futusignYoutubeError.removeEventListener(this.handleYoutubeError);
-    window.futusignYoutubePlayer.stopVideo();
-    this.futusignYoutubeEl.style.visibility = 'hidden';
   }
   handleYoutubeStateChange(event) {
-    const { done, youtubeVideos } = this.props;
+    const { setCover, setCurrentlyIsPlaying, youtubeVideos } = this.props;
     switch (event.detail) {
       case window.YT.PlayerState.CUED:
         window.futusignYoutubePlayer.playVideo();
-        this.futusignYoutubeEl.style.visibility = 'visible';
-        this.coverTimeout = window.setTimeout(() => {
-          const current = window.futusignYoutubePlayer.getCurrentTime();
-          const duration = window.futusignYoutubePlayer.getDuration();
-          const remaining = duration - current;
-          this.futusignCoverEl.style.opacity = 0;
-          if (remaining >= 1) {
-            this.coverTimeout = window.setTimeout(() => {
-              this.futusignCoverEl.style.opacity = 1;
-            }, (remaining - 1) * 1000);
-          }
-        }, 1000);
         break;
       case window.YT.PlayerState.ENDED:
-        if (this.iVideo < this.numberVideos - 1) {
-          this.iVideo += 1;
-          window.futusignYoutubePlayer.cueVideoById(
-            this.videoIds[this.iVideo],
-            0,
-            youtubeVideos[this.iVideo].suggestedQuality
-          );
-        } else {
-          done();
+        if (this.videoIndex >= this.numberOfVideos - 1) {
+          this.futusignYoutubeEl.style.visibility = 'hidden';
+          setCurrentlyIsPlaying(false);
+          window.setTimeout(() => setCover(true), 0);
+          return;
         }
+        this.videoIndex += 1;
+        window.futusignYoutubePlayer.cueVideoById(
+          this.videoIds[this.videoIndex],
+          0,
+          youtubeVideos[this.videoIndex].suggestedQuality
+        );
+        window.setTimeout(() => setCover(true), 0);
+        this.coverTimeout = window.setTimeout(() => setCover(false), VIDEO_DELAY * 1000);
         break;
       default:
     }
   }
   handleYoutubeError() {
-    const { setOfflinePlaying, resetPlaying } = this.props;
+    const { setOfflinePlaying } = this.props;
     setOfflinePlaying(true);
-    resetPlaying();
+  }
+  validVideos() {
+    const { youtubeVideos } = this.props;
+    this.videoIds = [];
+    this.numberOfVideos = youtubeVideos.length;
+    let valid = true;
+    for (let i = 0; i < this.numberOfVideos; i += 1) {
+      const url = youtubeVideos[i].url;
+      const match = URL_REGEX.exec(url);
+      if (match === null) {
+        valid = false;
+      } else {
+        this.videoIds.push(match[1]);
+      }
+    }
+    return valid;
   }
   render() {
-    return (
-      <div />
-    );
+    return null;
   }
 }
 PlayerYoutubeVideos.propTypes = {
-  done: PropTypes.func.isRequired,
-  resetPlaying: PropTypes.func.isRequired,
+  currentlyIsPlaying: PropTypes.bool.isRequired,
+  currentlyPlaying: PropTypes.string,
+  nextPlaying: PropTypes.string,
   setBadPlaying: PropTypes.func.isRequired,
+  setCover: PropTypes.func.isRequired,
+  setCurrentlyIsPlaying: PropTypes.func.isRequired,
+  setNextIsReady: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
 };

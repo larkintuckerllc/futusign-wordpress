@@ -1,18 +1,13 @@
 import { ACTION_PREFIX } from '../strings';
 
 // API
-export const BLANK = 'BLANK';
-export const LOADING = 'LOADING';
-export const SLIDE_DECKS = 'SLIDE_DECKS';
-export const YOUTUBE_VIDEOS = 'YOUTUBE_VIDEOS';
-export const IMAGES = 'IMAGES';
 // REDUCER MOUNT POINT
 const reducerMountPoint = 'currentlyPlaying';
 // ACTIONS
 export const SET_CURRENTLY_PLAYING = `${ACTION_PREFIX}SET_CURRENTLY_PLAYING`;
 // SCHEMA
 // REDUCERS
-export default (state = LOADING, action) => {
+export default (state = null, action) => {
   switch (action.type) {
     case SET_CURRENTLY_PLAYING:
       return action.value;
@@ -33,3 +28,7 @@ export const setCurrentlyPlaying = (value) => {
     value,
   });
 };
+export const resetCurrentlyPlaying = () => ({
+  type: SET_CURRENTLY_PLAYING,
+  value: null,
+});

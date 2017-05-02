@@ -17,7 +17,6 @@ if ( ! defined( 'WPINC' ) ) {
     frameborder="0"
     src="https://www.youtube.com/embed/XIMLoLxmTDw?enablejsapi=1"
   ></iframe>
-  <div id="futusign_cover" style="opacity: 0;"></div>
   <script>
     (function(){
       // SET WIDTH OF YOUTUBE
@@ -54,8 +53,14 @@ if ( ! defined( 'WPINC' ) ) {
       var firstScriptTag = document.getElementsByTagName('script')[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       window.onYouTubeIframeAPIReady = function() {
+        // REL DOES NOT SEEM TO WORK AS DOCUMENT; COVER WORKAROUND
         var player = new window.YT.Player('futusign_youtube', {
-          playerVars: { 'controls': 0 },
+          playerVars: {
+            'controls': 0,
+            'enablejsapi': 1,
+            'showinfo': 0,
+            'rel': 0,
+          },
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange,
@@ -92,8 +97,8 @@ if ( ! defined( 'WPINC' ) ) {
     </script>
   <?php endwhile; ?>
   <!-- MANUALLY UPDATE -->
-  <script src="<?php echo plugins_url( 'vendor.0dbbd78306fe243662d5.bundle.js', __FILE__ ); ?>"></script>
+  <script src="<?php echo plugins_url( 'vendor.a819a834ab1c97c81e26.bundle.js', __FILE__ ); ?>"></script>
   <!-- MANUALLY UPDATE -->
-  <script src="<?php echo plugins_url( 'main.58095727a8f966007659.bundle.js', __FILE__ ); ?>"></script>
+  <script src="<?php echo plugins_url( 'main.abbd9609e6805c5aa973.bundle.js', __FILE__ ); ?>"></script>
 </body>
 </html>

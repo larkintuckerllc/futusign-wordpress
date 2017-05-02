@@ -1,0 +1,18 @@
+#root {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.rootIFrame {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+}
+#rootEven, #rootOdd {
+  background-color: transparent;
+}

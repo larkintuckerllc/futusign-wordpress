@@ -24,7 +24,8 @@
     ],
     "acf": {
       "url": "https://youtu.be/LIjMBLVHDQs",
-      "suggested_quality": "hd720"
+      "suggested_quality": "hd720",
+      "priority": "1"
     },
     "_links": {
       "self": [
@@ -87,7 +88,8 @@
     ],
     "acf": {
       "url": "https://youtu.be/LIjMBLVHDQs",
-      "suggested_quality": "default"
+      "suggested_quality": "default",
+      "priority": "2"
     },
     "_links": {
       "self": [

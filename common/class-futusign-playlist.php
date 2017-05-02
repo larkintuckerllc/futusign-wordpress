@@ -34,11 +34,14 @@ class Futusign_Playlist {
 	 */
 	public function register() {
 		$object_types = array( 'futusign_slide_deck', 'futusign_screen' );
-		if (class_exists( 'Futusign_Youtube' )) {
-			array_push( $object_types, 'futusign_yt_video' );
-		}
 		if (class_exists( 'Futusign_Image' )) {
 			array_push( $object_types, 'futusign_image' );
+		}
+		if (class_exists( 'Futusign_Web' )) {
+			array_push( $object_types, 'futusign_web' );
+		}
+		if (class_exists( 'Futusign_Youtube' )) {
+			array_push( $object_types, 'futusign_yt_video' );
 		}
 		if (class_exists( 'Futusign_Layer' )) {
 			array_push( $object_types, 'futusign_layer' );
