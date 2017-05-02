@@ -7,6 +7,7 @@ const Layers = ({ layers }) => (
       <iframe
         key={i.toString()}
         src={o.url}
+        frameBorder="0"
         style={{
           zIndex: i,
         }}

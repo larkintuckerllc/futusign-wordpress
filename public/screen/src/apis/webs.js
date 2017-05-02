@@ -10,6 +10,7 @@ export const get = (playlistIds) => {
   .then(response => (response.map(o => ({
     id: o.id,
     url: o.acf.url,
+    webDuration: Number(o.acf.web_duration),
     priority: o.acf.priority !== undefined ? Number(o.acf.priority) : 1,
   }))))
   .catch(() => ([]));

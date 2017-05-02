@@ -1,6 +1,6 @@
 [
   {
-    "id": 200,
+    "id": 193,
     "date": "2017-04-19T12:17:39",
     "date_gmt": "2017-04-19T12:17:39",
     "guid": {
@@ -24,9 +24,7 @@
       11
     ],
     "acf": {
-      "url": "http://localhost:8080/data/web0.html",
-      "web_duration": "10",
-      "priority": "1"
+      "url": "http://localhost:8080/data/layer0.html"
     },
     "_links": {
       "self": [
@@ -66,7 +64,7 @@
     }
   },
   {
-    "id": 201,
+    "id": 194,
     "date": "2017-04-19T12:17:39",
     "date_gmt": "2017-04-19T12:17:39",
     "guid": {
@@ -90,9 +88,7 @@
       11
     ],
     "acf": {
-      "url": "http://localhost:8080/data/web1.html",
-      "web_duration": "10",
-      "priority": "2"
+      "url": "http://localhost:8080/data/layer1.html"
     },
     "_links": {
       "self": [

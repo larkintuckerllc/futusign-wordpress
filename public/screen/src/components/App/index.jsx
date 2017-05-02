@@ -190,7 +190,6 @@ class App extends Component {
       monitorResponse,
       screen,
     ]) => {
-      // TODO: CONTINUE
       // NEXT SLIDE DECKS
       let keys = slideDecksResponse.response.result;
       let lookup = slideDecksResponse.response.entities.slideDecks;

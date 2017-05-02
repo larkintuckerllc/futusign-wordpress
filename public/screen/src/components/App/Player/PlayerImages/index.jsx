@@ -6,6 +6,7 @@ import styles from './index.scss';
 class PlayerImages extends Component {
   constructor(props) {
     super(props);
+    this.imageDuration = null;
     this.readyTimeout = null;
     this.stopTimeout = null;
     this.imageIndex = null;
@@ -72,7 +73,9 @@ class PlayerImages extends Component {
     const { setNextIsReady } = this.props;
     const renderEl = this.even ? this.rootEvenEl : this.rootOddEl;
     renderEl.style.backgroundImage = `url(${file})`;
-    setNextIsReady(true);
+    if (this.imageIndex === 0) {
+      setNextIsReady(true);
+    }
   }
   loadImage() {
     const { setBadPlaying, images } = this.props;

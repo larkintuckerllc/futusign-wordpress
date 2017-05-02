@@ -176,6 +176,7 @@ class Player extends Component {
           nextPlaying={nextPlaying}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
+          webs={this.filteredWebs}
         />
         <PlayerYoutubeVideos
           currentlyIsPlaying={currentlyIsPlaying}

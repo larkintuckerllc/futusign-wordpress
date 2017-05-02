@@ -65,6 +65,8 @@ const Overlay = ({ overlay, ovWidgets }) => {
           <td>
             {upperLeft !== null && (
               <iframe
+                frameBorder="0"
+                scrolling="no"
                 className={styles.rootWidget}
                 src={upperLeft}
               />
@@ -73,6 +75,7 @@ const Overlay = ({ overlay, ovWidgets }) => {
           <td>
             {upperMiddle !== null && (
               <iframe
+                frameBorder="0"
                 className={styles.rootWidget}
                 src={upperMiddle}
               />
@@ -81,6 +84,8 @@ const Overlay = ({ overlay, ovWidgets }) => {
           <td>
             {upperRight !== null && (
               <iframe
+                frameBorder="0"
+                scrolling="no"
                 className={styles.rootWidget}
                 src={upperRight}
               />
@@ -91,6 +96,8 @@ const Overlay = ({ overlay, ovWidgets }) => {
           <td>
             {middleLeft !== null && (
               <iframe
+                frameBorder="0"
+                scrolling="no"
                 className={styles.rootWidget}
                 src={middleLeft}
               />
@@ -100,6 +107,8 @@ const Overlay = ({ overlay, ovWidgets }) => {
           <td>
             {middleRight !== null && (
               <iframe
+                frameBorder="0"
+                scrolling="no"
                 className={styles.rootWidget}
                 src={middleRight}
               />
@@ -110,6 +119,8 @@ const Overlay = ({ overlay, ovWidgets }) => {
           <td>
             {lowerLeft !== null && (
               <iframe
+                frameBorder="0"
+                scrolling="no"
                 className={styles.rootWidget}
                 src={lowerLeft}
               />
@@ -118,6 +129,8 @@ const Overlay = ({ overlay, ovWidgets }) => {
           <td>
             {lowerMiddle !== null && (
               <iframe
+                frameBorder="0"
+                scrolling="no"
                 className={styles.rootWidget}
                 src={lowerMiddle}
               />
@@ -126,6 +139,8 @@ const Overlay = ({ overlay, ovWidgets }) => {
           <td>
             {lowerRight !== null && (
               <iframe
+                frameBorder="0"
+                scrolling="no"
                 className={styles.rootWidget}
                 src={lowerRight}
               />

@@ -1,18 +1,29 @@
-import { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { WEBS } from '../../../../strings';
+import styles from './index.scss';
 
 class PlayerWebs extends Component {
   constructor(props) {
     super(props);
-    this.readyTimeout = null;
+    this.webDuration = null;
     this.stopTimeout = null;
+    this.webIndex = null;
+    this.rootEvenEl = null;
+    this.rootOddEl = null;
+    this.mounted = true;
+    this.even = true;
+    this.playWeb = this.playWeb.bind(this);
+    this.loadWeb = this.loadWeb.bind(this);
+  }
+  componentDidMount() {
+    this.rootEvenEl = document.getElementById(styles.rootEven);
+    this.rootOddEl = document.getElementById(styles.rootOdd);
   }
   componentWillReceiveProps(upProps) {
     const {
       currentlyIsPlaying,
       currentlyPlaying,
       nextPlaying,
-      setCurrentlyIsPlaying,
       setNextIsReady,
     } = this.props;
     const upNextPlaying = upProps.nextPlaying;
@@ -23,7 +34,9 @@ class PlayerWebs extends Component {
       nextPlaying !== WEBS &&
       upNextPlaying === WEBS
     ) {
-      this.readyTimeout = window.setTimeout(() => setNextIsReady(true), 1000);
+      this.webIndex = 0;
+      this.loadWeb();
+      this.readyTimeout = window.setTimeout(() => setNextIsReady(true), 0);
     }
     // START PLAYING
     if (
@@ -31,25 +44,75 @@ class PlayerWebs extends Component {
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
-      this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 5000);
+      this.playWeb();
     }
     // STOP SHOWING
     if (
       currentlyPlaying === WEBS &&
       upCurrentlyPlaying !== WEBS
     ) {
-      window.console.log('STOP SHOWING');
+      // EXIT ON RELOAD
+      window.clearTimeout(this.webTimeout);
+      window.clearTimeout(this.stopTimeout);
+      // ALL EXITS
+      this.rootEvenEl.style.display = 'none';
+      this.rootOddEl.style.display = 'none';
+      this.rootEvenEl.src = 'about:blank';
+      this.rootOddEl.src = 'about:blank';
     }
   }
   shouldComponentUpdate() {
     return false;
   }
   componentWillUnmount() {
-    window.clearTimeout(this.readyTimeout);
+    window.clearTimeout(this.webTimeout);
     window.clearTimeout(this.stopTimeout);
   }
+  loadWeb() {
+    const { webs } = this.props;
+    const web = webs[this.webIndex];
+    this.webDuration = web.webDuration;
+    const renderEl = this.even ? this.rootEvenEl : this.rootOddEl;
+    renderEl.src = web.url;
+  }
+  playWeb() {
+    const { setCurrentlyIsPlaying, webs } = this.props;
+    const playEl = this.even ? this.rootEvenEl : this.rootOddEl;
+    const hideEl = !this.even ? this.rootEvenEl : this.rootOddEl;
+    playEl.style.display = 'block';
+    hideEl.style.display = 'none';
+    hideEl.src = 'about:blank';
+    if (this.webIndex < webs.length - 1) {
+      this.webIndex += 1;
+      this.webTimeout = window.setTimeout(this.playWeb, this.imageDuration * 1000);
+      this.loadWeb();
+    } else {
+      this.stopTimeout = window.setTimeout(() => {
+        setCurrentlyIsPlaying(false);
+      }, this.webDuration * 1000);
+    }
+  }
   render() {
-    return null;
+    return (
+      <div id={styles.root}>
+        <iframe
+          frameBorder="0"
+          scrolling="no"
+          style={{ display: 'none' }}
+          id={styles.rootEven}
+          className={styles.rootIFrame}
+          src="about:blank"
+        />
+        <iframe
+          frameBorder="0"
+          scrolling="no"
+          style={{ display: 'none' }}
+          id={styles.rootOdd}
+          className={styles.rootIFrame}
+          src="about:blank"
+        />
+      </div>
+    );
   }
 }
 PlayerWebs.propTypes = {
@@ -58,5 +121,6 @@ PlayerWebs.propTypes = {
   nextPlaying: PropTypes.string,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
+  webs: PropTypes.array.isRequired,
 };
 export default PlayerWebs;
