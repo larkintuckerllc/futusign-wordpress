@@ -19,6 +19,7 @@ import layerBlocking from '../ducks/layerBlocking';
 import cover from '../ducks/cover';
 import priority from '../ducks/priority';
 import minSlideDeckPriority from '../ducks/minSlideDeckPriority';
+import webs from '../ducks/webs';
 
 export default combineReducers({
   appBlocking,
@@ -41,4 +42,5 @@ export default combineReducers({
   cover,
   priority,
   minSlideDeckPriority,
+  webs,
 });

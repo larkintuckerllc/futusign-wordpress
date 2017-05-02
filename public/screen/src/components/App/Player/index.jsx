@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { IMAGES, SLIDE_DECKS, TRANSITION, TRANSITION2, YOUTUBE_VIDEOS } from '../../../strings';
+import {
+  IMAGES, SLIDE_DECKS, TRANSITION, TRANSITION2, WEBS, YOUTUBE_VIDEOS,
+} from '../../../strings';
 import { minLargerPriority } from '../../../util/misc';
 import * as fromCurrentlyPlaying from '../../../ducks/currentlyPlaying';
 import * as fromCurrentlyIsPlaying from '../../../ducks/currentlyIsPlaying';
@@ -14,10 +16,12 @@ import { getMinSlideDeckPriority } from '../../../ducks/minSlideDeckPriority';
 import { getImages } from '../../../ducks/images';
 import { getSlideDecks } from '../../../ducks/slideDecks';
 import { getYoutubeVideos } from '../../../ducks/youtubeVideos';
+import { getWebs } from '../../../ducks/webs';
 import PlayerTransition from './PlayerTransition';
 import PlayerTransition2 from './PlayerTransition2';
 import PlayerSlideDecks from './PlayerSlideDecks';
 import PlayerImages from './PlayerImages';
+import PlayerWebs from './PlayerWebs';
 import PlayerYoutubeVideos from './PlayerYoutubeVideos';
 
 const PLAY_ORDER = [
@@ -25,6 +29,7 @@ const PLAY_ORDER = [
   TRANSITION2,
   SLIDE_DECKS,
   IMAGES,
+  WEBS,
   YOUTUBE_VIDEOS,
 ];
 class Player extends Component {
@@ -32,6 +37,7 @@ class Player extends Component {
     super(props);
     this.filteredSlideDecks = [];
     this.filteredImages = [];
+    this.filteredWebs = [];
     this.filteredYoutubeVideos = [];
     this.minSlideDeckPriority = null;
   }
@@ -49,6 +55,7 @@ class Player extends Component {
       setNextPlaying,
       setPriority,
       slideDecks,
+      webs,
       youtubeVideos,
     } = this.props;
     const mediaById = {
@@ -56,6 +63,7 @@ class Player extends Component {
       TRANSITION2: [null],
       SLIDE_DECKS: this.filteredSlideDecks,
       IMAGES: this.filteredImages,
+      WEBS: this.filteredWebs,
       YOUTUBE_VIDEOS: this.filteredYoutubeVideos,
     };
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
@@ -77,6 +85,7 @@ class Player extends Component {
         if (PLAY_ORDER[nextIndex] === TRANSITION2) {
           this.filteredSlideDecks = slideDecks.filter(o => o.priority === priority);
           this.filteredImages = images.filter(o => o.priority === priority);
+          this.filteredWebs = webs.filter(o => o.priority === priority);
           this.filteredYoutubeVideos = youtubeVideos.filter(o => o.priority === priority);
         }
         // TRIGGER NEXT LOAD
@@ -94,12 +103,14 @@ class Player extends Component {
           let nextPriority = minLargerPriority(priority, [
             ...slideDecks,
             ...images,
+            ...webs,
             ...youtubeVideos,
           ]);
           if (nextPriority === Infinity) {
             nextPriority = minLargerPriority(0, [
               ...slideDecks,
               ...images,
+              ...webs,
               ...youtubeVideos,
             ]);
           }
@@ -159,6 +170,13 @@ class Player extends Component {
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
         />
+        <PlayerWebs
+          currentlyIsPlaying={currentlyIsPlaying}
+          currentlyPlaying={currentlyPlaying}
+          nextPlaying={nextPlaying}
+          setCurrentlyIsPlaying={setCurrentlyIsPlaying}
+          setNextIsReady={setNextIsReady}
+        />
         <PlayerYoutubeVideos
           currentlyIsPlaying={currentlyIsPlaying}
           currentlyPlaying={currentlyPlaying}
@@ -191,6 +209,7 @@ Player.propTypes = {
   setOfflinePlaying: PropTypes.func.isRequired,
   setPriority: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
+  webs: PropTypes.array.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
 };
 export default connect(
@@ -203,6 +222,7 @@ export default connect(
     nextPlaying: fromNextPlaying.getNextPlaying(state),
     priority: fromPriority.getPriority(state),
     slideDecks: getSlideDecks(state),
+    webs: getWebs(state),
     youtubeVideos: getYoutubeVideos(state),
   }), {
     setBadPlaying: fromBadPlaying.setBadPlaying,

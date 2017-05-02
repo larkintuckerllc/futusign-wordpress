@@ -128,7 +128,6 @@ class PlayerSlideDecks extends Component {
     });
     // CACHING OFFLINE
     if (storeOffline && this.slideDeckIndex === 0) {
-      window.console.log('CACHING');
       const newSlideDeckURL = slideDecks[0].file;
       const newSlideDeckDuration = slideDecks[0].slideDuration;
       const lastSlideDeckURL = window.localStorage.getItem('futusign_slide_deck_url');

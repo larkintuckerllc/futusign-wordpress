@@ -14,6 +14,7 @@ import * as fromYoutubeVideos from '../../ducks/youtubeVideos';
 import * as fromCover from '../../ducks/cover';
 import * as fromImages from '../../ducks/images';
 import * as fromLayers from '../../ducks/layers';
+import * as fromWebs from '../../ducks/webs';
 import * as fromOfflinePlaying from '../../ducks/offlinePlaying';
 import * as fromBadPlaying from '../../ducks/badPlaying';
 import * as fromCurrentlyPlaying from '../../ducks/currentlyPlaying';
@@ -79,19 +80,23 @@ class App extends Component {
       fetchOvWidgets,
       fetchScreen,
       fetchSlideDecks,
+      fetchWebs,
       fetchYoutubeVideos,
       images,
       layers,
       monitor,
       offlinePlaying,
+      resetImages,
       resetOvWidgets,
       resetSlideDecks,
+      resetWebs,
       resetYoutubeVideos,
       setAppBlocking,
       setBadPlaying,
       setConnected,
       setOfflinePlaying,
       slideDecks,
+      webs,
       youtubeVideos,
     } = this.props;
     fetchBase()
@@ -126,19 +131,14 @@ class App extends Component {
     .then(screen => {
       if (screen.subscribedPlaylistIds.length === 0) {
         resetSlideDecks();
+        resetImages();
+        resetWebs();
         resetYoutubeVideos();
         return Promise.resolve([{
           response: {
             result: [],
             entities: {
               slideDecks: {},
-            },
-          },
-        }, {
-          response: {
-            result: [],
-            entities: {
-              youtubeVideos: {},
             },
           },
         }, {
@@ -152,6 +152,20 @@ class App extends Component {
           response: {
             result: [],
             entities: {
+              webs: {},
+            },
+          },
+        }, {
+          response: {
+            result: [],
+            entities: {
+              youtubeVideos: {},
+            },
+          },
+        }, {
+          response: {
+            result: [],
+            entities: {
               layers: {},
             },
           },
@@ -159,8 +173,9 @@ class App extends Component {
       }
       return Promise.all([
         fetchSlideDecks(screen.subscribedPlaylistIds),
-        fetchYoutubeVideos(screen.subscribedPlaylistIds),
         fetchImages(screen.subscribedPlaylistIds),
+        fetchWebs(screen.subscribedPlaylistIds),
+        fetchYoutubeVideos(screen.subscribedPlaylistIds),
         fetchLayers(screen.subscribedPlaylistIds),
         fetchMonitor(),
         Promise.resolve(screen),
@@ -168,27 +183,34 @@ class App extends Component {
     })
     .then(([
       slideDecksResponse,
-      youtubeVideosResponse,
       imagesResponse,
+      websResponse,
+      youtubeVideosResponse,
       layersResponse,
       monitorResponse,
       screen,
     ]) => {
+      // TODO: CONTINUE
       // NEXT SLIDE DECKS
       let keys = slideDecksResponse.response.result;
       let lookup = slideDecksResponse.response.entities.slideDecks;
       let list = keys.map(o => lookup[o]);
       const nextSlideDecks = list;
-      // NEXT YOUTUBE VIDEOS
-      keys = youtubeVideosResponse.response.result;
-      lookup = youtubeVideosResponse.response.entities.youtubeVideos;
-      list = keys.map(o => lookup[o]);
-      const nextYoutubeVideos = list;
       // NEXT IMAGES
       keys = imagesResponse.response.result;
       lookup = imagesResponse.response.entities.images;
       list = keys.map(o => lookup[o]);
       const nextImages = list;
+      // NEXT WEBS
+      keys = websResponse.response.result;
+      lookup = websResponse.response.entities.webs;
+      list = keys.map(o => lookup[o]);
+      const nextWebs = list;
+      // NEXT YOUTUBE VIDEOS
+      keys = youtubeVideosResponse.response.result;
+      lookup = youtubeVideosResponse.response.entities.youtubeVideos;
+      list = keys.map(o => lookup[o]);
+      const nextYoutubeVideos = list;
       // NEXT LAYERS
       keys = layersResponse.response.result;
       lookup = layersResponse.response.entities.layers;
@@ -263,8 +285,9 @@ class App extends Component {
         badPlaying ||
         offlinePlaying ||
         JSON.stringify(slideDecks) !== JSON.stringify(nextSlideDecks) ||
-        JSON.stringify(youtubeVideos) !== JSON.stringify(nextYoutubeVideos) ||
         JSON.stringify(images) !== JSON.stringify(nextImages) ||
+        JSON.stringify(webs) !== JSON.stringify(nextWebs) ||
+        JSON.stringify(youtubeVideos) !== JSON.stringify(nextYoutubeVideos) ||
         JSON.stringify(layers) !== JSON.stringify(nextLayers)
       ) {
         this.restartPlayingLoop();
@@ -294,6 +317,7 @@ class App extends Component {
       setNextIsReady,
       setPriority,
       slideDecks,
+      webs,
       youtubeVideos,
     } = this.props;
     setNextIsReady(false);
@@ -307,6 +331,7 @@ class App extends Component {
     setPriority(minLargerPriority(0, [
       ...slideDecks,
       ...images,
+      ...webs,
       ...youtubeVideos,
     ]));
   }
@@ -325,6 +350,7 @@ class App extends Component {
       ovWidgets,
       setBadPlaying,
       slideDecks,
+      webs,
       youtubeVideos,
     } = this.props;
     const lastSlideDeckURL = window.localStorage.getItem('futusign_slide_deck_url');
@@ -340,8 +366,9 @@ class App extends Component {
     if (badPlaying) return <Bad />;
     if (
       slideDecks.length === 0 &&
-      youtubeVideos.length === 0 &&
-      images.length === 0
+      images.length === 0 &&
+      webs.length === 0 &&
+      youtubeVideos.length === 0
     ) return <NoMedia />;
     return (
       <div>
@@ -367,6 +394,7 @@ App.propTypes = {
   fetchMonitor: PropTypes.func.isRequired,
   fetchScreen: PropTypes.func.isRequired,
   fetchSlideDecks: PropTypes.func.isRequired,
+  fetchWebs: PropTypes.func.isRequired,
   fetchYoutubeVideos: PropTypes.func.isRequired,
   layers: PropTypes.array.isRequired,
   layerBlocking: PropTypes.bool.isRequired,
@@ -375,9 +403,11 @@ App.propTypes = {
   overlay: PropTypes.object,
   ovWidgets: PropTypes.array.isRequired,
   resetCurrentlyPlaying: PropTypes.func.isRequired,
+  resetImages: PropTypes.func.isRequired,
   resetNextPlaying: PropTypes.func.isRequired,
   resetOvWidgets: PropTypes.func.isRequired,
   resetSlideDecks: PropTypes.func.isRequired,
+  resetWebs: PropTypes.func.isRequired,
   resetYoutubeVideos: PropTypes.func.isRequired,
   setAppBlocking: PropTypes.func.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
@@ -391,6 +421,7 @@ App.propTypes = {
   setOfflinePlaying: PropTypes.func.isRequired,
   setPriority: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
+  webs: PropTypes.array.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
 };
 export default connect(
@@ -407,6 +438,7 @@ export default connect(
     overlay: fromOverlay.getOverlay(state),
     ovWidgets: fromOvWidgets.getOvWidgets(state),
     slideDecks: fromSlideDecks.getSlideDecks(state),
+    webs: fromWebs.getWebs(state),
     youtubeVideos: fromYoutubeVideos.getYoutubeVideos(state),
   }),
   {
@@ -417,11 +449,14 @@ export default connect(
     fetchOvWidgets: fromOvWidgets.fetchOvWidgets,
     fetchScreen: fromScreen.fetchScreen,
     fetchSlideDecks: fromSlideDecks.fetchSlideDecks,
+    fetchWebs: fromWebs.fetchWebs,
     fetchYoutubeVideos: fromYoutubeVideos.fetchYoutubeVideos,
     resetCurrentlyPlaying: fromCurrentlyPlaying.resetCurrentlyPlaying,
+    resetImages: fromImages.resetImages,
     resetNextPlaying: fromNextPlaying.resetNextPlaying,
     resetOvWidgets: fromOvWidgets.resetOvWidgets,
     resetSlideDecks: fromSlideDecks.resetSlideDecks,
+    resetWebs: fromWebs.resetWebs,
     resetYoutubeVideos: fromYoutubeVideos.resetYoutubeVideos,
     setAppBlocking: fromAppBlocking.setAppBlocking,
     setBadPlaying: fromBadPlaying.setBadPlaying,
