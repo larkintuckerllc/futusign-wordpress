@@ -12,11 +12,13 @@ class PlayerTransition2 extends Component {
       currentlyIsPlaying,
       currentlyPlaying,
       nextPlaying,
+      setCover,
       setCurrentlyIsPlaying,
       setNextIsReady,
     } = this.props;
     const upNextPlaying = upProps.nextPlaying;
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
+    const upCurrentlyPlaying = upProps.currentlyPlaying;
     // GETTING READY TO PLAY
     if (
       nextPlaying !== TRANSITION2 &&
@@ -31,6 +33,13 @@ class PlayerTransition2 extends Component {
       upCurrentlyIsPlaying
     ) {
       this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 0);
+    }
+    // STOP SHOWING
+    if (
+      currentlyPlaying === TRANSITION2 &&
+      upCurrentlyPlaying !== TRANSITION2
+    ) {
+      window.setTimeout(() => setCover(false), 0);
     }
   }
   shouldComponentUpdate() {
@@ -48,6 +57,7 @@ PlayerTransition2.propTypes = {
   currentlyIsPlaying: PropTypes.bool.isRequired,
   currentlyPlaying: PropTypes.string,
   nextPlaying: PropTypes.string,
+  setCover: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
 };

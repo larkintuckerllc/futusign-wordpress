@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { WEBS } from '../../../../strings';
 import styles from './index.scss';
 
+const WEB_LOAD_TIME = 2;
 class PlayerWebs extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +37,7 @@ class PlayerWebs extends Component {
     ) {
       this.webIndex = 0;
       this.loadWeb();
-      this.readyTimeout = window.setTimeout(() => setNextIsReady(true), 0);
+      this.readyTimeout = window.setTimeout(() => setNextIsReady(true), WEB_LOAD_TIME * 1000);
     }
     // START PLAYING
     if (
@@ -82,9 +83,10 @@ class PlayerWebs extends Component {
     playEl.style.display = 'block';
     hideEl.style.display = 'none';
     hideEl.src = 'about:blank';
+    this.even = !this.even;
     if (this.webIndex < webs.length - 1) {
       this.webIndex += 1;
-      this.webTimeout = window.setTimeout(this.playWeb, this.imageDuration * 1000);
+      this.webTimeout = window.setTimeout(this.playWeb, this.webDuration * 1000);
       this.loadWeb();
     } else {
       this.stopTimeout = window.setTimeout(() => {

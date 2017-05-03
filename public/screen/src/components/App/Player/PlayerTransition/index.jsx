@@ -18,7 +18,6 @@ class PlayerTransition extends Component {
     } = this.props;
     const upNextPlaying = upProps.nextPlaying;
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
-    const upCurrentlyPlaying = upProps.currentlyPlaying;
     // GETTING READY TO PLAY
     if (
       nextPlaying !== TRANSITION &&
@@ -34,13 +33,6 @@ class PlayerTransition extends Component {
     ) {
       window.setTimeout(() => setCover(true), 0);
       this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 2000);
-    }
-    // STOP SHOWING
-    if (
-      currentlyPlaying === TRANSITION &&
-      upCurrentlyPlaying !== TRANSITION
-    ) {
-      window.setTimeout(() => setCover(false), 0);
     }
   }
   shouldComponentUpdate() {

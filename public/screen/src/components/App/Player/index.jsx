@@ -148,6 +148,7 @@ class Player extends Component {
           currentlyIsPlaying={currentlyIsPlaying}
           currentlyPlaying={currentlyPlaying}
           nextPlaying={nextPlaying}
+          setCover={setCover}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
         />
