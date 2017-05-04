@@ -25,7 +25,7 @@
     "acf": {
       "file": "http://localhost:8080/data/sample.pdf",
       "slide_duration": "4",
-      "priority": "1"
+      "priority": "21"
     },
     "_links": {
       "self": [

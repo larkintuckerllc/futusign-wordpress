@@ -324,8 +324,6 @@ class App extends Component {
     resetCurrentlyPlaying();
     resetNextPlaying();
     setLayerBlocking(false);
-    setCurrentlyPlaying(TRANSITION);
-    setCurrentlyIsPlaying(true);
     setMinSlideDeckPriority(minLargerPriority(0, slideDecks));
     setPriority(minLargerPriority(0, [
       ...slideDecks,
@@ -333,6 +331,8 @@ class App extends Component {
       ...webs,
       ...youtubeVideos,
     ]));
+    setCurrentlyPlaying(TRANSITION);
+    setCurrentlyIsPlaying(true);
   }
   render() {
     const {
