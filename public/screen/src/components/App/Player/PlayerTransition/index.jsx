@@ -12,7 +12,6 @@ class PlayerTransition extends Component {
       currentlyIsPlaying,
       currentlyPlaying,
       nextPlaying,
-      setCover,
       setCurrentlyIsPlaying,
       setNextIsReady,
     } = this.props;
@@ -31,8 +30,7 @@ class PlayerTransition extends Component {
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
-      window.setTimeout(() => setCover(true), 0);
-      this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 2000);
+      this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 0);
     }
   }
   shouldComponentUpdate() {
@@ -50,7 +48,6 @@ PlayerTransition.propTypes = {
   currentlyIsPlaying: PropTypes.bool.isRequired,
   currentlyPlaying: PropTypes.string,
   nextPlaying: PropTypes.string,
-  setCover: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
 };
