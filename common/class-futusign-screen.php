@@ -161,7 +161,7 @@ if ( ! defined( 'WPINC' ) ) {
           'name' => '',
           'type' => 'message',
           'message' => wp_kses(
-            __( 'Used to create an Uniform Resource Locator (URL) or address for a <i>Screen</i>, additionally add it to one or more <i>Playlists</i> below.', 'futusign' ),
+            __( 'Used to create an Uniform Resource Locator (URL) or address for a <i>Screen</i>, additionally add it to one or more lists below.', 'futusign' ),
             array( 'i' => array() )
           )
         ),

@@ -157,7 +157,7 @@ class Futusign_Slide_Deck {
 					'name' => '',
 					'type' => 'message',
 					'message' => wp_kses(
-						__( 'In addition to setting the <i>File</i> and <i>Slide Duration</i>, add the <i>Slide Deck</i> to one or more <i>Playlists</i> below.', 'futusign' ),
+						__( 'In addition to setting the <i>File</i>, etc., add the <i>Slide Deck</i> to one or more list below.', 'futusign' ),
 						array( 'i' => array() )
 					)
 				),

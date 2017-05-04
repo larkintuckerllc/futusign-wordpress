@@ -3,7 +3,7 @@ Contributors: sckmkny
 Tags: digital, signage
 Requires at least: 4.3
 Tested up to: 4.7
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -21,6 +21,18 @@ Install and activate the *futusign* plugin via the WordPress *Plugins* admin
 screen.
 
 == Changelog ==
+
+= 1.4.2 =
+
+Tweak instructions for Screens and Slide Decks.
+
+Bug Fix: With futusign Priority not showing first priority.
+
+Enhancement: Remove spinner on cycling or priority changes.
+
+Bug Fix: Updated limit of items to max; 100.
+
+Enhancement: Update order to use titles instead of post date.
 
 = 1.4.1 =
 
