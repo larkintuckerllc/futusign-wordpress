@@ -2,12 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import pdfjsLib from 'pdfjs-dist';
 import { convertDataURIToBinary } from '../../../../util/misc';
 import { getFile } from '../../../../util/rest';
-import { SLIDE_DECKS } from '../../../../strings';
+import { SLIDE_DECKS, TRANSITION, TRANSITION2 } from '../../../../strings';
 import styles from './index.scss';
 
 class PlayerSlideDecks extends Component {
   constructor(props) {
     super(props);
+    this.showing = false;
     this.slideDeckIndex = null;
     this.pdfDocument = null;
     this.pageNumber = null;
@@ -61,17 +62,25 @@ class PlayerSlideDecks extends Component {
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
+      this.showing = true;
       this.playSlide();
     }
-    // STOP SHOWING
+    // STOP PLAYING
     if (
       currentlyPlaying === SLIDE_DECKS &&
       upCurrentlyPlaying !== SLIDE_DECKS
     ) {
-      // EXIT ON RELOAD
       window.clearTimeout(this.slideTimeout);
       window.clearTimeout(this.stopTimeout);
-      // ALL EXITS
+    }
+    // STOP SHOWING
+    if (
+      this.showing &&
+      upCurrentlyPlaying !== SLIDE_DECKS &&
+      upCurrentlyPlaying !== TRANSITION &&
+      upCurrentlyPlaying !== TRANSITION2
+    ) {
+      this.showing = false;
       this.rootCanvasEvenEl.style.display = 'none';
       this.rootCanvasOddEl.style.display = 'none';
     }
