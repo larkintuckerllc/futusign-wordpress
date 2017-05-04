@@ -25,7 +25,7 @@
     "acf": {
       "file": "http://localhost:8080/data/sample.jpg",
       "image_duration": "5",
-      "priority": "1"
+      "priority": "10"
     },
     "_links": {
       "self": [
@@ -89,7 +89,7 @@
     "acf": {
       "file": "http://localhost:8080/data/sample.jpg",
       "image_duration": "3",
-      "priority": "2"
+      "priority": "20"
     },
     "_links": {
       "self": [
@@ -153,7 +153,7 @@
     "acf": {
       "file": "http://localhost:8080/data/cat.jpg",
       "image_duration": "3",
-      "priority": "3"
+      "priority": "30"
     },
     "_links": {
       "self": [

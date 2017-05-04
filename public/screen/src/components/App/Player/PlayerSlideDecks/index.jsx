@@ -96,6 +96,7 @@ class PlayerSlideDecks extends Component {
     const scaleX = this.rootWidth / pdfWidth;
     const scaleY = this.rootHeight / pdfHeight;
     const scale = Math.max(scaleX, scaleY);
+    // FIREFOX WILL SCALE CANVAS TO FIT ON SCREEN EVEN IF SET TO BE BIGGER
     this.renderCanvasEl.width = pdfWidth * scale;
     this.renderCanvasEl.height = pdfHeight * scale;
     viewport = pdfPage.getViewport(scale);
