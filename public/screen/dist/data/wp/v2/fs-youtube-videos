@@ -1,0 +1,131 @@
+[
+  {
+    "id": 40,
+    "date": "2017-02-28T16:38:29",
+    "date_gmt": "2017-02-28T16:38:29",
+    "guid": {
+      "rendered": "http://localhost:8080/?post_type=futusign_yt_video&#038;p=40"
+    },
+    "modified": "2017-02-28T17:11:53",
+    "modified_gmt": "2017-02-28T17:11:53",
+    "slug": "gbr-animation",
+    "type": "futusign_yt_video",
+    "link": "http://localhost:8080/futusign_yt_video/gbr-animation/",
+    "title": {
+      "rendered": "GBR Animation"
+    },
+    "content": {
+      "rendered": "",
+      "protected": false
+    },
+    "template": "",
+    "fs-playlists": [
+      11
+    ],
+    "acf": {
+      "url": "https://youtu.be/LIjMBLVHDQs",
+      "suggested_quality": "hd720",
+      "priority": "10"
+    },
+    "_links": {
+      "self": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-youtube-videos/40"
+        }
+      ],
+      "collection": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-youtube-videos"
+        }
+      ],
+      "about": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/types/futusign_yt_video"
+        }
+      ],
+      "wp:attachment": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/media?parent=40"
+        }
+      ],
+      "wp:term": [
+        {
+          "taxonomy": "futusign_playlist",
+          "embeddable": true,
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-playlists?post=40"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https://api.w.org/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  }, {
+    "id": 41,
+    "date": "2017-02-28T16:38:29",
+    "date_gmt": "2017-02-28T16:38:29",
+    "guid": {
+      "rendered": "http://localhost:8080/?post_type=futusign_yt_video&#038;p=40"
+    },
+    "modified": "2017-02-28T17:11:53",
+    "modified_gmt": "2017-02-28T17:11:53",
+    "slug": "gbr-animation",
+    "type": "futusign_yt_video",
+    "link": "http://localhost:8080/futusign_yt_video/gbr-animation/",
+    "title": {
+      "rendered": "GBR Animation"
+    },
+    "content": {
+      "rendered": "",
+      "protected": false
+    },
+    "template": "",
+    "fs-playlists": [
+      11
+    ],
+    "acf": {
+      "url": "https://youtu.be/LIjMBLVHDQs",
+      "suggested_quality": "default",
+      "priority": "20"
+    },
+    "_links": {
+      "self": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-youtube-videos/40"
+        }
+      ],
+      "collection": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-youtube-videos"
+        }
+      ],
+      "about": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/types/futusign_yt_video"
+        }
+      ],
+      "wp:attachment": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/media?parent=40"
+        }
+      ],
+      "wp:term": [
+        {
+          "taxonomy": "futusign_playlist",
+          "embeddable": true,
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-playlists?post=40"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https://api.w.org/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  }
+]

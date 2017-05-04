@@ -6,7 +6,7 @@ import { getBase, getSeparator } from './base';
 export const get = () => {
   const version = Date.now();
 // eslint-disable-next-line
-  return fromRest.get(`${getBase()}${OV_WIDGETS_API_ENDPOINT}${getSeparator()}version=${version}`)
+  return fromRest.get(`${getBase()}${OV_WIDGETS_API_ENDPOINT}${getSeparator()}per_page=100&order=asc&orderby=title&version=${version}`)
   .then(response => (response.map(o => ({
     id: o.id,
     url: o.link,

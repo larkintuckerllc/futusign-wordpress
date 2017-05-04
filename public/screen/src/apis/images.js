@@ -6,7 +6,7 @@ import { getBase, getSeparator } from './base';
 export const get = (playlistIds) => {
   const version = Date.now();
 // eslint-disable-next-line
-  return fromRest.get(`${getBase()}${IMAGES_API_ENDPOINT}${getSeparator()}fs-playlists=${playlistIds.join(',')}&version=${version}`)
+  return fromRest.get(`${getBase()}${IMAGES_API_ENDPOINT}${getSeparator()}fs-playlists=${playlistIds.join(',')}&per_page=100&order=asc&orderby=title&version=${version}`)
   .then(response => (response.map(o => ({
     id: o.id,
     file: o.acf.file,
