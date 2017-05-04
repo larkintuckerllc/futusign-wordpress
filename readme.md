@@ -58,16 +58,17 @@ the web application will display a *No Slide Decks* icon.
 
 **Tips**
 
-
 * If required, the uploaded PDF file will be stretched / shrunk (centered and
 maintaining aspect ratio) to just cover the target display screen.
-* *Slide Decks* play in the order shown (reverse chronological).
+* *Slide Decks* play alphabetically by title.
 * *Slide Decks* can be scheduled to be published in the future using the
 WordPress schedule feature.
 * *Slide Decks* can be scheduled to expire in the future using the third-party
 plugin *Post Expirator*.
+* *Screens* are limited to playing less than 100 *Slide Decks*.
 * A variety of devices can be used for digital signage
 as described in the article [Digital Signage is Just Another Screen](https://medium.com/@johntucker_48673/digital-signage-is-just-another-screen-e138c2ec3ae9#.244a74dta).
+While Chrome (or Chromium) is the recommended browser, Edge works fine.  *Slide Decks* do not scale to cover the screen with FireFox.
 * Additional features can be added via commercial plugins available at
 <https://www.futusign.com>.
 
