@@ -1,9 +1,10 @@
 import { Component, PropTypes } from 'react';
-import { TEMPLATE } from '../../../../strings';
+import { TEMPLATE, TRANSITION, TRANSITION2 } from '../../../../strings';
 
 class PlayerTemplate extends Component {
   constructor(props) {
     super(props);
+    this.showing = false;
     this.readyTimeout = null;
     this.stopTimeout = null;
   }
@@ -31,13 +32,24 @@ class PlayerTemplate extends Component {
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
+      this.showing = true;
       this.stopTimeout = window.setTimeout(() => setCurrentlyIsPlaying(false), 5000);
     }
-    // STOP SHOWING
+    // STOP PLAYING
     if (
       currentlyPlaying === TEMPLATE &&
       upCurrentlyPlaying !== TEMPLATE
     ) {
+      window.console.log('STOP PLAYING');
+    }
+    // STOP SHOWING
+    if (
+      this.showing &&
+      upCurrentlyPlaying !== TEMPLATE &&
+      upCurrentlyPlaying !== TRANSITION &&
+      upCurrentlyPlaying !== TRANSITION2
+    ) {
+      this.showing = false;
       window.console.log('STOP SHOWING');
     }
   }

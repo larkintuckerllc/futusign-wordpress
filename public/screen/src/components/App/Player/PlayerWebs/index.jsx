@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { WEBS } from '../../../../strings';
+import { TRANSITION, TRANSITION2, WEBS } from '../../../../strings';
 import styles from './index.scss';
 
 const WEB_LOAD_TIME = 2;
 class PlayerWebs extends Component {
   constructor(props) {
     super(props);
+    this.showing = false;
     this.webDuration = null;
     this.stopTimeout = null;
     this.webIndex = null;
@@ -45,17 +46,25 @@ class PlayerWebs extends Component {
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
+      this.showing = true;
       this.playWeb();
     }
-    // STOP SHOWING
+    // STOP PLAYING
     if (
       currentlyPlaying === WEBS &&
       upCurrentlyPlaying !== WEBS
     ) {
-      // EXIT ON RELOAD
       window.clearTimeout(this.webTimeout);
       window.clearTimeout(this.stopTimeout);
-      // ALL EXITS
+    }
+    // STOP SHOWING
+    if (
+      this.showing &&
+      upCurrentlyPlaying !== WEBS &&
+      upCurrentlyPlaying !== TRANSITION &&
+      upCurrentlyPlaying !== TRANSITION2
+    ) {
+      this.showing = false;
       this.rootEvenEl.style.display = 'none';
       this.rootOddEl.style.display = 'none';
       this.rootEvenEl.src = 'about:blank';

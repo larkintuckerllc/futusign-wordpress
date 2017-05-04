@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { getFile } from '../../../../util/rest';
-import { IMAGES } from '../../../../strings';
+import { IMAGES, TRANSITION, TRANSITION2 } from '../../../../strings';
 import styles from './index.scss';
 
 class PlayerImages extends Component {
   constructor(props) {
     super(props);
+    this.showing = false;
     this.imageDuration = null;
     this.readyTimeout = null;
     this.stopTimeout = null;
@@ -45,17 +46,25 @@ class PlayerImages extends Component {
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
+      this.showing = true;
       this.playImage();
     }
-    // STOP SHOWING
+    // STOP PLAYING
     if (
       currentlyPlaying === IMAGES &&
       upCurrentlyPlaying !== IMAGES
     ) {
-      // EXIT ON RELOAD
       window.clearTimeout(this.slideTimeout);
       window.clearTimeout(this.stopTimeout);
-      // ALL EXITS
+    }
+    // STOP SHOWING
+    if (
+      this.showing &&
+      upCurrentlyPlaying !== IMAGES &&
+      upCurrentlyPlaying !== TRANSITION &&
+      upCurrentlyPlaying !== TRANSITION2
+    ) {
+      this.showing = false;
       this.rootEvenEl.style.display = 'none';
       this.rootOddEl.style.display = 'none';
     }

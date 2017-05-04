@@ -1,5 +1,5 @@
 import { Component, PropTypes } from 'react';
-import { YOUTUBE_VIDEOS } from '../../../../strings';
+import { YOUTUBE_VIDEOS, TRANSITION, TRANSITION2 } from '../../../../strings';
 
 const URL_REGEX = /^https:\/\/youtu\.be\/(.*)/;
 const PLAYER_DELAY = 5;
@@ -7,6 +7,7 @@ const VIDEO_DELAY = 2;
 class PlayerYoutubeVideos extends Component {
   constructor(props) {
     super(props);
+    this.showing = false;
     this.readyTimeout = null;
     this.coverTimeout = null;
     this.videoIds = null;
@@ -67,6 +68,7 @@ class PlayerYoutubeVideos extends Component {
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
+      this.showing = true;
       this.videoIndex = 0;
       window.futusignYoutubePlayer.cueVideoById(
         this.videoIds[this.videoIndex],
@@ -79,19 +81,27 @@ class PlayerYoutubeVideos extends Component {
       }, 0);
       this.coverTimeout = window.setTimeout(() => setCover(false), VIDEO_DELAY * 1000);
     }
-    // STOP SHOWING
+    // STOP PLAYING
     if (
       currentlyPlaying === YOUTUBE_VIDEOS &&
       upCurrentlyPlaying !== YOUTUBE_VIDEOS
     ) {
-      // EXIT RELOAD
       if (window.futusignYoutubePlayer !== undefined) {
         window.futusignYoutubePlayer.pauseVideo();
       }
       this.futusignYoutubeEl.style.visibility = 'hidden';
       window.clearTimeout(this.readyTimeout);
       window.clearTimeout(this.coverTimeout);
-      // ALL EXITS
+      window.setTimeout(() => setCover(true), 0);
+    }
+    // STOP SHOWING
+    if (
+      this.showing &&
+      upCurrentlyPlaying !== YOUTUBE_VIDEOS &&
+      upCurrentlyPlaying !== TRANSITION &&
+      upCurrentlyPlaying !== TRANSITION2
+    ) {
+      this.showing = false;
       window.setTimeout(() => setCover(false), 0);
     }
   }
