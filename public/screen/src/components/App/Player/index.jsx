@@ -13,10 +13,6 @@ import * as fromCover from '../../../ducks/cover';
 import * as fromOfflinePlaying from '../../../ducks/offlinePlaying';
 import * as fromPriority from '../../../ducks/priority';
 import { getMinSlideDeckPriority } from '../../../ducks/minSlideDeckPriority';
-import { getImages } from '../../../ducks/images';
-import { getSlideDecks } from '../../../ducks/slideDecks';
-import { getYoutubeVideos } from '../../../ducks/youtubeVideos';
-import { getWebs } from '../../../ducks/webs';
 import PlayerTransition from './PlayerTransition';
 import PlayerTransition2 from './PlayerTransition2';
 import PlayerSlideDecks from './PlayerSlideDecks';
@@ -218,14 +214,10 @@ export default connect(
   state => ({
     currentlyIsPlaying: fromCurrentlyIsPlaying.getCurrentlyIsPlaying(state),
     currentlyPlaying: fromCurrentlyPlaying.getCurrentlyPlaying(state),
-    images: getImages(state),
     minSlideDeckPriority: getMinSlideDeckPriority(state),
     nextIsReady: fromNextIsReady.getNextIsReady(state),
     nextPlaying: fromNextPlaying.getNextPlaying(state),
     priority: fromPriority.getPriority(state),
-    slideDecks: getSlideDecks(state),
-    webs: getWebs(state),
-    youtubeVideos: getYoutubeVideos(state),
   }), {
     setBadPlaying: fromBadPlaying.setBadPlaying,
     setCover: fromCover.setCover,
