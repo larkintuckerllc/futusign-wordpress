@@ -11,6 +11,8 @@ export const get = (id) => {
       id: response.id,
       title: response.title.rendered,
       subscribedPlaylistIds: response['fs-playlists'],
+      subscribedOverrideIds: response['fs-overrides'] !== undefined ?
+        response['fs-overrides'] : [],
       overlay:
         response.acf !== undefined &&
         response.acf.overlay !== undefined &&

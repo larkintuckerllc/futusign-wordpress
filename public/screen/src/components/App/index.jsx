@@ -10,6 +10,7 @@ import * as fromAppBlocking from '../../ducks/appBlocking';
 import * as fromMonitor from '../../ducks/monitor';
 import * as fromScreen from '../../ducks/screen';
 import * as fromSlideDecks from '../../ducks/slideDecks';
+import * as fromSlideDecksOverride from '../../ducks/slideDecksOverride';
 import * as fromYoutubeVideos from '../../ducks/youtubeVideos';
 import * as fromCover from '../../ducks/cover';
 import * as fromImages from '../../ducks/images';
@@ -27,6 +28,7 @@ import * as fromOvWidgets from '../../ducks/ovWidgets';
 import * as fromLayerBlocking from '../../ducks/layerBlocking';
 import * as fromPriority from '../../ducks/priority';
 import * as fromMinSlideDeckPriority from '../../ducks/minSlideDeckPriority';
+import * as fromOverride from '../../ducks/override';
 import Blocking from './Blocking';
 import Offline from './Offline';
 import Connected from './Connected';
@@ -43,6 +45,7 @@ class App extends Component {
     super();
     this.fetch = this.fetch.bind(this);
     this.restartPlayingLoop = this.restartPlayingLoop.bind(this);
+    this.fetchSubscribed = this.fetchSubscribed.bind(this);
   }
   componentDidMount() {
     const { setLayerBlocking } = this.props;
@@ -70,32 +73,108 @@ class App extends Component {
     appCache.addEventListener('updateready', handleUpdateReady);
     window.addEventListener('message', handleMessage);
   }
+  fetchSubscribed(screen) {
+    const {
+      fetchSlideDecks,
+      fetchImages,
+      fetchWebs,
+      fetchYoutubeVideos,
+      fetchLayers,
+      resetImages,
+      resetSlideDecks,
+      resetWebs,
+      resetYoutubeVideos,
+    } = this.props;
+    if (screen.subscribedPlaylistIds.length === 0) {
+      resetSlideDecks();
+      resetImages();
+      resetWebs();
+      resetYoutubeVideos();
+      return Promise.resolve([{
+        response: {
+          result: [],
+          entities: {
+            slideDecks: {},
+          },
+        },
+      }, {
+        response: {
+          result: [],
+          entities: {
+            images: {},
+          },
+        },
+      }, {
+        response: {
+          result: [],
+          entities: {
+            webs: {},
+          },
+        },
+      }, {
+        response: {
+          result: [],
+          entities: {
+            youtubeVideos: {},
+          },
+        },
+      }, {
+        response: {
+          result: [],
+          entities: {
+            layers: {},
+          },
+        },
+      }]);
+    }
+    return Promise.all([
+      fetchSlideDecks(screen.subscribedPlaylistIds),
+      fetchImages(screen.subscribedPlaylistIds),
+      fetchWebs(screen.subscribedPlaylistIds),
+      fetchYoutubeVideos(screen.subscribedPlaylistIds),
+      fetchLayers(screen.subscribedPlaylistIds),
+    ]);
+  }
+  fetchSubscribedOverride(screen) {
+    const {
+      fetchSlideDecksOverride,
+      resetSlideDecksOverride,
+    } = this.props;
+    if (screen.subscribedOverrideIds.length === 0) {
+      resetSlideDecksOverride();
+      return Promise.resolve([{
+        response: {
+          result: [],
+          entities: {
+            slideDecks: {},
+          },
+        },
+      }]);
+    }
+    return Promise.all([
+      fetchSlideDecksOverride(screen.subscribedOverrideIds),
+    ]);
+  }
   fetch() {
     const {
       badPlaying,
-      fetchImages,
-      fetchLayers,
       fetchMonitor,
       fetchOverlay,
       fetchOvWidgets,
       fetchScreen,
-      fetchSlideDecks,
-      fetchWebs,
-      fetchYoutubeVideos,
       images,
       layers,
       monitor,
       offlinePlaying,
-      resetImages,
+      override,
       resetOvWidgets,
-      resetSlideDecks,
-      resetWebs,
-      resetYoutubeVideos,
       setAppBlocking,
       setBadPlaying,
       setConnected,
       setOfflinePlaying,
+      setOverride,
       slideDecks,
+      slideDecksOverride,
       webs,
       youtubeVideos,
     } = this.props;
@@ -128,86 +207,80 @@ class App extends Component {
       return fetchOvWidgets()
       .then(() => screen);
     })
-    .then(screen => {
-      if (screen.subscribedPlaylistIds.length === 0) {
-        resetSlideDecks();
-        resetImages();
-        resetWebs();
-        resetYoutubeVideos();
-        return Promise.resolve([{
-          response: {
-            result: [],
-            entities: {
-              slideDecks: {},
-            },
-          },
-        }, {
+    .then(screen => Promise.all([
+      this.fetchSubscribed(screen),
+      this.fetchSubscribedOverride(screen),
+      fetchMonitor(),
+      Promise.resolve(screen),
+    ]))
+    .then(([
+      [
+        slideDecksResponse,
+        imagesResponse,
+        websResponse,
+        youtubeVideosResponse,
+        layersResponse,
+      ],
+      [
+        slideDecksOverrideResponse,
+      ],
+      monitorResponse,
+      screen,
+    ]) => {
+      let nextOverride = false;
+      let usedSlideDecksResponse = slideDecksResponse;
+      let usedImagesResponse = imagesResponse;
+      let usedWebsResponse = websResponse;
+      let usedYoutubeVideosResponse = youtubeVideosResponse;
+      if (slideDecksOverrideResponse.response.result.length !== 0) {
+        nextOverride = true;
+        setOverride(true);
+        usedSlideDecksResponse = slideDecksOverrideResponse;
+        usedImagesResponse = {
           response: {
             result: [],
             entities: {
               images: {},
             },
           },
-        }, {
+        };
+        usedWebsResponse = {
           response: {
             result: [],
             entities: {
               webs: {},
             },
           },
-        }, {
+        };
+        usedYoutubeVideosResponse = {
           response: {
             result: [],
             entities: {
               youtubeVideos: {},
             },
           },
-        }, {
-          response: {
-            result: [],
-            entities: {
-              layers: {},
-            },
-          },
-        }]);
+        };
+      } else {
+        setOverride(false);
       }
-      return Promise.all([
-        fetchSlideDecks(screen.subscribedPlaylistIds),
-        fetchImages(screen.subscribedPlaylistIds),
-        fetchWebs(screen.subscribedPlaylistIds),
-        fetchYoutubeVideos(screen.subscribedPlaylistIds),
-        fetchLayers(screen.subscribedPlaylistIds),
-        fetchMonitor(),
-        Promise.resolve(screen),
-      ]);
-    })
-    .then(([
-      slideDecksResponse,
-      imagesResponse,
-      websResponse,
-      youtubeVideosResponse,
-      layersResponse,
-      monitorResponse,
-      screen,
-    ]) => {
       // NEXT SLIDE DECKS
-      let keys = slideDecksResponse.response.result;
-      let lookup = slideDecksResponse.response.entities.slideDecks;
+      let keys = usedSlideDecksResponse.response.result;
+      let lookup = usedSlideDecksResponse.response.entities.slideDecks;
       let list = keys.map(o => lookup[o]);
       const nextSlideDecks = list;
       // NEXT IMAGES
-      keys = imagesResponse.response.result;
-      lookup = imagesResponse.response.entities.images;
+      keys = usedImagesResponse.response.result;
+      lookup = usedImagesResponse.response.entities.images;
       list = keys.map(o => lookup[o]);
       const nextImages = list;
       // NEXT WEBS
-      keys = websResponse.response.result;
-      lookup = websResponse.response.entities.webs;
+      keys = usedWebsResponse.response.result;
+      lookup = usedWebsResponse.response.entities.webs;
       list = keys.map(o => lookup[o]);
       const nextWebs = list;
       // NEXT YOUTUBE VIDEOS
-      keys = youtubeVideosResponse.response.result;
-      lookup = youtubeVideosResponse.response.entities.youtubeVideos;
+      keys = usedYoutubeVideosResponse.response.result;
+      lookup = usedYoutubeVideosResponse.response.entities.youtubeVideos;
       list = keys.map(o => lookup[o]);
       const nextYoutubeVideos = list;
       // NEXT LAYERS
@@ -280,13 +353,24 @@ class App extends Component {
       setBadPlaying(false);
       setAppBlocking(false);
       // CONDITIONALLY RESTART PLAYING LOOP
+      let usedSlideDecks = slideDecks;
+      let usedImages = images;
+      let usedWebs = webs;
+      let usedYoutubeVideos = youtubeVideos;
+      if (nextOverride) {
+        usedSlideDecks = slideDecksOverride;
+        usedImages = [];
+        usedWebs = [];
+        usedYoutubeVideos = [];
+      }
       if (
         badPlaying ||
         offlinePlaying ||
-        JSON.stringify(slideDecks) !== JSON.stringify(nextSlideDecks) ||
-        JSON.stringify(images) !== JSON.stringify(nextImages) ||
-        JSON.stringify(webs) !== JSON.stringify(nextWebs) ||
-        JSON.stringify(youtubeVideos) !== JSON.stringify(nextYoutubeVideos) ||
+        override !== nextOverride ||
+        JSON.stringify(usedSlideDecks) !== JSON.stringify(nextSlideDecks) ||
+        JSON.stringify(usedImages) !== JSON.stringify(nextImages) ||
+        JSON.stringify(usedWebs) !== JSON.stringify(nextWebs) ||
+        JSON.stringify(usedYoutubeVideos) !== JSON.stringify(nextYoutubeVideos) ||
         JSON.stringify(layers) !== JSON.stringify(nextLayers)
       ) {
         this.restartPlayingLoop();
@@ -307,6 +391,7 @@ class App extends Component {
   restartPlayingLoop() {
     const {
       images,
+      override,
       resetCurrentlyPlaying,
       resetNextPlaying,
       setCurrentlyIsPlaying,
@@ -316,20 +401,31 @@ class App extends Component {
       setNextIsReady,
       setPriority,
       slideDecks,
+      slideDecksOverride,
       webs,
       youtubeVideos,
     } = this.props;
+    let usedSlideDecks = slideDecks;
+    let usedImages = images;
+    let usedWebs = webs;
+    let usedYoutubeVideos = youtubeVideos;
+    if (override) {
+      usedSlideDecks = slideDecksOverride;
+      usedImages = [];
+      usedWebs = [];
+      usedYoutubeVideos = [];
+    }
     setNextIsReady(false);
     setCurrentlyIsPlaying(false);
     resetCurrentlyPlaying();
     resetNextPlaying();
     setLayerBlocking(false);
-    setMinSlideDeckPriority(minLargerPriority(0, slideDecks));
+    setMinSlideDeckPriority(minLargerPriority(0, usedSlideDecks));
     setPriority(minLargerPriority(0, [
-      ...slideDecks,
-      ...images,
-      ...webs,
-      ...youtubeVideos,
+      ...usedSlideDecks,
+      ...usedImages,
+      ...usedWebs,
+      ...usedYoutubeVideos,
     ]));
     setCurrentlyPlaying(TRANSITION);
     setCurrentlyIsPlaying(true);
@@ -346,13 +442,25 @@ class App extends Component {
       monitor,
       offlinePlaying,
       overlay,
+      override,
       ovWidgets,
       setBadPlaying,
       slideDecks,
+      slideDecksOverride,
       webs,
       youtubeVideos,
     } = this.props;
     const lastSlideDeckURL = window.localStorage.getItem('futusign_slide_deck_url');
+    let usedSlideDecks = slideDecks;
+    let usedImages = images;
+    let usedWebs = webs;
+    let usedYoutubeVideos = youtubeVideos;
+    if (override) {
+      usedSlideDecks = slideDecksOverride;
+      usedImages = [];
+      usedWebs = [];
+      usedYoutubeVideos = [];
+    }
     if (appBlocking) return <Blocking />;
     if (offlinePlaying && lastSlideDeckURL !== null) {
       return (
@@ -363,19 +471,27 @@ class App extends Component {
     }
     if (offlinePlaying) return <Offline />;
     if (badPlaying) return <Bad />;
-    if (
-      slideDecks.length === 0 &&
-      images.length === 0 &&
-      webs.length === 0 &&
-      youtubeVideos.length === 0
-    ) return <NoMedia />;
+    const noMedia = (
+      usedSlideDecks.length === 0 &&
+      usedImages.length === 0 &&
+      usedWebs.length === 0 &&
+      usedYoutubeVideos.length === 0
+    );
     return (
       <div>
         <Layers layers={layers} />
         {!layerBlocking && cover && <Cover />}
         {!layerBlocking && monitor !== null && <Connected connected={connected} />}
         {!layerBlocking && overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
-        {!layerBlocking && <Player />}
+        {!layerBlocking && noMedia && !override && <NoMedia />}
+        {!layerBlocking && !noMedia &&
+          <Player
+            slideDecks={usedSlideDecks}
+            images={usedImages}
+            webs={usedWebs}
+            youtubeVideos={usedYoutubeVideos}
+          />
+        }
       </div>
     );
   }
@@ -393,6 +509,7 @@ App.propTypes = {
   fetchMonitor: PropTypes.func.isRequired,
   fetchScreen: PropTypes.func.isRequired,
   fetchSlideDecks: PropTypes.func.isRequired,
+  fetchSlideDecksOverride: PropTypes.func.isRequired,
   fetchWebs: PropTypes.func.isRequired,
   fetchYoutubeVideos: PropTypes.func.isRequired,
   layers: PropTypes.array.isRequired,
@@ -400,12 +517,14 @@ App.propTypes = {
   monitor: PropTypes.object,
   offlinePlaying: PropTypes.bool.isRequired,
   overlay: PropTypes.object,
+  override: PropTypes.bool.isRequired,
   ovWidgets: PropTypes.array.isRequired,
   resetCurrentlyPlaying: PropTypes.func.isRequired,
   resetImages: PropTypes.func.isRequired,
   resetNextPlaying: PropTypes.func.isRequired,
   resetOvWidgets: PropTypes.func.isRequired,
   resetSlideDecks: PropTypes.func.isRequired,
+  resetSlideDecksOverride: PropTypes.func.isRequired,
   resetWebs: PropTypes.func.isRequired,
   resetYoutubeVideos: PropTypes.func.isRequired,
   setAppBlocking: PropTypes.func.isRequired,
@@ -418,8 +537,10 @@ App.propTypes = {
   setMinSlideDeckPriority: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
+  setOverride: PropTypes.func.isRequired,
   setPriority: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
+  slideDecksOverride: PropTypes.array.isRequired,
   webs: PropTypes.array.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
 };
@@ -435,8 +556,10 @@ export default connect(
     monitor: fromMonitor.getMonitor(state),
     offlinePlaying: fromOfflinePlaying.getOfflinePlaying(state),
     overlay: fromOverlay.getOverlay(state),
+    override: fromOverride.getOverride(state),
     ovWidgets: fromOvWidgets.getOvWidgets(state),
     slideDecks: fromSlideDecks.getSlideDecks(state),
+    slideDecksOverride: fromSlideDecksOverride.getSlideDecksOverride(state),
     webs: fromWebs.getWebs(state),
     youtubeVideos: fromYoutubeVideos.getYoutubeVideos(state),
   }),
@@ -448,6 +571,7 @@ export default connect(
     fetchOvWidgets: fromOvWidgets.fetchOvWidgets,
     fetchScreen: fromScreen.fetchScreen,
     fetchSlideDecks: fromSlideDecks.fetchSlideDecks,
+    fetchSlideDecksOverride: fromSlideDecksOverride.fetchSlideDecksOverride,
     fetchWebs: fromWebs.fetchWebs,
     fetchYoutubeVideos: fromYoutubeVideos.fetchYoutubeVideos,
     resetCurrentlyPlaying: fromCurrentlyPlaying.resetCurrentlyPlaying,
@@ -455,6 +579,7 @@ export default connect(
     resetNextPlaying: fromNextPlaying.resetNextPlaying,
     resetOvWidgets: fromOvWidgets.resetOvWidgets,
     resetSlideDecks: fromSlideDecks.resetSlideDecks,
+    resetSlideDecksOverride: fromSlideDecksOverride.resetSlideDecksOverride,
     resetWebs: fromWebs.resetWebs,
     resetYoutubeVideos: fromYoutubeVideos.resetYoutubeVideos,
     setAppBlocking: fromAppBlocking.setAppBlocking,
@@ -467,6 +592,7 @@ export default connect(
     setMinSlideDeckPriority: fromMinSlideDeckPriority.setMinSlideDeckPriority,
     setNextIsReady: fromNextIsReady.setNextIsReady,
     setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
+    setOverride: fromOverride.setOverride,
     setPriority: fromPriority.setPriority,
   }
 )(App);

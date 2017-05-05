@@ -97,8 +97,8 @@ if ( ! defined( 'WPINC' ) ) {
     </script>
   <?php endwhile; ?>
   <!-- MANUALLY UPDATE -->
-  <script src="<?php echo plugins_url( 'vendor.a819a834ab1c97c81e26.bundle.js', __FILE__ ); ?>"></script>
+  <script src="<?php echo plugins_url( 'vendor.1880b89a17e0e5344c8a.bundle.js', __FILE__ ); ?>"></script>
   <!-- MANUALLY UPDATE -->
-  <script src="<?php echo plugins_url( 'main.2ff3625848c4d34a263b.bundle.js', __FILE__ ); ?>"></script>
+  <script src="<?php echo plugins_url( 'main.4d453aae6675c1a9b758.bundle.js', __FILE__ ); ?>"></script>
 </body>
 </html>

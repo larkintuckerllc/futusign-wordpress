@@ -20,6 +20,8 @@ import cover from '../ducks/cover';
 import priority from '../ducks/priority';
 import minSlideDeckPriority from '../ducks/minSlideDeckPriority';
 import webs from '../ducks/webs';
+import slideDecksOverride from '../ducks/slideDecksOverride';
+import override from '../ducks/override';
 
 export default combineReducers({
   appBlocking,
@@ -43,4 +45,6 @@ export default combineReducers({
   priority,
   minSlideDeckPriority,
   webs,
+  slideDecksOverride,
+  override,
 });
