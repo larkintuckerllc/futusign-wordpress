@@ -43,6 +43,7 @@ class App extends Component {
     super();
     this.fetch = this.fetch.bind(this);
     this.restartPlayingLoop = this.restartPlayingLoop.bind(this);
+    this.fetchSubscribed = this.fetchSubscribed.bind(this);
   }
   componentDidMount() {
     const { setLayerBlocking } = this.props;
@@ -70,27 +71,80 @@ class App extends Component {
     appCache.addEventListener('updateready', handleUpdateReady);
     window.addEventListener('message', handleMessage);
   }
+  fetchSubscribed(screen) {
+    const {
+      fetchSlideDecks,
+      fetchImages,
+      fetchWebs,
+      fetchYoutubeVideos,
+      fetchLayers,
+      resetImages,
+      resetSlideDecks,
+      resetWebs,
+      resetYoutubeVideos,
+    } = this.props;
+    if (screen.subscribedPlaylistIds.length === 0) {
+      resetSlideDecks();
+      resetImages();
+      resetWebs();
+      resetYoutubeVideos();
+      return Promise.resolve([{
+        response: {
+          result: [],
+          entities: {
+            slideDecks: {},
+          },
+        },
+      }, {
+        response: {
+          result: [],
+          entities: {
+            images: {},
+          },
+        },
+      }, {
+        response: {
+          result: [],
+          entities: {
+            webs: {},
+          },
+        },
+      }, {
+        response: {
+          result: [],
+          entities: {
+            youtubeVideos: {},
+          },
+        },
+      }, {
+        response: {
+          result: [],
+          entities: {
+            layers: {},
+          },
+        },
+      }]);
+    }
+    return Promise.all([
+      fetchSlideDecks(screen.subscribedPlaylistIds),
+      fetchImages(screen.subscribedPlaylistIds),
+      fetchWebs(screen.subscribedPlaylistIds),
+      fetchYoutubeVideos(screen.subscribedPlaylistIds),
+      fetchLayers(screen.subscribedPlaylistIds),
+    ]);
+  }
   fetch() {
     const {
       badPlaying,
-      fetchImages,
-      fetchLayers,
       fetchMonitor,
       fetchOverlay,
       fetchOvWidgets,
       fetchScreen,
-      fetchSlideDecks,
-      fetchWebs,
-      fetchYoutubeVideos,
       images,
       layers,
       monitor,
       offlinePlaying,
-      resetImages,
       resetOvWidgets,
-      resetSlideDecks,
-      resetWebs,
-      resetYoutubeVideos,
       setAppBlocking,
       setBadPlaying,
       setConnected,
@@ -128,65 +182,21 @@ class App extends Component {
       return fetchOvWidgets()
       .then(() => screen);
     })
-    .then(screen => {
-      if (screen.subscribedPlaylistIds.length === 0) {
-        resetSlideDecks();
-        resetImages();
-        resetWebs();
-        resetYoutubeVideos();
-        return Promise.resolve([{
-          response: {
-            result: [],
-            entities: {
-              slideDecks: {},
-            },
-          },
-        }, {
-          response: {
-            result: [],
-            entities: {
-              images: {},
-            },
-          },
-        }, {
-          response: {
-            result: [],
-            entities: {
-              webs: {},
-            },
-          },
-        }, {
-          response: {
-            result: [],
-            entities: {
-              youtubeVideos: {},
-            },
-          },
-        }, {
-          response: {
-            result: [],
-            entities: {
-              layers: {},
-            },
-          },
-        }]);
-      }
-      return Promise.all([
-        fetchSlideDecks(screen.subscribedPlaylistIds),
-        fetchImages(screen.subscribedPlaylistIds),
-        fetchWebs(screen.subscribedPlaylistIds),
-        fetchYoutubeVideos(screen.subscribedPlaylistIds),
-        fetchLayers(screen.subscribedPlaylistIds),
-        fetchMonitor(),
-        Promise.resolve(screen),
-      ]);
-    })
+    // TODO: NEED TO SPLIT INTO TWO
+    .then(screen => Promise.all([
+      this.fetchSubscribed(screen),
+      fetchMonitor(),
+      Promise.resolve(screen),
+    ]))
+    // BRING BACK TOGETHER
     .then(([
-      slideDecksResponse,
-      imagesResponse,
-      websResponse,
-      youtubeVideosResponse,
-      layersResponse,
+      [
+        slideDecksResponse,
+        imagesResponse,
+        websResponse,
+        youtubeVideosResponse,
+        layersResponse,
+      ],
       monitorResponse,
       screen,
     ]) => {
@@ -363,19 +373,20 @@ class App extends Component {
     }
     if (offlinePlaying) return <Offline />;
     if (badPlaying) return <Bad />;
-    if (
+    const noMedia = (
       slideDecks.length === 0 &&
       images.length === 0 &&
       webs.length === 0 &&
       youtubeVideos.length === 0
-    ) return <NoMedia />;
+    );
     return (
       <div>
         <Layers layers={layers} />
         {!layerBlocking && cover && <Cover />}
         {!layerBlocking && monitor !== null && <Connected connected={connected} />}
         {!layerBlocking && overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
-        {!layerBlocking && <Player />}
+        {!layerBlocking && noMedia && <NoMedia />}
+        {!layerBlocking && !noMedia && <Player />}
       </div>
     );
   }
