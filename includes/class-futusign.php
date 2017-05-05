@@ -165,6 +165,9 @@ class Futusign {
 		$this->loader->add_filter('manage_futusign_screen_posts_columns', $screen, 'manage_posts_columns');
 		$this->loader->add_filter('restrict_manage_posts', $screen, 'restrict_manage_posts');
 		$this->loader->add_filter('parse_query', $screen, 'parse_query');
+		// SCREEN - OVERRIDE
+		$this->loader->add_filter('restrict_manage_posts', $screen, 'restrict_manage_posts_override');
+		$this->loader->add_filter('parse_query', $screen, 'parse_query_override');
 		// SLIDE DECK
 		$slide_deck = $plugin_common->get_slide_deck();
 		$this->loader->add_action('init', $slide_deck, 'register');
@@ -173,6 +176,9 @@ class Futusign {
 		$this->loader->add_filter('manage_futusign_slide_deck_posts_columns', $slide_deck, 'manage_posts_columns');
 		$this->loader->add_filter('restrict_manage_posts', $slide_deck, 'restrict_manage_posts');
 		$this->loader->add_filter('parse_query', $slide_deck, 'parse_query');
+				// SCREEN - OVERRIDE
+		$this->loader->add_filter('restrict_manage_posts', $slide_deck, 'restrict_manage_posts_override');
+		$this->loader->add_filter('parse_query', $slide_deck, 'parse_query_override');
 	}
 	/**
 	 * Register all of the hooks related to the admin area functionality
