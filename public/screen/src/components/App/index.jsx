@@ -227,13 +227,11 @@ class App extends Component {
       monitorResponse,
       screen,
     ]) => {
-      // TODO: USE OVERRIDE
       let nextOverride = false;
       let usedSlideDecksResponse = slideDecksResponse;
       let usedImagesResponse = imagesResponse;
       let usedWebsResponse = websResponse;
       let usedYoutubeVideosResponse = youtubeVideosResponse;
-      // TODO: LAYERS
       if (slideDecksOverrideResponse.response.result.length !== 0) {
         nextOverride = true;
         setOverride(true);
@@ -364,7 +362,6 @@ class App extends Component {
         usedImages = [];
         usedWebs = [];
         usedYoutubeVideos = [];
-        // TODO: LAYERS
       }
       if (
         badPlaying ||
@@ -463,7 +460,6 @@ class App extends Component {
       usedImages = [];
       usedWebs = [];
       usedYoutubeVideos = [];
-      // TODO: LAYERS
     }
     if (appBlocking) return <Blocking />;
     if (offlinePlaying && lastSlideDeckURL !== null) {
