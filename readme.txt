@@ -3,7 +3,7 @@ Contributors: sckmkny
 Tags: digital, signage
 Requires at least: 4.3
 Tested up to: 4.7
-Stable tag: 1.5.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -21,6 +21,16 @@ Install and activate the *futusign* plugin via the WordPress *Plugins* admin
 screen.
 
 == Changelog ==
+
+= 2.0.0 =
+
+Slide Decks are now deprecated and will be removed in a future version;
+primarily due to unresolvable issues with the PDF rendering library.
+
+Images are now included in the core futusign plugin; also replaces Slide
+Decks in offline behavior.
+
+Media play alphabetically by title.
 
 = 1.5.0 =
 
