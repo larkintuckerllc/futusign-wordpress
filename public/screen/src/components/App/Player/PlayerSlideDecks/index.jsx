@@ -135,31 +135,12 @@ class PlayerSlideDecks extends Component {
     this.renderPage();
   }
   handleFile(file) {
-    const { setBadPlaying, slideDecks, storeOffline } = this.props;
+    const { setBadPlaying } = this.props;
     if (!this.mounted) { return; }
     this.loadingTask = pdfjsLib.getDocument({
       data: convertDataURIToBinary(file),
       worker: window.futusignPDFWorker,
     });
-    // CACHING OFFLINE
-    if (storeOffline && this.slideDeckIndex === 0) {
-      const newSlideDeckURL = slideDecks[0].file;
-      const newSlideDeckDuration = slideDecks[0].slideDuration;
-      const lastSlideDeckURL = window.localStorage.getItem('futusign_slide_deck_url');
-      const lastSlideDeckDuration =
-        window.localStorage.getItem('futusign_slide_deck_slide_duration');
-      if (
-        newSlideDeckURL !== lastSlideDeckURL ||
-        newSlideDeckDuration !== lastSlideDeckDuration
-      ) {
-        window.localStorage.setItem('futusign_slide_deck_url', newSlideDeckURL);
-        window.localStorage.setItem('futusign_slide_deck_file', file);
-        window.localStorage.setItem(
-          'futusign_slide_deck_slide_duration',
-          newSlideDeckDuration
-        );
-      }
-    }
     this.loadingTask.promise.then(this.handleDocument, () => setBadPlaying(true));
   }
   handleDestroy() {
@@ -226,6 +207,5 @@ PlayerSlideDecks.propTypes = {
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
-  storeOffline: PropTypes.bool.isRequired,
 };
 export default PlayerSlideDecks;

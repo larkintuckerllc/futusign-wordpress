@@ -13,7 +13,7 @@ import * as fromCover from '../../../ducks/cover';
 import * as fromCounter from '../../../ducks/counter';
 import * as fromOfflinePlaying from '../../../ducks/offlinePlaying';
 import * as fromPriority from '../../../ducks/priority';
-import { getMinSlideDeckPriority } from '../../../ducks/minSlideDeckPriority';
+import { getMinImagePriority } from '../../../ducks/minImagePriority';
 import PlayerTransition from './PlayerTransition';
 import PlayerTransition2 from './PlayerTransition2';
 import PlayerSlideDecks from './PlayerSlideDecks';
@@ -25,11 +25,11 @@ class Player extends Component {
   constructor(props) {
     super(props);
     this.media = [];
+    this.mediaImages = [];
     this.filteredSlideDecks = [];
     this.filteredImages = [];
     this.filteredWebs = [];
     this.filteredYoutubeVideos = [];
-    this.minSlideDeckPriority = null;
   }
   componentWillReceiveProps(upProps) {
     const {
@@ -57,13 +57,22 @@ class Player extends Component {
       if (currentlyPlaying === TRANSITION) {
         // BEGINNING OF NEW PRIORITY; SET MEDIA
         if (counter === 0) {
-          const mediaImages = images
+          this.mediaImages = images
             .filter(o => o.priority === priority)
             .map(o => ({
               title: o.title,
               type: IMAGES,
               media: o,
-            }));
+            }))
+            .sort((a, b) => {
+              if (a.title < b.title) {
+                return -1;
+              }
+              if (a.title > b.title) {
+                return 1;
+              }
+              return 0;
+            });
           const mediaWebs = webs
             .filter(o => o.priority === priority)
             .map(o => ({
@@ -86,7 +95,7 @@ class Player extends Component {
               media: o,
             }));
           this.media = [
-            ...mediaImages,
+            ...this.mediaImages,
             ...mediaWebs,
             ...mediaYoutubeVideos,
             ...mediaSlideDecks,
@@ -179,7 +188,7 @@ class Player extends Component {
     const {
       currentlyIsPlaying,
       currentlyPlaying,
-      minSlideDeckPriority,
+      minImagePriority,
       nextPlaying,
       priority,
       setBadPlaying,
@@ -206,16 +215,6 @@ class Player extends Component {
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
         />
-        <PlayerSlideDecks
-          currentlyIsPlaying={currentlyIsPlaying}
-          currentlyPlaying={currentlyPlaying}
-          nextPlaying={nextPlaying}
-          setBadPlaying={setBadPlaying}
-          setCurrentlyIsPlaying={setCurrentlyIsPlaying}
-          setNextIsReady={setNextIsReady}
-          slideDecks={this.filteredSlideDecks}
-          storeOffline={priority === minSlideDeckPriority}
-        />
         <PlayerImages
           currentlyIsPlaying={currentlyIsPlaying}
           currentlyPlaying={currentlyPlaying}
@@ -224,6 +223,11 @@ class Player extends Component {
           setBadPlaying={setBadPlaying}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
+          storeOffline={
+            this.filteredImages.length !== 0 &&
+            priority === minImagePriority &&
+            this.filteredImages[0].id === this.mediaImages[0].media.id
+          }
         />
         <PlayerWebs
           currentlyIsPlaying={currentlyIsPlaying}
@@ -244,6 +248,15 @@ class Player extends Component {
           setOfflinePlaying={setOfflinePlaying}
           youtubeVideos={this.filteredYoutubeVideos}
         />
+        <PlayerSlideDecks
+          currentlyIsPlaying={currentlyIsPlaying}
+          currentlyPlaying={currentlyPlaying}
+          nextPlaying={nextPlaying}
+          setBadPlaying={setBadPlaying}
+          setCurrentlyIsPlaying={setCurrentlyIsPlaying}
+          setNextIsReady={setNextIsReady}
+          slideDecks={this.filteredSlideDecks}
+        />
       </div>
     );
   }
@@ -252,7 +265,7 @@ Player.propTypes = {
   counter: PropTypes.number.isRequired,
   currentlyIsPlaying: PropTypes.bool.isRequired,
   currentlyPlaying: PropTypes.string,
-  minSlideDeckPriority: PropTypes.number.isRequired,
+  minImagePriority: PropTypes.number.isRequired,
   images: PropTypes.array.isRequired,
   nextIsReady: PropTypes.bool.isRequired,
   nextPlaying: PropTypes.string,
@@ -275,7 +288,7 @@ export default connect(
     counter: fromCounter.getCounter(state),
     currentlyIsPlaying: fromCurrentlyIsPlaying.getCurrentlyIsPlaying(state),
     currentlyPlaying: fromCurrentlyPlaying.getCurrentlyPlaying(state),
-    minSlideDeckPriority: getMinSlideDeckPriority(state),
+    minImagePriority: getMinImagePriority(state),
     nextIsReady: fromNextIsReady.getNextIsReady(state),
     nextPlaying: fromNextPlaying.getNextPlaying(state),
     priority: fromPriority.getPriority(state),

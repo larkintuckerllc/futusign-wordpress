@@ -78,8 +78,18 @@ class PlayerImages extends Component {
     this.mounted = false;
   }
   handleFile(file) {
+    const { images, storeOffline } = this.props;
     if (!this.mounted) { return; }
     const { setNextIsReady } = this.props;
+    // CACHING OFFLINE
+    if (storeOffline && this.imageIndex === 0) {
+      const newImageURL = images[0].file;
+      const lastImageURL = window.localStorage.getItem('futusign_image_url');
+      if (newImageURL !== lastImageURL) {
+        window.localStorage.setItem('futusign_image_url', newImageURL);
+        window.localStorage.setItem('futusign_image_file', file);
+      }
+    }
     const renderEl = this.even ? this.rootEvenEl : this.rootOddEl;
     renderEl.style.backgroundImage = `url(${file})`;
     if (this.imageIndex === 0) {
@@ -135,5 +145,6 @@ PlayerImages.propTypes = {
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
+  storeOffline: PropTypes.bool.isRequired,
 };
 export default PlayerImages;

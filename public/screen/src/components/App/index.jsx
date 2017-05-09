@@ -28,12 +28,12 @@ import * as fromOverlay from '../../ducks/overlay';
 import * as fromOvWidgets from '../../ducks/ovWidgets';
 import * as fromLayerBlocking from '../../ducks/layerBlocking';
 import * as fromPriority from '../../ducks/priority';
-import * as fromMinSlideDeckPriority from '../../ducks/minSlideDeckPriority';
+import * as fromMinImagePriority from '../../ducks/minImagePriority';
 import * as fromOverride from '../../ducks/override';
 import Blocking from './Blocking';
 import Offline from './Offline';
 import Connected from './Connected';
-import OfflineSlideDeck from './OfflineSlideDeck';
+import OfflineImage from './OfflineImage';
 import Bad from './Bad';
 import NoMedia from './NoMedia';
 import Player from './Player';
@@ -344,10 +344,9 @@ class App extends Component {
         }
       }
       // CONDITIONALLY CLEAR LOCAL STORAGE
-      if (nextSlideDecks.length === 0) {
-        window.localStorage.removeItem('futusign_slide_deck_url');
-        window.localStorage.removeItem('futusign_slide_deck_file');
-        window.localStorage.removeItem('futusign_slide_deck_slide_duration');
+      if (nextImages.length === 0) {
+        window.localStorage.removeItem('futusign_image_url');
+        window.localStorage.removeItem('futusign_image_file');
       }
       // MISC
       setOfflinePlaying(false);
@@ -399,7 +398,7 @@ class App extends Component {
       setCurrentlyIsPlaying,
       setCurrentlyPlaying,
       setLayerBlocking,
-      setMinSlideDeckPriority,
+      setMinImagePriority,
       setNextIsReady,
       setPriority,
       slideDecks,
@@ -422,7 +421,7 @@ class App extends Component {
     resetCurrentlyPlaying();
     resetNextPlaying();
     setLayerBlocking(false);
-    setMinSlideDeckPriority(minLargerPriority(0, usedSlideDecks));
+    setMinImagePriority(minLargerPriority(0, usedImages));
     setPriority(minLargerPriority(0, [
       ...usedSlideDecks,
       ...usedImages,
@@ -447,13 +446,12 @@ class App extends Component {
       overlay,
       override,
       ovWidgets,
-      setBadPlaying,
       slideDecks,
       slideDecksOverride,
       webs,
       youtubeVideos,
     } = this.props;
-    const lastSlideDeckURL = window.localStorage.getItem('futusign_slide_deck_url');
+    const lastImageURL = window.localStorage.getItem('futusign_image_url');
     let usedSlideDecks = slideDecks;
     let usedImages = images;
     let usedWebs = webs;
@@ -465,13 +463,7 @@ class App extends Component {
       usedYoutubeVideos = [];
     }
     if (appBlocking) return <Blocking />;
-    if (offlinePlaying && lastSlideDeckURL !== null) {
-      return (
-        <OfflineSlideDeck
-          setBadPlaying={setBadPlaying}
-        />
-      );
-    }
+    if (offlinePlaying && lastImageURL !== null) return <OfflineImage />;
     if (offlinePlaying) return <Offline />;
     if (badPlaying) return <Bad />;
     const noMedia = (
@@ -538,7 +530,7 @@ App.propTypes = {
   setCurrentlyPlaying: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setLayerBlocking: PropTypes.func.isRequired,
-  setMinSlideDeckPriority: PropTypes.func.isRequired,
+  setMinImagePriority: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
   setOfflinePlaying: PropTypes.func.isRequired,
   setOverride: PropTypes.func.isRequired,
@@ -594,7 +586,7 @@ export default connect(
     setCurrentlyIsPlaying: fromCurrentlyIsPlaying.setCurrentlyIsPlaying,
     setCurrentlyPlaying: fromCurrentlyPlaying.setCurrentlyPlaying,
     setLayerBlocking: fromLayerBlocking.setLayerBlocking,
-    setMinSlideDeckPriority: fromMinSlideDeckPriority.setMinSlideDeckPriority,
+    setMinImagePriority: fromMinImagePriority.setMinImagePriority,
     setNextIsReady: fromNextIsReady.setNextIsReady,
     setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
     setOverride: fromOverride.setOverride,

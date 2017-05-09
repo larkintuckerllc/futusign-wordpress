@@ -89,7 +89,7 @@
     "acf": {
       "file": "http://localhost:8080/data/sample.jpg",
       "image_duration": "3",
-      "priority": "20"
+      "priority": "10"
     },
     "_links": {
       "self": [
