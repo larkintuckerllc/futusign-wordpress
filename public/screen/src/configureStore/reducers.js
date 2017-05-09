@@ -21,6 +21,7 @@ import priority from '../ducks/priority';
 import minImagePriority from '../ducks/minImagePriority';
 import webs from '../ducks/webs';
 import slideDecksOverride from '../ducks/slideDecksOverride';
+import imagesOverride from '../ducks/imagesOverride';
 import override from '../ducks/override';
 import counter from '../ducks/counter';
 
@@ -47,6 +48,7 @@ export default combineReducers({
   minImagePriority,
   webs,
   slideDecksOverride,
+  imagesOverride,
   override,
   counter,
 });
