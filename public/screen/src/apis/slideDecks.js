@@ -10,6 +10,7 @@ export const get = (listIds, override) => {
   return fromRest.get(`${getBase()}${SLIDE_DECKS_API_ENDPOINT}${getSeparator()}${slug}=${listIds.join(',')}&per_page=100&order=asc&orderby=title&version=${version}`)
     .then(response => (response.map(o => ({
       id: o.id,
+      title: o.title.rendered,
       file: o.acf.file,
       slideDuration: Number(o.acf.slide_duration),
       priority: o.acf.priority !== undefined ? Number(o.acf.priority) : 1,

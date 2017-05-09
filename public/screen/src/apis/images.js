@@ -9,6 +9,7 @@ export const get = (playlistIds) => {
   return fromRest.get(`${getBase()}${IMAGES_API_ENDPOINT}${getSeparator()}fs-playlists=${playlistIds.join(',')}&per_page=100&order=asc&orderby=title&version=${version}`)
   .then(response => (response.map(o => ({
     id: o.id,
+    title: o.title.rendered,
     file: o.acf.file,
     imageDuration: Number(o.acf.image_duration),
     priority: o.acf.priority !== undefined ? Number(o.acf.priority) : 1,

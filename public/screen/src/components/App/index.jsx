@@ -13,6 +13,7 @@ import * as fromSlideDecks from '../../ducks/slideDecks';
 import * as fromSlideDecksOverride from '../../ducks/slideDecksOverride';
 import * as fromYoutubeVideos from '../../ducks/youtubeVideos';
 import * as fromCover from '../../ducks/cover';
+import * as fromCounter from '../../ducks/counter';
 import * as fromImages from '../../ducks/images';
 import * as fromLayers from '../../ducks/layers';
 import * as fromWebs from '../../ducks/webs';
@@ -394,6 +395,7 @@ class App extends Component {
       override,
       resetCurrentlyPlaying,
       resetNextPlaying,
+      setCounter,
       setCurrentlyIsPlaying,
       setCurrentlyPlaying,
       setLayerBlocking,
@@ -427,6 +429,7 @@ class App extends Component {
       ...usedWebs,
       ...usedYoutubeVideos,
     ]));
+    setCounter(0);
     setCurrentlyPlaying(TRANSITION);
     setCurrentlyIsPlaying(true);
   }
@@ -531,6 +534,7 @@ App.propTypes = {
   setBadPlaying: PropTypes.func.isRequired,
   setConnected: PropTypes.func.isRequired,
   setCover: PropTypes.func.isRequired,
+  setCounter: PropTypes.func.isRequired,
   setCurrentlyPlaying: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setLayerBlocking: PropTypes.func.isRequired,
@@ -585,6 +589,7 @@ export default connect(
     setAppBlocking: fromAppBlocking.setAppBlocking,
     setBadPlaying: fromBadPlaying.setBadPlaying,
     setCover: fromCover.setCover,
+    setCounter: fromCounter.setCounter,
     setConnected: fromConnected.setConnected,
     setCurrentlyIsPlaying: fromCurrentlyIsPlaying.setCurrentlyIsPlaying,
     setCurrentlyPlaying: fromCurrentlyPlaying.setCurrentlyPlaying,
