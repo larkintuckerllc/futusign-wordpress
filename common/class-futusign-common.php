@@ -42,17 +42,27 @@ class Futusign_Common {
 	 * @access   private
 	 * @var      Futusign_Playlist    $playlist    The playlist.
 	 */
+	/**
+	 * The image.
+	 *
+	 * @since    2.0.0
+	 * @access   private
+	 * @var      Futusign_Image    $image    The image
+	 */
+	private $image;
 	private $playlist;
 	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    0.3.0
 	 */
+
 	public function __construct() {
 		$this->load_dependencies();
 		$this->screen = new Futusign_Screen();
 		$this->slide_deck = new Futusign_Slide_Deck();
 		$this->playlist = new Futusign_Playlist();
+		$this->image = new Futusign_Image();
 	}
 	/**
 	 * Load the required dependencies for module.
@@ -64,6 +74,7 @@ class Futusign_Common {
 		require_once plugin_dir_path( __FILE__ ) . 'class-futusign-screen.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-futusign-slide-deck.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-futusign-playlist.php';
+		require_once plugin_dir_path( __FILE__ ) . 'class-futusign-image.php';
 	}
 	/**
 	 * Retrieve the screen.
@@ -91,5 +102,14 @@ class Futusign_Common {
 	 */
 	public function get_playlist() {
 		return $this->playlist;
+	}
+	/**
+ * Retrieve the image.
+ *
+ * @since     2.0.0
+ * @return    Futusign_Image_Type    The image functionality.
+ */
+	public function get_image() {
+		return $this->image;
 	}
 }

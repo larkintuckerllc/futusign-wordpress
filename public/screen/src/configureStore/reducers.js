@@ -18,10 +18,12 @@ import ovWidgets from '../ducks/ovWidgets';
 import layerBlocking from '../ducks/layerBlocking';
 import cover from '../ducks/cover';
 import priority from '../ducks/priority';
-import minSlideDeckPriority from '../ducks/minSlideDeckPriority';
+import minImagePriority from '../ducks/minImagePriority';
 import webs from '../ducks/webs';
 import slideDecksOverride from '../ducks/slideDecksOverride';
+import imagesOverride from '../ducks/imagesOverride';
 import override from '../ducks/override';
+import counter from '../ducks/counter';
 
 export default combineReducers({
   appBlocking,
@@ -43,8 +45,10 @@ export default combineReducers({
   layerBlocking,
   cover,
   priority,
-  minSlideDeckPriority,
+  minImagePriority,
   webs,
   slideDecksOverride,
+  imagesOverride,
   override,
+  counter,
 });

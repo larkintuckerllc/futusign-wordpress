@@ -92,7 +92,7 @@ class Futusign {
 	 */
 	public function __construct() {
 		$this->plugin_name = 'futusign';
-		$this->version = '1.5.0';
+		$this->version = '2.0.0';
 		$this->load_dependencies();
 		$this->set_locale();
 		if (Futusign::is_plugin_active('all')) {
@@ -168,6 +168,17 @@ class Futusign {
 		// SCREEN - OVERRIDE
 		$this->loader->add_filter('restrict_manage_posts', $screen, 'restrict_manage_posts_override');
 		$this->loader->add_filter('parse_query', $screen, 'parse_query_override');
+		// IMAGE
+		$image = $plugin_common->get_image();
+		$this->loader->add_action('init', $image, 'register');
+		$this->loader->add_filter('init', $image, 'register_field_group');
+		$this->loader->add_filter('manage_futusign_image_posts_custom_column', $image, 'manage_posts_custom_column', 10, 2 );
+		$this->loader->add_filter('manage_futusign_image_posts_columns', $image, 'manage_posts_columns');
+		$this->loader->add_filter('restrict_manage_posts', $image, 'restrict_manage_posts');
+		$this->loader->add_filter('parse_query', $image, 'parse_query');
+		// IMAGE - OVERRIDE
+		$this->loader->add_filter('restrict_manage_posts', $image, 'restrict_manage_posts_override');
+		$this->loader->add_filter('parse_query', $image, 'parse_query_override');
 		// SLIDE DECK
 		$slide_deck = $plugin_common->get_slide_deck();
 		$this->loader->add_action('init', $slide_deck, 'register');
@@ -176,7 +187,7 @@ class Futusign {
 		$this->loader->add_filter('manage_futusign_slide_deck_posts_columns', $slide_deck, 'manage_posts_columns');
 		$this->loader->add_filter('restrict_manage_posts', $slide_deck, 'restrict_manage_posts');
 		$this->loader->add_filter('parse_query', $slide_deck, 'parse_query');
-				// SCREEN - OVERRIDE
+		// SLIDE DECK - OVERRIDE
 		$this->loader->add_filter('restrict_manage_posts', $slide_deck, 'restrict_manage_posts_override');
 		$this->loader->add_filter('parse_query', $slide_deck, 'parse_query_override');
 	}

@@ -33,10 +33,7 @@ class Futusign_Playlist {
 	 * @since    0.3.0
 	 */
 	public function register() {
-		$object_types = array( 'futusign_slide_deck', 'futusign_screen' );
-		if (class_exists( 'Futusign_Image' )) {
-			array_push( $object_types, 'futusign_image' );
-		}
+		$object_types = array( 'futusign_slide_deck', 'futusign_screen', 'futusign_image' );
 		if (class_exists( 'Futusign_Web' )) {
 			array_push( $object_types, 'futusign_web' );
 		}

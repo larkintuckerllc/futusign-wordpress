@@ -9,6 +9,7 @@ export const get = (playlistIds) => {
   return fromRest.get(`${getBase()}${YOUTUBE_VIDEOS_API_ENDPOINT}${getSeparator()}fs-playlists=${playlistIds.join(',')}&per_page=100&order=asc&orderby=title&version=${version}`)
   .then(response => (response.map(o => ({
     id: o.id,
+    title: o.title.rendered,
     url: o.acf.url,
     suggestedQuality: o.acf.suggested_quality,
     priority: o.acf.priority !== undefined ? Number(o.acf.priority) : 1,

@@ -221,6 +221,16 @@ class Futusign_Slide_Deck {
 			'title' => 'futusign Slide Decks',
 			'fields' => array (
 				array (
+					'key' => 'field_acf_futusign_slide_decks_alert',
+					'label' => __('Alert', 'futusign'),
+					'name' => '',
+					'type' => 'message',
+					'message' => wp_kses(
+						__( '<b><i>Slide Decks</i> have been deprecated and will be removed in a future version. Please see <a href="https://www.futusign.com/faq/" target="_blank">FAQ</a> for more details.</b>', 'futusign' ),
+						array( 'i' => array(), 'b' => array(), 'a' => array( 'href' => array(), 'target' => array(), ), )
+					)
+				),
+				array (
 					'key' => 'field_5898796f0caa2', // STUCK WITH ORIGINAL FIELD KEY
 					'label' => __('Instructions', 'futusign'),
 					'name' => '',
