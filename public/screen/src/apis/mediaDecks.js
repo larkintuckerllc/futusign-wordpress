@@ -12,5 +12,6 @@ export const get = (listIds, override) => {
       id: o.id,
       title: o.title.rendered,
       priority: o.acf.priority !== undefined ? Number(o.acf.priority) : 1,
-    }))));
+    }))))
+    .catch(() => ([]));
 };

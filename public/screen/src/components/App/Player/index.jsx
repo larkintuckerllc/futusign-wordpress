@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import {
-  IMAGES, TRANSITION, TRANSITION2, WEBS, YOUTUBE_VIDEOS, SLIDE_DECKS,
+  IMAGES, MEDIA_DECKS, TRANSITION, TRANSITION2, WEBS, YOUTUBE_VIDEOS, SLIDE_DECKS,
 } from '../../../strings';
 import { minLargerPriority } from '../../../util/misc';
 import * as fromCurrentlyPlaying from '../../../ducks/currentlyPlaying';
@@ -26,10 +26,10 @@ class Player extends Component {
     super(props);
     this.media = [];
     this.mediaImages = [];
-    this.filteredSlideDecks = [];
     this.filteredImages = [];
     this.filteredWebs = [];
     this.filteredYoutubeVideos = [];
+    this.filteredSlideDecks = [];
   }
   componentWillReceiveProps(upProps) {
     const {
@@ -37,6 +37,7 @@ class Player extends Component {
       currentlyIsPlaying,
       currentlyPlaying,
       images,
+      mediaDecks,
       nextIsReady,
       nextPlaying,
       priority,
@@ -57,6 +58,7 @@ class Player extends Component {
       if (currentlyPlaying === TRANSITION) {
         // BEGINNING OF NEW PRIORITY; SET MEDIA
         if (counter === 0) {
+          // HANDLING IMAGES SPECIAL BECAUSE NEED FOR OFFLINE
           this.mediaImages = images
             .filter(o => o.priority === priority)
             .map(o => ({
@@ -73,6 +75,13 @@ class Player extends Component {
               }
               return 0;
             });
+          const mediaMediaDecks = mediaDecks
+            .filter(o => o.priority === priority)
+            .map(o => ({
+              title: o.title,
+              type: MEDIA_DECKS,
+              media: o,
+            }));
           const mediaWebs = webs
             .filter(o => o.priority === priority)
             .map(o => ({
@@ -96,6 +105,7 @@ class Player extends Component {
             }));
           this.media = [
             ...this.mediaImages,
+            ...mediaMediaDecks,
             ...mediaWebs,
             ...mediaYoutubeVideos,
             ...mediaSlideDecks,
@@ -111,6 +121,11 @@ class Player extends Component {
         }
         // STUFF FILTERED
         const nextMedia = this.media[counter];
+        // TODO: NEED TO LOOP THROUGH A MEDIA DECK
+        window.console.log(this.media);
+        window.console.log(counter);
+        window.console.log(nextMedia);
+        debugger;
         this.filteredImages = [];
         this.filteredWebs = [];
         this.filteredYoutubeVideos = [];
@@ -267,6 +282,7 @@ Player.propTypes = {
   currentlyPlaying: PropTypes.string,
   minImagePriority: PropTypes.number.isRequired,
   images: PropTypes.array.isRequired,
+  mediaDecks: PropTypes.array.isRequired,
   nextIsReady: PropTypes.bool.isRequired,
   nextPlaying: PropTypes.string,
   priority: PropTypes.number.isRequired,
