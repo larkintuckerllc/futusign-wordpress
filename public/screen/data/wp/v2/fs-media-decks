@@ -1,0 +1,183 @@
+[
+  {
+    "id": 331,
+    "date": "2017-05-20T14:29:40",
+    "date_gmt": "2017-05-20T14:29:40",
+    "guid": {
+      "rendered": "http://localhost:8080/?post_type=futusign_media_deck&#038;p=331"
+    },
+    "modified": "2017-05-20T14:44:43",
+    "modified_gmt": "2017-05-20T14:44:43",
+    "slug": "test",
+    "status": "publish",
+    "type": "futusign_media_deck",
+    "link": "http://localhost:8080/futusign_media_deck/test/",
+    "title": {
+      "rendered": "Test"
+    },
+    "content": {
+      "rendered": "",
+      "protected": false
+    },
+    "template": "",
+    "fs-playlists": [
+      7
+    ],
+    "fs-overrides": [],
+    "acf": {
+      "media": [
+        {
+          "acf_fc_layout": "image",
+          "file": "http://localhost:8080/data/sample.jpg",
+          "image_duration": "3"
+        },
+        {
+          "acf_fc_layout": "image",
+          "file": "http://localhost:8080/data/sample.jpg",
+          "image_duration": "3"
+        },
+        {
+          "acf_fc_layout": "web",
+          "url": "http://www.cnn.com/",
+          "web_duration": "10"
+        },
+        {
+          "acf_fc_layout": "youtube",
+          "url": "https://youtu.be/LIjMBLVHDQs",
+          "suggested_quality": "default"
+        }
+      ]
+    },
+    "_links": {
+      "self": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-media-decks/331"
+        }
+      ],
+      "collection": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-media-decks"
+        }
+      ],
+      "about": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/types/futusign_media_deck"
+        }
+      ],
+      "wp:attachment": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/media?parent=331"
+        }
+      ],
+      "wp:term": [
+        {
+          "taxonomy": "futusign_playlist",
+          "embeddable": true,
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-playlists?post=331"
+        },
+        {
+          "taxonomy": "futusign_override",
+          "embeddable": true,
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-overrides?post=331"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https://api.w.org/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  }, {
+    "id": 332,
+    "date": "2017-05-20T14:29:40",
+    "date_gmt": "2017-05-20T14:29:40",
+    "guid": {
+      "rendered": "http://localhost:8080/?post_type=futusign_media_deck&#038;p=331"
+    },
+    "modified": "2017-05-20T14:44:43",
+    "modified_gmt": "2017-05-20T14:44:43",
+    "slug": "test",
+    "status": "publish",
+    "type": "futusign_media_deck",
+    "link": "http://localhost:8080/futusign_media_deck/test/",
+    "title": {
+      "rendered": "Test"
+    },
+    "content": {
+      "rendered": "",
+      "protected": false
+    },
+    "template": "",
+    "fs-playlists": [
+      7
+    ],
+    "fs-overrides": [],
+    "acf": {
+      "media": [
+        {
+          "acf_fc_layout": "image",
+          "file": "http://localhost:8080/data/sample.jpg",
+          "image_duration": "3"
+        },
+        {
+          "acf_fc_layout": "image",
+          "file": "http://localhost:8080/data/sample.jpg",
+          "image_duration": "3"
+        },
+        {
+          "acf_fc_layout": "web",
+          "url": "http://www.cnn.com/",
+          "web_duration": "10"
+        },
+        {
+          "acf_fc_layout": "youtube",
+          "url": "https://youtu.be/LIjMBLVHDQs",
+          "suggested_quality": "default"
+        }
+      ]
+    },
+    "_links": {
+      "self": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-media-decks/331"
+        }
+      ],
+      "collection": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-media-decks"
+        }
+      ],
+      "about": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/types/futusign_media_deck"
+        }
+      ],
+      "wp:attachment": [
+        {
+          "href": "http://localhost:8080/wp-json/wp/v2/media?parent=331"
+        }
+      ],
+      "wp:term": [
+        {
+          "taxonomy": "futusign_playlist",
+          "embeddable": true,
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-playlists?post=331"
+        },
+        {
+          "taxonomy": "futusign_override",
+          "embeddable": true,
+          "href": "http://localhost:8080/wp-json/wp/v2/fs-overrides?post=331"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https://api.w.org/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  }
+]
