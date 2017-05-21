@@ -11,6 +11,7 @@ import * as fromNextIsReady from '../../../ducks/nextIsReady';
 import * as fromBadPlaying from '../../../ducks/badPlaying';
 import * as fromCover from '../../../ducks/cover';
 import * as fromCounter from '../../../ducks/counter';
+import * as fromCounterDeck from '../../../ducks/counterDeck';
 import * as fromOfflinePlaying from '../../../ducks/offlinePlaying';
 import * as fromPriority from '../../../ducks/priority';
 import { getMinImagePriority } from '../../../ducks/minImagePriority';
@@ -27,6 +28,7 @@ class Player extends Component {
     this.media = [];
     this.mediaImages = [];
     this.filteredImages = [];
+    this.filteredMediaDeck = null;
     this.filteredWebs = [];
     this.filteredYoutubeVideos = [];
     this.filteredSlideDecks = [];
@@ -42,6 +44,7 @@ class Player extends Component {
       nextPlaying,
       priority,
       setCounter,
+      setCounterDeck,
       setCurrentlyIsPlaying,
       setCurrentlyPlaying,
       setNextIsReady,
@@ -122,17 +125,19 @@ class Player extends Component {
         // STUFF FILTERED
         const nextMedia = this.media[counter];
         // TODO: NEED TO LOOP THROUGH A MEDIA DECK
-        window.console.log(this.media);
-        window.console.log(counter);
-        window.console.log(nextMedia);
-        debugger;
+        // TODO: HAVE TO THINK ABOUT REUSING PLAYERS
         this.filteredImages = [];
+        this.filteredMediaDeck = null;
         this.filteredWebs = [];
         this.filteredYoutubeVideos = [];
         this.filteredSlideDecks = [];
         switch (nextMedia.type) {
           case IMAGES:
             this.filteredImages = [nextMedia.media];
+            break;
+          case MEDIA_DECKS:
+            this.filteredMediaDeck = nextMedia.media;
+            window.setTimeout(() => setCounterDeck(0), 0);
             break;
           case WEBS:
             this.filteredWebs = [nextMedia.media];
@@ -203,59 +208,86 @@ class Player extends Component {
     const {
       currentlyIsPlaying,
       currentlyPlaying,
-      minImagePriority,
+      // minImagePriority,
       nextPlaying,
-      priority,
+      // priority,
       setBadPlaying,
       setCover,
       setCurrentlyIsPlaying,
       setNextIsReady,
       setOfflinePlaying,
     } = this.props;
+      // TODO: BRING BACK IN
+        /*
+          storeOffline={
+            this.filteredImages.length !== 0 &&
+            priority === minImagePriority &&
+            this.filteredImages[0].id === this.mediaImages[0].media.id
+          }
+          */
+    // INJECTING MEDIA_DECK HANDLING
+    // HAVE TO SET FILTEREDIMAGE, ETC
+    // TODO: WEBS AND YOUTUBE
+    let adjFilteredImages = this.filteredImages;
+    if (nextPlaying === MEDIA_DECKS || currentlyPlaying === MEDIA_DECKS) {
+      const mediaDeckItem = this.filteredMediaDeck.media[0];
+      switch (mediaDeckItem.type) {
+        case IMAGES:
+          adjFilteredImages = [mediaDeckItem];
+          break;
+        default:
+      }
+    }
+    const adjNextPlaying =
+      nextPlaying === MEDIA_DECKS ?
+      this.filteredMediaDeck.media[0].type :
+      nextPlaying;
+    const adjCurrentlyPlaying =
+      currentlyPlaying === MEDIA_DECKS ?
+      this.filteredMediaDeck.media[0].type :
+      currentlyPlaying;
+    window.console.log('SHIT');
+    window.console.log(adjFilteredImages);
     return (
       <div>
         <PlayerTransition
           currentlyIsPlaying={currentlyIsPlaying}
-          currentlyPlaying={currentlyPlaying}
-          nextPlaying={nextPlaying}
+          currentlyPlaying={adjCurrentlyPlaying}
+          nextPlaying={adjNextPlaying}
           setCover={setCover}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
         />
         <PlayerTransition2
           currentlyIsPlaying={currentlyIsPlaying}
-          currentlyPlaying={currentlyPlaying}
-          nextPlaying={nextPlaying}
+          currentlyPlaying={adjCurrentlyPlaying}
+          nextPlaying={adjNextPlaying}
           setCover={setCover}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
         />
         <PlayerImages
           currentlyIsPlaying={currentlyIsPlaying}
-          currentlyPlaying={currentlyPlaying}
-          images={this.filteredImages}
-          nextPlaying={nextPlaying}
+          currentlyPlaying={adjCurrentlyPlaying}
+          images={adjFilteredImages}
+          nextPlaying={adjNextPlaying}
           setBadPlaying={setBadPlaying}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
-          storeOffline={
-            this.filteredImages.length !== 0 &&
-            priority === minImagePriority &&
-            this.filteredImages[0].id === this.mediaImages[0].media.id
-          }
+          storeOffline={false}
         />
         <PlayerWebs
           currentlyIsPlaying={currentlyIsPlaying}
-          currentlyPlaying={currentlyPlaying}
-          nextPlaying={nextPlaying}
+          currentlyPlaying={adjCurrentlyPlaying}
+          nextPlaying={adjNextPlaying}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
           webs={this.filteredWebs}
         />
         <PlayerYoutubeVideos
           currentlyIsPlaying={currentlyIsPlaying}
-          currentlyPlaying={currentlyPlaying}
-          nextPlaying={nextPlaying}
+          currentlyPlaying={adjCurrentlyPlaying}
+          nextPlaying={adjNextPlaying}
           setBadPlaying={setBadPlaying}
           setCover={setCover}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
@@ -265,8 +297,8 @@ class Player extends Component {
         />
         <PlayerSlideDecks
           currentlyIsPlaying={currentlyIsPlaying}
-          currentlyPlaying={currentlyPlaying}
-          nextPlaying={nextPlaying}
+          currentlyPlaying={adjCurrentlyPlaying}
+          nextPlaying={adjNextPlaying}
           setBadPlaying={setBadPlaying}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
@@ -278,6 +310,7 @@ class Player extends Component {
 }
 Player.propTypes = {
   counter: PropTypes.number.isRequired,
+  counterDeck: PropTypes.number.isRequired,
   currentlyIsPlaying: PropTypes.bool.isRequired,
   currentlyPlaying: PropTypes.string,
   minImagePriority: PropTypes.number.isRequired,
@@ -289,6 +322,7 @@ Player.propTypes = {
   setBadPlaying: PropTypes.func.isRequired,
   setCover: PropTypes.func.isRequired,
   setCounter: PropTypes.func.isRequired,
+  setCounterDeck: PropTypes.func.isRequired,
   setCurrentlyPlaying: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
@@ -302,6 +336,7 @@ Player.propTypes = {
 export default connect(
   state => ({
     counter: fromCounter.getCounter(state),
+    counterDeck: fromCounterDeck.getCounterDeck(state),
     currentlyIsPlaying: fromCurrentlyIsPlaying.getCurrentlyIsPlaying(state),
     currentlyPlaying: fromCurrentlyPlaying.getCurrentlyPlaying(state),
     minImagePriority: getMinImagePriority(state),
@@ -312,6 +347,7 @@ export default connect(
     setBadPlaying: fromBadPlaying.setBadPlaying,
     setCover: fromCover.setCover,
     setCounter: fromCounter.setCounter,
+    setCounterDeck: fromCounterDeck.setCounterDeck,
     setCurrentlyPlaying: fromCurrentlyPlaying.setCurrentlyPlaying,
     setCurrentlyIsPlaying: fromCurrentlyIsPlaying.setCurrentlyIsPlaying,
     setNextIsReady: fromNextIsReady.setNextIsReady,

@@ -26,6 +26,7 @@ import override from '../ducks/override';
 import counter from '../ducks/counter';
 import mediaDecks from '../ducks/mediaDecks';
 import mediaDecksOverride from '../ducks/mediaDecksOverride';
+import counterDeck from '../ducks/counterDeck';
 
 export default combineReducers({
   appBlocking,
@@ -55,4 +56,5 @@ export default combineReducers({
   counter,
   mediaDecks,
   mediaDecksOverride,
+  counterDeck,
 });

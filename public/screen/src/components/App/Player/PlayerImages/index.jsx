@@ -24,6 +24,8 @@ class PlayerImages extends Component {
     this.rootOddEl = document.getElementById(styles.rootOdd);
   }
   componentWillReceiveProps(upProps) {
+    window.console.log('FUCK ME');
+    window.console.log(upProps);
     const {
       currentlyIsPlaying,
       currentlyPlaying,
@@ -98,6 +100,8 @@ class PlayerImages extends Component {
   }
   loadImage() {
     const { setBadPlaying, images } = this.props;
+    window.console.log('SHIT FACE');
+    window.console.log(images);
     const image = images[this.imageIndex];
     this.imageDuration = image.imageDuration;
     getFile(image.file)
@@ -105,6 +109,8 @@ class PlayerImages extends Component {
   }
   playImage() {
     const { setCurrentlyIsPlaying, images } = this.props;
+    window.console.log('SUCK DICK');
+    window.console.log(images);
     const playEl = this.even ? this.rootEvenEl : this.rootOddEl;
     const hideEl = !this.even ? this.rootEvenEl : this.rootOddEl;
     playEl.style.display = 'block';
