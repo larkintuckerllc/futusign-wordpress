@@ -119,8 +119,15 @@ class Player extends Component {
             return 0;
           });
           // TODO: WORK IN DECKS
-          window.console.log(mediaMediaDecks);
-          window.console.log(this.media);
+          // MERGE IN MEDIA DECKS
+          for (let i = 0; i < this.media.length; i += 1) {
+            const mediaItem = this.media[i];
+            for (let j = mediaMediaDecks.length - 1; j >= 0; j -= 1) {
+              const mediaMediaDecksItem = mediaMediaDecks[j];
+              window.console.log(mediaItem);
+              window.console.log(mediaMediaDecksItem);
+            }
+          }
           debugger;
         }
         // STUFF FILTERED
