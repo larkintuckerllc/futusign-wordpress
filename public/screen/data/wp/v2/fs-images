@@ -12,7 +12,7 @@
     "type": "futusign_image",
     "link": "http://localhost:8080/futusign_image/test/",
     "title": {
-      "rendered": "Test"
+      "rendered": "Test1"
     },
     "content": {
       "rendered": "",
@@ -24,8 +24,7 @@
     ],
     "acf": {
       "file": "http://localhost:8080/data/sample.jpg",
-      "image_duration": "5",
-      "priority": "10"
+      "image_duration": "5"
     },
     "_links": {
       "self": [
@@ -76,7 +75,7 @@
     "type": "futusign_image",
     "link": "http://localhost:8080/futusign_image/test/",
     "title": {
-      "rendered": "Test"
+      "rendered": "Test3"
     },
     "content": {
       "rendered": "",
@@ -88,8 +87,7 @@
     ],
     "acf": {
       "file": "http://localhost:8080/data/sample.jpg",
-      "image_duration": "3",
-      "priority": "10"
+      "image_duration": "3"
     },
     "_links": {
       "self": [
@@ -140,7 +138,7 @@
     "type": "futusign_image",
     "link": "http://localhost:8080/futusign_image/test/",
     "title": {
-      "rendered": "Test"
+      "rendered": "Test4"
     },
     "content": {
       "rendered": "",
@@ -152,8 +150,7 @@
     ],
     "acf": {
       "file": "http://localhost:8080/data/cat.jpg",
-      "image_duration": "3",
-      "priority": "30"
+      "image_duration": "3"
     },
     "_links": {
       "self": [

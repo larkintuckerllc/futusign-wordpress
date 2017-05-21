@@ -13,7 +13,7 @@
     "type": "futusign_media_deck",
     "link": "http://localhost:8080/futusign_media_deck/test/",
     "title": {
-      "rendered": "Test"
+      "rendered": "Test2"
     },
     "content": {
       "rendered": "",
@@ -103,7 +103,7 @@
     "type": "futusign_media_deck",
     "link": "http://localhost:8080/futusign_media_deck/test/",
     "title": {
-      "rendered": "Test"
+      "rendered": "Test5"
     },
     "content": {
       "rendered": "",
