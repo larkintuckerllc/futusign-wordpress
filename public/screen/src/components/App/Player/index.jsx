@@ -203,17 +203,19 @@ class Player extends Component {
         if (nextPlaying === TRANSITION) {
           if (counter === this.media.length) {
             let nextPriority = minLargerPriority(priority, [
-              ...slideDecks,
               ...images,
+              ...mediaDecks,
               ...webs,
               ...youtubeVideos,
+              ...slideDecks,
             ]);
             if (nextPriority === Infinity) {
               nextPriority = minLargerPriority(0, [
-                ...slideDecks,
                 ...images,
+                ...mediaDecks,
                 ...webs,
                 ...youtubeVideos,
+                ...slideDecks,
               ]);
             }
             setPriority(nextPriority);
