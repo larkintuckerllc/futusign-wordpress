@@ -118,17 +118,38 @@ class Player extends Component {
             }
             return 0;
           });
-          // TODO: WORK IN DECKS
           // MERGE IN MEDIA DECKS
-          for (let i = 0; i < this.media.length; i += 1) {
+          const newMedia = [];
+          for (let i = this.media.length - 1; i >= 0; i -= 1) {
             const mediaItem = this.media[i];
             for (let j = mediaMediaDecks.length - 1; j >= 0; j -= 1) {
               const mediaMediaDecksItem = mediaMediaDecks[j];
-              window.console.log(mediaItem);
-              window.console.log(mediaMediaDecksItem);
+              if (mediaMediaDecksItem.title > mediaItem.title) {
+                mediaMediaDecks.splice(j, 1);
+                for (let k = mediaMediaDecksItem.media.media.length - 1; k >= 0; k -= 1) {
+                  const mediaMediaDecksItemItem = mediaMediaDecksItem.media.media[k];
+                  newMedia.unshift({
+                    media: mediaMediaDecksItemItem,
+                    title: mediaMediaDecksItem.title,
+                    type: mediaMediaDecksItemItem.type,
+                  });
+                }
+              }
+            }
+            newMedia.unshift(mediaItem);
+          }
+          for (let i = mediaMediaDecks.length - 1; i >= 0; i -= 1) {
+            const mediaMediaDecksItem = mediaMediaDecks[i];
+            for (let j = mediaMediaDecksItem.media.media.length - 1; j >= 0; j -= 1) {
+              const mediaMediaDecksItemItem = mediaMediaDecksItem.media.media[j];
+              newMedia.unshift({
+                media: mediaMediaDecksItemItem,
+                title: mediaMediaDecksItem.title,
+                type: mediaMediaDecksItemItem.type,
+              });
             }
           }
-          debugger;
+          this.media = newMedia;
         }
         // STUFF FILTERED
         const nextMedia = this.media[counter];
