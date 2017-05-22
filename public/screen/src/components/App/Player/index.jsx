@@ -230,23 +230,15 @@ class Player extends Component {
     const {
       currentlyIsPlaying,
       currentlyPlaying,
-      // minImagePriority,
+      minImagePriority,
       nextPlaying,
-      // priority,
+      priority,
       setBadPlaying,
       setCover,
       setCurrentlyIsPlaying,
       setNextIsReady,
       setOfflinePlaying,
     } = this.props;
-    /*
-          // TODO: FACTOR BACK IN
-          storeOffline={
-            this.filteredImages.length !== 0 &&
-            priority === minImagePriority &&
-            this.filteredImages[0].id === this.mediaImages[0].media.id
-          }
-    */
     return (
       <div>
         <PlayerTransition
@@ -273,7 +265,12 @@ class Player extends Component {
           setBadPlaying={setBadPlaying}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
-          storeOffline={false}
+          storeOffline={
+            this.filteredImages.length !== 0 &&
+            priority === minImagePriority &&
+            this.filteredImages[0].id !== undefined &&
+            this.filteredImages[0].id === this.mediaImages[0].media.id
+          }
         />
         <PlayerWebs
           currentlyIsPlaying={currentlyIsPlaying}
