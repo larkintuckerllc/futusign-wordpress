@@ -36,7 +36,7 @@ image file.
 
 To create a digital sign, connect a television to a computer with a modern web
 browser and have it load the *Screen's* URL. The loaded web application will
-check every minute to automatically apply changes made on the admin screens.
+check every hour to automatically apply changes made on the admin screens.
 
 **Caveats**
 
@@ -44,7 +44,7 @@ After the initial load, the web browser will load the web application with
 or without a network connection.
 
 When the plugin in updated, the web application will automatically
-update and reload within 5 minutes.
+update and reload within an hour.
 
 There are several known situations where the web application will display an
 error until the situation is corrected (will recover within a minute).

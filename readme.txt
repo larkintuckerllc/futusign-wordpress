@@ -3,7 +3,7 @@ Contributors: sckmkny
 Tags: digital, signage
 Requires at least: 4.3
 Tested up to: 4.7
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -21,6 +21,12 @@ Install and activate the *futusign* plugin via the WordPress *Plugins* admin
 screen.
 
 == Changelog ==
+
+= 2.1.1 =
+
+Band-aid fix; changed polling from once per minute to once per hour.
+Eating up too much CPU cyles on WordPress instance. Future will default
+to an hour but let you change.
 
 = 2.1.0 =
 
