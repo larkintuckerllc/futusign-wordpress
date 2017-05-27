@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import {
-  IMAGES, TRANSITION, TRANSITION2, WEBS, YOUTUBE_VIDEOS, SLIDE_DECKS,
+  IMAGES, MEDIA_DECKS, TRANSITION, TRANSITION2, WEBS, YOUTUBE_VIDEOS, SLIDE_DECKS,
 } from '../../../strings';
 import { minLargerPriority } from '../../../util/misc';
 import * as fromCurrentlyPlaying from '../../../ducks/currentlyPlaying';
@@ -26,10 +26,11 @@ class Player extends Component {
     super(props);
     this.media = [];
     this.mediaImages = [];
-    this.filteredSlideDecks = [];
     this.filteredImages = [];
+    this.filteredMediaDecks = [];
     this.filteredWebs = [];
     this.filteredYoutubeVideos = [];
+    this.filteredSlideDecks = [];
   }
   componentWillReceiveProps(upProps) {
     const {
@@ -37,6 +38,7 @@ class Player extends Component {
       currentlyIsPlaying,
       currentlyPlaying,
       images,
+      mediaDecks,
       nextIsReady,
       nextPlaying,
       priority,
@@ -57,6 +59,7 @@ class Player extends Component {
       if (currentlyPlaying === TRANSITION) {
         // BEGINNING OF NEW PRIORITY; SET MEDIA
         if (counter === 0) {
+          // HANDLED DIFFERENT BECAUSE OF OFFLINE
           this.mediaImages = images
             .filter(o => o.priority === priority)
             .map(o => ({
@@ -78,6 +81,13 @@ class Player extends Component {
             .map(o => ({
               title: o.title,
               type: WEBS,
+              media: o,
+            }));
+          const mediaMediaDecks = mediaDecks
+            .filter(o => o.priority === priority)
+            .map(o => ({
+              title: o.title,
+              type: MEDIA_DECKS,
               media: o,
             }));
           const mediaYoutubeVideos = youtubeVideos
@@ -108,6 +118,38 @@ class Player extends Component {
             }
             return 0;
           });
+          // MERGE IN MEDIA DECKS
+          const newMedia = [];
+          for (let i = this.media.length - 1; i >= 0; i -= 1) {
+            const mediaItem = this.media[i];
+            for (let j = mediaMediaDecks.length - 1; j >= 0; j -= 1) {
+              const mediaMediaDecksItem = mediaMediaDecks[j];
+              if (mediaMediaDecksItem.title > mediaItem.title) {
+                mediaMediaDecks.splice(j, 1);
+                for (let k = mediaMediaDecksItem.media.media.length - 1; k >= 0; k -= 1) {
+                  const mediaMediaDecksItemItem = mediaMediaDecksItem.media.media[k];
+                  newMedia.unshift({
+                    media: mediaMediaDecksItemItem,
+                    title: mediaMediaDecksItem.title,
+                    type: mediaMediaDecksItemItem.type,
+                  });
+                }
+              }
+            }
+            newMedia.unshift(mediaItem);
+          }
+          for (let i = mediaMediaDecks.length - 1; i >= 0; i -= 1) {
+            const mediaMediaDecksItem = mediaMediaDecks[i];
+            for (let j = mediaMediaDecksItem.media.media.length - 1; j >= 0; j -= 1) {
+              const mediaMediaDecksItemItem = mediaMediaDecksItem.media.media[j];
+              newMedia.unshift({
+                media: mediaMediaDecksItemItem,
+                title: mediaMediaDecksItem.title,
+                type: mediaMediaDecksItemItem.type,
+              });
+            }
+          }
+          this.media = newMedia;
         }
         // STUFF FILTERED
         const nextMedia = this.media[counter];
@@ -161,17 +203,19 @@ class Player extends Component {
         if (nextPlaying === TRANSITION) {
           if (counter === this.media.length) {
             let nextPriority = minLargerPriority(priority, [
-              ...slideDecks,
               ...images,
+              ...mediaDecks,
               ...webs,
               ...youtubeVideos,
+              ...slideDecks,
             ]);
             if (nextPriority === Infinity) {
               nextPriority = minLargerPriority(0, [
-                ...slideDecks,
                 ...images,
+                ...mediaDecks,
                 ...webs,
                 ...youtubeVideos,
+                ...slideDecks,
               ]);
             }
             setPriority(nextPriority);
@@ -226,6 +270,7 @@ class Player extends Component {
           storeOffline={
             this.filteredImages.length !== 0 &&
             priority === minImagePriority &&
+            this.filteredImages[0].id !== undefined &&
             this.filteredImages[0].id === this.mediaImages[0].media.id
           }
         />
@@ -267,6 +312,7 @@ Player.propTypes = {
   currentlyPlaying: PropTypes.string,
   minImagePriority: PropTypes.number.isRequired,
   images: PropTypes.array.isRequired,
+  mediaDecks: PropTypes.array.isRequired,
   nextIsReady: PropTypes.bool.isRequired,
   nextPlaying: PropTypes.string,
   priority: PropTypes.number.isRequired,

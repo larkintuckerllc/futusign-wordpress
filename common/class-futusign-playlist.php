@@ -43,6 +43,9 @@ class Futusign_Playlist {
 		if (class_exists( 'Futusign_Layer' )) {
 			array_push( $object_types, 'futusign_layer' );
 		}
+		if (class_exists( 'Futusign_MediaDeck' )) {
+			array_push( $object_types, 'futusign_media_deck' );
+		}
 		$labels = array(
 			 'name' => __( 'Playlists', 'futusign' ),
 			 'singular_name' => __( 'Playlist', 'futusign' ),
