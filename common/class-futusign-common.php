@@ -112,4 +112,13 @@ class Futusign_Common {
 	public function get_image() {
 		return $this->image;
 	}
+	// DUPLICATED IN INACTIVE
+	/**
+	 * Add rewrite rules
+	 *
+	 * @since    2.1.2
+	 */
+	public function add_rewrite_rules() {
+		add_rewrite_rule( '^fs-endpoint/?', 'index.php?futusign_endpoint=1', 'top' );
+	}
 }

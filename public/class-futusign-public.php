@@ -40,4 +40,28 @@ class Futusign_Public {
 		}
 		return $single;
 	}
+	/**
+	 * Add to query variables
+	 *
+	 * @since    2.1.2
+	 * @param    array      $query_vars     query variables
+	 * @return   array      query variables
+	 */
+	public function query_vars( $query_vars ) {
+    $query_vars[] = 'futusign_endpoint';
+		return $query_vars;
+	}
+	/**
+	 * Define futusign-monitor endpoint
+	 *
+	 * @since    2.1.2
+	 * @param    array      $query     query
+	 */
+	public function parse_request( $query ) {
+		if ( array_key_exists( 'futusign_endpoint', $query->query_vars ) ) {
+			include 'partials/futusign-endpoint.php';
+			exit();
+		}
+		return;
+	}
 }

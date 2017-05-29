@@ -145,6 +145,7 @@ class Futusign {
 	 */
 	private function define_inactive_hooks() {
 		$plugin_inactive = new Futusign_Inactive();
+		$this->loader->add_action('init', $plugin_inactive, 'add_rewrite_rules');
 		$this->loader->add_action('admin_notices', $plugin_inactive, 'missing_plugins_notice' );
 	}
 	/**
@@ -155,6 +156,8 @@ class Futusign {
 	 */
 	private function define_common_hooks() {
 		$plugin_common = new Futusign_Common();
+		// ENDPOINT
+		$this->loader->add_action('init', $plugin_common, 'add_rewrite_rules');
 		// PLAYLIST
 		$this->loader->add_action('init', $plugin_common->get_playlist(), 'register', 20);
 		// SCREEN
@@ -211,6 +214,8 @@ class Futusign {
 	private function define_public_hooks() {
 		$plugin_public = new Futusign_Public();
 		$this->loader->add_action('single_template', $plugin_public, 'single_template');
+		$this->loader->add_action('query_vars', $plugin_public, 'query_vars');
+		$this->loader->add_action('parse_request', $plugin_public, 'parse_request');
 	}
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.
