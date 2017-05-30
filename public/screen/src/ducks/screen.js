@@ -12,6 +12,9 @@ import { setSlideDecksOverride } from './slideDecksOverride';
 import { setLayers } from './layers';
 import { setMediaDecks } from './mediaDecks';
 import { setMediaDecksOverride } from './mediaDecksOverride';
+import { setOverlay } from './overlay';
+import { setOvWidgets } from './ovWidgets';
+import { setMonitor } from './monitor';
 // API
 import { get } from '../apis/endpoint';
 
@@ -80,15 +83,10 @@ export const fetchScreen = () => (dispatch, getState) => {
   return get(screen.id)
     .then(
       response => {
-        const overlay = response.overlay;
         dispatch({
           type: FETCH_SCREEN_SUCCESS,
           response: response.screen,
         });
-        if (overlay !== null) {
-          // TODO: DISPATCH OVERLAY
-          // TODO: DISPATCH WIDG
-        }
         dispatch(setImages(response.images));
         dispatch(setImagesOverride(response.imagesOverride));
         dispatch(setMediaDecks(response.mediaDecks));
@@ -100,6 +98,9 @@ export const fetchScreen = () => (dispatch, getState) => {
         dispatch(setSlideDecks(response.slideDecks));
         dispatch(setSlideDecksOverride(response.slideDecksOverride));
         dispatch(setLayers(response.layers));
+        dispatch(setOverlay(response.overlay));
+        dispatch(setOvWidgets(response.ovWidgets));
+        dispatch(setMonitor(response.monitor));
         return response;
       },
       error => {
