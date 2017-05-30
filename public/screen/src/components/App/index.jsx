@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import { CACHE_INTERVAL, POLLING_INTERVAL, TRANSITION } from '../../strings';
@@ -11,12 +11,14 @@ import * as fromScreen from '../../ducks/screen';
 import * as fromSlideDecks from '../../ducks/slideDecks';
 import * as fromSlideDecksOverride from '../../ducks/slideDecksOverride';
 import * as fromYoutubeVideos from '../../ducks/youtubeVideos';
+import * as fromYoutubeVideosOverride from '../../ducks/youtubeVideosOverride';
 import * as fromCover from '../../ducks/cover';
 import * as fromCounter from '../../ducks/counter';
 import * as fromImages from '../../ducks/images';
 import * as fromImagesOverride from '../../ducks/imagesOverride';
 import * as fromLayers from '../../ducks/layers';
 import * as fromWebs from '../../ducks/webs';
+import * as fromWebsOverride from '../../ducks/websOverride';
 import * as fromOfflinePlaying from '../../ducks/offlinePlaying';
 import * as fromBadPlaying from '../../ducks/badPlaying';
 import * as fromCurrentlyPlaying from '../../ducks/currentlyPlaying';
@@ -46,7 +48,6 @@ import Cover from './Cover';
 class App extends Component {
   constructor() {
     super();
-    this.checkRestart = this.checkRestart.bind(this);
     this.fetch = this.fetch.bind(this);
     this.restartPlayingLoop = this.restartPlayingLoop.bind(this);
   }
@@ -76,83 +77,69 @@ class App extends Component {
     appCache.addEventListener('updateready', handleUpdateReady);
     window.addEventListener('message', handleMessage);
   }
-  checkRestart(response) {
-    window.console.log(response);
-    /*
+  fetch() {
+    const {
+      badPlaying,
+      fetchScreen,
+      images,
+      imagesOverride,
+      offlinePlaying,
+      override,
+      layers,
+      monitor,
+      mediaDecks,
+      mediaDecksOverride,
+      webs,
+      websOverride,
+      youtubeVideos,
+      youtubeVideosOverride,
+      setConnected,
+      slideDecks,
+      slideDecksOverride,
+      setAppBlocking,
+      setBadPlaying,
+      setOverride,
+      setOfflinePlaying,
+    } = this.props;
+    fetchScreen()
+    .then(response => {
+      if (offlinePlaying) {
+        window.location.reload();
+        return;
+      }
+      const screen = response.screen;
       let nextOverride = false;
-      let usedImagesResponse = imagesResponse;
-      let usedMediaDecksResponse = mediaDecksResponse;
-      let usedSlideDecksResponse = slideDecksResponse;
-      let usedWebsResponse = websResponse;
-      let usedYoutubeVideosResponse = youtubeVideosResponse;
+      let nextImages = response.images;
+      let nextMediaDecks = response.mediaDecks;
+      let nextSlideDecks = response.slideDecks;
+      let nextWebs = response.webs;
+      let nextYoutubeVideos = response.youtubeVideos;
+      const nextLayers = response.layers;
+      const nextMonitor = response.monitor;
       if (
-        imagesOverrideResponse.response.result.length !== 0 ||
-        mediaDecksOverrideResponse.response.result.length !== 0 ||
-        slideDecksOverrideResponse.response.result.length !== 0
+        response.imagesOverride.length !== 0 ||
+        response.mediaDecksOverride.length !== 0 ||
+        response.slideDecksOverride.length !== 0 ||
+        response.websOverride.length !== 0 ||
+        response.youtubeVideosOverride.length !== 0
       ) {
         nextOverride = true;
         setOverride(true);
-        usedImagesResponse = imagesOverrideResponse;
-        usedMediaDecksResponse = mediaDecksOverrideResponse;
-        usedSlideDecksResponse = slideDecksOverrideResponse;
-        usedWebsResponse = {
-          response: {
-            result: [],
-            entities: {
-              webs: {},
-            },
-          },
-        };
-        usedYoutubeVideosResponse = {
-          response: {
-            result: [],
-            entities: {
-              youtubeVideos: {},
-            },
-          },
-        };
+        nextImages = response.imagesOverride;
+        nextMediaDecks = response.mediaDecksOverride;
+        nextSlideDecks = response.slideDecksOverride;
+        nextWebs = response.websOverride;
+        nextYoutubeVideos = response.youtubeVideosOverride;
       } else {
         setOverride(false);
       }
-      // NEXT IMAGES
-      let keys = usedImagesResponse.response.result;
-      let lookup = usedImagesResponse.response.entities.images;
-      let list = keys.map(o => lookup[o]);
-      const nextImages = list;
-      // NEXT MEDIA DECKS
-      keys = usedMediaDecksResponse.response.result;
-      lookup = usedMediaDecksResponse.response.entities.mediaDecks;
-      list = keys.map(o => lookup[o]);
-      const nextMediaDecks = list;
-      // NEXT WEBS
-      keys = usedWebsResponse.response.result;
-      lookup = usedWebsResponse.response.entities.webs;
-      list = keys.map(o => lookup[o]);
-      const nextWebs = list;
-      // NEXT YOUTUBE VIDEOS
-      keys = usedYoutubeVideosResponse.response.result;
-      lookup = usedYoutubeVideosResponse.response.entities.youtubeVideos;
-      list = keys.map(o => lookup[o]);
-      const nextYoutubeVideos = list;
-      // NEXT LAYERS
-      keys = layersResponse.response.result;
-      lookup = layersResponse.response.entities.layers;
-      list = keys.map(o => lookup[o]);
-      const nextLayers = list;
-      // NEXT SLIDE DECKS
-      keys = usedSlideDecksResponse.response.result;
-      lookup = usedSlideDecksResponse.response.entities.slideDecks;
-      list = keys.map(o => lookup[o]);
-      const nextSlideDecks = list;
-      // MONITORING
-      const nextMonitor = monitorResponse;
       // MONITORING - RELOAD
       if (
         monitor !== null &&
         JSON.stringify(nextMonitor) !== JSON.stringify(monitor)
       ) {
         window.location.reload();
-        return null;
+        return;
       }
       // MONITORING - LOGIN AND CHECK-IN
       if (monitor === null && nextMonitor !== null) {
@@ -216,8 +203,8 @@ class App extends Component {
       if (nextOverride) {
         usedImages = imagesOverride;
         usedMediaDecks = mediaDecksOverride;
-        usedWebs = [];
-        usedYoutubeVideos = [];
+        usedWebs = websOverride;
+        usedYoutubeVideos = youtubeVideosOverride;
         usedSlideDecks = slideDecksOverride;
       }
       if (
@@ -233,23 +220,6 @@ class App extends Component {
       ) {
         this.restartPlayingLoop();
       }
-      */
-  }
-  fetch() {
-    const {
-      fetchScreen,
-      offlinePlaying,
-      setAppBlocking,
-      setBadPlaying,
-      setOfflinePlaying,
-    } = this.props;
-    fetchScreen()
-    .then(response => {
-      if (offlinePlaying) {
-        window.location.reload();
-        return;
-      }
-      this.checkRestart(response);
     })
     .catch(error => {
       setOfflinePlaying(true);
@@ -385,19 +355,7 @@ App.propTypes = {
   cover: PropTypes.bool.isRequired,
   images: PropTypes.array.isRequired,
   imagesOverride: PropTypes.array.isRequired,
-  // fetchImages: PropTypes.func.isRequired,
-  // fetchImagesOverride: PropTypes.func.isRequired,
-  // fetchLayers: PropTypes.func.isRequired,
-  // fetchMediaDecks: PropTypes.func.isRequired,
-  // fetchMediaDecksOverride: PropTypes.func.isRequired,
-  // fetchOverlay: PropTypes.func.isRequired,
-  // fetchOvWidgets: PropTypes.func.isRequired,
-  // fetchMonitor: PropTypes.func.isRequired,
   fetchScreen: PropTypes.func.isRequired,
-  // fetchSlideDecks: PropTypes.func.isRequired,
-  // fetchSlideDecksOverride: PropTypes.func.isRequired,
-  // fetchWebs: PropTypes.func.isRequired,
-  // fetchYoutubeVideos: PropTypes.func.isRequired,
   layers: PropTypes.array.isRequired,
   layerBlocking: PropTypes.bool.isRequired,
   mediaDecks: PropTypes.array.isRequired,
@@ -408,16 +366,7 @@ App.propTypes = {
   override: PropTypes.bool.isRequired,
   ovWidgets: PropTypes.array.isRequired,
   resetCurrentlyPlaying: PropTypes.func.isRequired,
-  // resetImages: PropTypes.func.isRequired,
-  // resetImagesOverride: PropTypes.func.isRequired,
-  // resetMediaDecks: PropTypes.func.isRequired,
-  // resetMediaDecksOverride: PropTypes.func.isRequired,
   resetNextPlaying: PropTypes.func.isRequired,
-  // resetOvWidgets: PropTypes.func.isRequired,
-  // resetSlideDecks: PropTypes.func.isRequired,
-  // resetSlideDecksOverride: PropTypes.func.isRequired,
-  // resetWebs: PropTypes.func.isRequired,
-  // resetYoutubeVideos: PropTypes.func.isRequired,
   setAppBlocking: PropTypes.func.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
   setConnected: PropTypes.func.isRequired,
@@ -434,7 +383,9 @@ App.propTypes = {
   slideDecks: PropTypes.array.isRequired,
   slideDecksOverride: PropTypes.array.isRequired,
   webs: PropTypes.array.isRequired,
+  websOverride: PropTypes.array.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
+  youtubeVideosOverride: PropTypes.array.isRequired,
 };
 export default connect(
   state => ({
@@ -456,33 +407,14 @@ export default connect(
     slideDecks: fromSlideDecks.getSlideDecks(state),
     slideDecksOverride: fromSlideDecksOverride.getSlideDecksOverride(state),
     webs: fromWebs.getWebs(state),
+    websOverride: fromWebsOverride.getWebsOverride(state),
     youtubeVideos: fromYoutubeVideos.getYoutubeVideos(state),
+    youtubeVideosOverride: fromYoutubeVideosOverride.getYoutubeVideosOverride(state),
   }),
   {
-    // fetchImages: fromImages.fetchImages,
-    // fetchImagesOverride: fromImagesOverride.fetchImagesOverride,
-    // fetchLayers: fromLayers.fetchLayers,
-    // fetchMediaDecks: fromMediaDecks.fetchMediaDecks,
-    // fetchMediaDecksOverride: fromMediaDecksOverride.fetchMediaDecksOverride,
-    // fetchMonitor: fromMonitor.fetchMonitor,
-    // fetchOverlay: fromOverlay.fetchOverlay,
-    // fetchOvWidgets: fromOvWidgets.fetchOvWidgets,
     fetchScreen: fromScreen.fetchScreen,
-    // fetchSlideDecks: fromSlideDecks.fetchSlideDecks,
-    // fetchSlideDecksOverride: fromSlideDecksOverride.fetchSlideDecksOverride,
-    // fetchWebs: fromWebs.fetchWebs,
-    // fetchYoutubeVideos: fromYoutubeVideos.fetchYoutubeVideos,
     resetCurrentlyPlaying: fromCurrentlyPlaying.resetCurrentlyPlaying,
-    // resetImages: fromImages.resetImages,
-    // resetImagesOverride: fromImagesOverride.resetImagesOverride,
-    // resetMediaDecks: fromMediaDecks.resetMediaDecks,
-    // resetMediaDecksOverride: fromMediaDecksOverride.resetMediaDecksOverride,
     resetNextPlaying: fromNextPlaying.resetNextPlaying,
-    // resetOvWidgets: fromOvWidgets.resetOvWidgets,
-    // resetSlideDecks: fromSlideDecks.resetSlideDecks,
-    // resetSlideDecksOverride: fromSlideDecksOverride.resetSlideDecksOverride,
-    // resetWebs: fromWebs.resetWebs,
-    // resetYoutubeVideos: fromYoutubeVideos.resetYoutubeVideos,
     setAppBlocking: fromAppBlocking.setAppBlocking,
     setBadPlaying: fromBadPlaying.setBadPlaying,
     setCover: fromCover.setCover,
