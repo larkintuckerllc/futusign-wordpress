@@ -1,0 +1,127 @@
+{
+  "screen": {
+    "id": 0,
+    "title": "Test",
+    "subscribedPlaylistIds": [
+      0
+    ],
+    "subscribedOverrideIds": [
+      0
+    ],
+    "overlay": null
+  },
+  "images": [
+    {
+      "id": 1,
+      "title": "Welcome",
+      "file": "http://localhost:8080/data/sample.jpg",
+      "imageDuration": 3,
+      "priority": 1
+    }
+  ],
+  "imagesOverride": [
+    {
+      "id": 1,
+      "title": "Welcome",
+      "file": "http://localhost:8080/data/sample.jpg",
+      "imageDuration": 3,
+      "priority": 1
+    }
+  ],
+  "mediaDecks": [
+    {
+      "id": 2,
+      "title": "Test2",
+      "media": [
+        {
+          "type": "IMAGES",
+          "file": "http://localhost:8080/data/sample.jpg",
+          "imageDuration": 5
+        },
+        {
+          "type": "WEBS",
+          "url": "https://www.futusign.com/",
+          "webDuration": 5
+        },
+        {
+          "type": "YOUTUBE_VIDEOS",
+          "url": "https://youtu.be/LIjMBLVHDQ",
+          "suggestedQuality": "default"
+        }
+      ],
+      "priority": 1
+    }
+  ],
+  "mediaDecksOverride": [
+    {
+      "id": 2,
+      "title": "Test2",
+      "media": [
+        {
+          "type": "IMAGES",
+          "file": "http://localhost:8080/data/sample.jpg",
+          "imageDuration": 5
+        },
+        {
+          "type": "WEBS",
+          "url": "https://www.futusign.com/",
+          "webDuration": 5
+        },
+        {
+          "type": "YOUTUBE_VIDEOS",
+          "url": "https://youtu.be/LIjMBLVHDQ",
+          "suggestedQuality": "default"
+        }
+      ],
+      "priority": 1
+    }
+  ],
+  "webs": [
+    {
+      "id": 3,
+      "title": "Web",
+      "url": "https://www.futusign.com/",
+      "webDuration": 5,
+      "priority": 1
+    }
+  ],
+  "websOverride": [
+    {
+      "id": 3,
+      "title": "Web",
+      "url": "https://www.futusign.com/",
+      "webDuration": 5,
+      "priority": 1
+    }
+  ],
+  "youtubeVideos": [
+    {
+      "id": 4,
+      "title": "Test",
+      "url": "https://youtu.be/LIjMBLVHDQ",
+      "suggestedQuality": "default",
+      "priority": 1
+    }
+  ],
+  "youtubeVideosOverride": [
+    {
+      "id": 4,
+      "title": "Test",
+      "url": "https://youtu.be/LIjMBLVHDQ",
+      "suggestedQuality": "default",
+      "priority": 1
+    }
+  ],
+  "slideDecks": [],
+  "slideDecksOverride": [],
+  "layers": [
+    {
+      "id": 6,
+      "title": "test",
+      "url": "https://www.futusign.com"
+    }
+  ],
+  "overlay": null,
+  "ovWidgets": [],
+  "monitor": null
+}

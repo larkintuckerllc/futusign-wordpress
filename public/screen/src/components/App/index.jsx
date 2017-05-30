@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import firebase from 'firebase/app';
+// import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import { CACHE_INTERVAL, POLLING_INTERVAL, TRANSITION } from '../../strings';
-import { fetchBase } from '../../apis/base';
 import { minLargerPriority } from '../../util/misc';
 import * as fromAppBlocking from '../../ducks/appBlocking';
 import * as fromMonitor from '../../ducks/monitor';
@@ -47,9 +46,9 @@ import Cover from './Cover';
 class App extends Component {
   constructor() {
     super();
+    this.checkRestart = this.checkRestart.bind(this);
     this.fetch = this.fetch.bind(this);
     this.restartPlayingLoop = this.restartPlayingLoop.bind(this);
-    this.fetchSubscribed = this.fetchSubscribed.bind(this);
   }
   componentDidMount() {
     const { setLayerBlocking } = this.props;
@@ -77,199 +76,9 @@ class App extends Component {
     appCache.addEventListener('updateready', handleUpdateReady);
     window.addEventListener('message', handleMessage);
   }
-  fetchSubscribed(screen) {
-    const {
-      fetchImages,
-      fetchMediaDecks,
-      fetchSlideDecks,
-      fetchWebs,
-      fetchYoutubeVideos,
-      fetchLayers,
-      resetImages,
-      resetMediaDecks,
-      resetSlideDecks,
-      resetWebs,
-      resetYoutubeVideos,
-    } = this.props;
-    if (screen.subscribedPlaylistIds.length === 0) {
-      resetImages();
-      resetMediaDecks();
-      resetWebs();
-      resetYoutubeVideos();
-      resetSlideDecks();
-      return Promise.resolve([{
-        response: {
-          result: [],
-          entities: {
-            images: {},
-          },
-        },
-      }, {
-        response: {
-          result: [],
-          entities: {
-            mediaDecks: {},
-          },
-        },
-      }, {
-        response: {
-          result: [],
-          entities: {
-            webs: {},
-          },
-        },
-      }, {
-        response: {
-          result: [],
-          entities: {
-            youtubeVideos: {},
-          },
-        },
-      }, {
-        response: {
-          result: [],
-          entities: {
-            layers: {},
-          },
-        },
-      }, {
-        response: {
-          result: [],
-          entities: {
-            slideDecks: {},
-          },
-        },
-      }]);
-    }
-    return Promise.all([
-      fetchImages(screen.subscribedPlaylistIds),
-      fetchMediaDecks(screen.subscribedPlaylistIds),
-      fetchWebs(screen.subscribedPlaylistIds),
-      fetchYoutubeVideos(screen.subscribedPlaylistIds),
-      fetchLayers(screen.subscribedPlaylistIds),
-      fetchSlideDecks(screen.subscribedPlaylistIds),
-    ]);
-  }
-  fetchSubscribedOverride(screen) {
-    const {
-      fetchImagesOverride,
-      fetchMediaDecksOverride,
-      fetchSlideDecksOverride,
-      resetImagesOverride,
-      resetMediaDecksOverride,
-      resetSlideDecksOverride,
-    } = this.props;
-    if (screen.subscribedOverrideIds.length === 0) {
-      resetImagesOverride();
-      resetMediaDecksOverride();
-      resetSlideDecksOverride();
-      return Promise.resolve([{
-        response: {
-          result: [],
-          entities: {
-            images: {},
-          },
-        },
-      }, {
-        response: {
-          result: [],
-          entities: {
-            mediaDecks: {},
-          },
-        },
-      }, {
-        response: {
-          result: [],
-          entities: {
-            slideDecks: {},
-          },
-        },
-      }]);
-    }
-    return Promise.all([
-      fetchImagesOverride(screen.subscribedOverrideIds),
-      fetchMediaDecksOverride(screen.subscribedOverrideIds),
-      fetchSlideDecksOverride(screen.subscribedOverrideIds),
-    ]);
-  }
-  fetch() {
-    const {
-      badPlaying,
-      fetchMonitor,
-      fetchOverlay,
-      fetchOvWidgets,
-      fetchScreen,
-      images,
-      imagesOverride,
-      layers,
-      mediaDecks,
-      mediaDecksOverride,
-      monitor,
-      offlinePlaying,
-      override,
-      resetOvWidgets,
-      setAppBlocking,
-      setBadPlaying,
-      setConnected,
-      setOfflinePlaying,
-      setOverride,
-      slideDecks,
-      slideDecksOverride,
-      webs,
-      youtubeVideos,
-    } = this.props;
-    fetchBase()
-    .then(() => {
-      // DETECT COMING BACK ONLINE
-      if (offlinePlaying) {
-        window.location.reload();
-      }
-      return fetchScreen();
-    })
-    .then(screen => {
-      if (screen.overlay === null) {
-        resetOvWidgets();
-        return Promise.all([
-          Promise.resolve(null),
-          Promise.resolve(screen),
-        ]);
-      }
-      return Promise.all([
-        fetchOverlay(screen.overlay),
-        Promise.resolve(screen),
-      ]);
-    })
-    .then(([overlay, screen]) => {
-      if (overlay === null) {
-        resetOvWidgets();
-        return screen;
-      }
-      return fetchOvWidgets()
-      .then(() => screen);
-    })
-    .then(screen => Promise.all([
-      this.fetchSubscribed(screen),
-      this.fetchSubscribedOverride(screen),
-      fetchMonitor(),
-      Promise.resolve(screen),
-    ]))
-    .then(([
-      [
-        imagesResponse,
-        mediaDecksResponse,
-        websResponse,
-        youtubeVideosResponse,
-        layersResponse,
-        slideDecksResponse,
-      ],
-      [
-        imagesOverrideResponse,
-        mediaDecksOverrideResponse,
-        slideDecksOverrideResponse,
-      ],
-      monitorResponse,
-      screen,
-    ]) => {
+  checkRestart(response) {
+    window.console.log(response);
+    /*
       let nextOverride = false;
       let usedImagesResponse = imagesResponse;
       let usedMediaDecksResponse = mediaDecksResponse;
@@ -424,7 +233,23 @@ class App extends Component {
       ) {
         this.restartPlayingLoop();
       }
-      return null;
+      */
+  }
+  fetch() {
+    const {
+      fetchScreen,
+      offlinePlaying,
+      setAppBlocking,
+      setBadPlaying,
+      setOfflinePlaying,
+    } = this.props;
+    fetchScreen()
+    .then(response => {
+      if (offlinePlaying) {
+        window.location.reload();
+        return;
+      }
+      this.checkRestart(response);
     })
     .catch(error => {
       setOfflinePlaying(true);
@@ -560,19 +385,19 @@ App.propTypes = {
   cover: PropTypes.bool.isRequired,
   images: PropTypes.array.isRequired,
   imagesOverride: PropTypes.array.isRequired,
-  fetchImages: PropTypes.func.isRequired,
-  fetchImagesOverride: PropTypes.func.isRequired,
-  fetchLayers: PropTypes.func.isRequired,
-  fetchMediaDecks: PropTypes.func.isRequired,
-  fetchMediaDecksOverride: PropTypes.func.isRequired,
+  // fetchImages: PropTypes.func.isRequired,
+  // fetchImagesOverride: PropTypes.func.isRequired,
+  // fetchLayers: PropTypes.func.isRequired,
+  // fetchMediaDecks: PropTypes.func.isRequired,
+  // fetchMediaDecksOverride: PropTypes.func.isRequired,
   fetchOverlay: PropTypes.func.isRequired,
   fetchOvWidgets: PropTypes.func.isRequired,
   fetchMonitor: PropTypes.func.isRequired,
   fetchScreen: PropTypes.func.isRequired,
-  fetchSlideDecks: PropTypes.func.isRequired,
-  fetchSlideDecksOverride: PropTypes.func.isRequired,
-  fetchWebs: PropTypes.func.isRequired,
-  fetchYoutubeVideos: PropTypes.func.isRequired,
+  // fetchSlideDecks: PropTypes.func.isRequired,
+  // fetchSlideDecksOverride: PropTypes.func.isRequired,
+  // fetchWebs: PropTypes.func.isRequired,
+  // fetchYoutubeVideos: PropTypes.func.isRequired,
   layers: PropTypes.array.isRequired,
   layerBlocking: PropTypes.bool.isRequired,
   mediaDecks: PropTypes.array.isRequired,
@@ -583,16 +408,16 @@ App.propTypes = {
   override: PropTypes.bool.isRequired,
   ovWidgets: PropTypes.array.isRequired,
   resetCurrentlyPlaying: PropTypes.func.isRequired,
-  resetImages: PropTypes.func.isRequired,
-  resetImagesOverride: PropTypes.func.isRequired,
-  resetMediaDecks: PropTypes.func.isRequired,
-  resetMediaDecksOverride: PropTypes.func.isRequired,
+  // resetImages: PropTypes.func.isRequired,
+  // resetImagesOverride: PropTypes.func.isRequired,
+  // resetMediaDecks: PropTypes.func.isRequired,
+  // resetMediaDecksOverride: PropTypes.func.isRequired,
   resetNextPlaying: PropTypes.func.isRequired,
   resetOvWidgets: PropTypes.func.isRequired,
-  resetSlideDecks: PropTypes.func.isRequired,
-  resetSlideDecksOverride: PropTypes.func.isRequired,
-  resetWebs: PropTypes.func.isRequired,
-  resetYoutubeVideos: PropTypes.func.isRequired,
+  // resetSlideDecks: PropTypes.func.isRequired,
+  // resetSlideDecksOverride: PropTypes.func.isRequired,
+  // resetWebs: PropTypes.func.isRequired,
+  // resetYoutubeVideos: PropTypes.func.isRequired,
   setAppBlocking: PropTypes.func.isRequired,
   setBadPlaying: PropTypes.func.isRequired,
   setConnected: PropTypes.func.isRequired,
@@ -634,30 +459,30 @@ export default connect(
     youtubeVideos: fromYoutubeVideos.getYoutubeVideos(state),
   }),
   {
-    fetchImages: fromImages.fetchImages,
-    fetchImagesOverride: fromImagesOverride.fetchImagesOverride,
-    fetchLayers: fromLayers.fetchLayers,
-    fetchMediaDecks: fromMediaDecks.fetchMediaDecks,
-    fetchMediaDecksOverride: fromMediaDecksOverride.fetchMediaDecksOverride,
+    // fetchImages: fromImages.fetchImages,
+    // fetchImagesOverride: fromImagesOverride.fetchImagesOverride,
+    // fetchLayers: fromLayers.fetchLayers,
+    // fetchMediaDecks: fromMediaDecks.fetchMediaDecks,
+    // fetchMediaDecksOverride: fromMediaDecksOverride.fetchMediaDecksOverride,
     fetchMonitor: fromMonitor.fetchMonitor,
     fetchOverlay: fromOverlay.fetchOverlay,
     fetchOvWidgets: fromOvWidgets.fetchOvWidgets,
     fetchScreen: fromScreen.fetchScreen,
-    fetchSlideDecks: fromSlideDecks.fetchSlideDecks,
-    fetchSlideDecksOverride: fromSlideDecksOverride.fetchSlideDecksOverride,
-    fetchWebs: fromWebs.fetchWebs,
-    fetchYoutubeVideos: fromYoutubeVideos.fetchYoutubeVideos,
+    // fetchSlideDecks: fromSlideDecks.fetchSlideDecks,
+    // fetchSlideDecksOverride: fromSlideDecksOverride.fetchSlideDecksOverride,
+    // fetchWebs: fromWebs.fetchWebs,
+    // fetchYoutubeVideos: fromYoutubeVideos.fetchYoutubeVideos,
     resetCurrentlyPlaying: fromCurrentlyPlaying.resetCurrentlyPlaying,
-    resetImages: fromImages.resetImages,
-    resetImagesOverride: fromImagesOverride.resetImagesOverride,
-    resetMediaDecks: fromMediaDecks.resetMediaDecks,
-    resetMediaDecksOverride: fromMediaDecksOverride.resetMediaDecksOverride,
+    // resetImages: fromImages.resetImages,
+    // resetImagesOverride: fromImagesOverride.resetImagesOverride,
+    // resetMediaDecks: fromMediaDecks.resetMediaDecks,
+    // resetMediaDecksOverride: fromMediaDecksOverride.resetMediaDecksOverride,
     resetNextPlaying: fromNextPlaying.resetNextPlaying,
     resetOvWidgets: fromOvWidgets.resetOvWidgets,
-    resetSlideDecks: fromSlideDecks.resetSlideDecks,
-    resetSlideDecksOverride: fromSlideDecksOverride.resetSlideDecksOverride,
-    resetWebs: fromWebs.resetWebs,
-    resetYoutubeVideos: fromYoutubeVideos.resetYoutubeVideos,
+    // resetSlideDecks: fromSlideDecks.resetSlideDecks,
+    // resetSlideDecksOverride: fromSlideDecksOverride.resetSlideDecksOverride,
+    // resetWebs: fromWebs.resetWebs,
+    // resetYoutubeVideos: fromYoutubeVideos.resetYoutubeVideos,
     setAppBlocking: fromAppBlocking.setAppBlocking,
     setBadPlaying: fromBadPlaying.setBadPlaying,
     setCover: fromCover.setCover,

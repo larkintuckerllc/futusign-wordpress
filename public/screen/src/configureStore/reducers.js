@@ -6,6 +6,7 @@ import screen from '../ducks/screen';
 import layers from '../ducks/layers';
 import slideDecks from '../ducks/slideDecks';
 import youtubeVideos from '../ducks/youtubeVideos';
+import youtubeVideosOverride from '../ducks/youtubeVideosOverride';
 import currentlyPlaying from '../ducks/currentlyPlaying';
 import currentlyIsPlaying from '../ducks/currentlyIsPlaying';
 import nextPlaying from '../ducks/nextPlaying';
@@ -20,6 +21,7 @@ import cover from '../ducks/cover';
 import priority from '../ducks/priority';
 import minImagePriority from '../ducks/minImagePriority';
 import webs from '../ducks/webs';
+import websOverride from '../ducks/websOverride';
 import slideDecksOverride from '../ducks/slideDecksOverride';
 import imagesOverride from '../ducks/imagesOverride';
 import override from '../ducks/override';
@@ -33,7 +35,6 @@ export default combineReducers({
   badPlaying,
   screen,
   slideDecks,
-  youtubeVideos,
   currentlyPlaying,
   currentlyIsPlaying,
   nextPlaying,
@@ -49,10 +50,13 @@ export default combineReducers({
   priority,
   minImagePriority,
   webs,
+  websOverride,
   slideDecksOverride,
   imagesOverride,
   override,
   counter,
   mediaDecks,
   mediaDecksOverride,
+  youtubeVideos,
+  youtubeVideosOverride,
 });
