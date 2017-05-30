@@ -49,6 +49,7 @@ class Futusign_Public {
 	 */
 	public function query_vars( $query_vars ) {
     $query_vars[] = 'futusign_endpoint';
+		$query_vars[] = 'futusign_screen_id';
 		return $query_vars;
 	}
 	/**
@@ -58,10 +59,16 @@ class Futusign_Public {
 	 * @param    array      $query     query
 	 */
 	public function parse_request( $query ) {
-		if ( array_key_exists( 'futusign_endpoint', $query->query_vars ) ) {
-			include 'partials/futusign-endpoint.php';
-			exit();
+		$query_vars = $query->query_vars;
+		if ( array_key_exists( 'futusign_endpoint', $query_vars ) ) {
+			if ( array_key_exists( 'futusign_screen_id', $query_vars ) ) {
+				include 'partials/futusign-endpoint.php';
+				futusign_endpoint($query_vars['futusign_screen_id']);
+			} else {
+				status_header(400);
+			}
 		}
+		exit();
 		return;
 	}
 }
