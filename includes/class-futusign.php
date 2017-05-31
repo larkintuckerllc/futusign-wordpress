@@ -163,36 +163,36 @@ class Futusign {
 		// SCREEN
 		$screen = $plugin_common->get_screen();
 		$this->loader->add_action('init', $screen, 'register');
-		$this->loader->add_filter('init', $screen, 'register_field_group');
-		$this->loader->add_filter('manage_futusign_screen_posts_custom_column', $screen, 'manage_posts_custom_column', 10, 2 );
+		$this->loader->add_action('init', $screen, 'register_field_group');
+		$this->loader->add_action('manage_futusign_screen_posts_custom_column', $screen, 'manage_posts_custom_column', 10, 2 );
 		$this->loader->add_filter('manage_futusign_screen_posts_columns', $screen, 'manage_posts_columns');
-		$this->loader->add_filter('restrict_manage_posts', $screen, 'restrict_manage_posts');
-		$this->loader->add_filter('parse_query', $screen, 'parse_query');
+		$this->loader->add_action('restrict_manage_posts', $screen, 'restrict_manage_posts');
+		$this->loader->add_action('parse_query', $screen, 'parse_query');
 		// SCREEN - OVERRIDE
-		$this->loader->add_filter('restrict_manage_posts', $screen, 'restrict_manage_posts_override');
-		$this->loader->add_filter('parse_query', $screen, 'parse_query_override');
+		$this->loader->add_action('restrict_manage_posts', $screen, 'restrict_manage_posts_override');
+		$this->loader->add_action('parse_query', $screen, 'parse_query_override');
 		// IMAGE
 		$image = $plugin_common->get_image();
 		$this->loader->add_action('init', $image, 'register');
-		$this->loader->add_filter('init', $image, 'register_field_group');
-		$this->loader->add_filter('manage_futusign_image_posts_custom_column', $image, 'manage_posts_custom_column', 10, 2 );
+		$this->loader->add_action('init', $image, 'register_field_group');
+		$this->loader->add_action('manage_futusign_image_posts_custom_column', $image, 'manage_posts_custom_column', 10, 2 );
 		$this->loader->add_filter('manage_futusign_image_posts_columns', $image, 'manage_posts_columns');
-		$this->loader->add_filter('restrict_manage_posts', $image, 'restrict_manage_posts');
-		$this->loader->add_filter('parse_query', $image, 'parse_query');
+		$this->loader->add_action('restrict_manage_posts', $image, 'restrict_manage_posts');
+		$this->loader->add_action('parse_query', $image, 'parse_query');
 		// IMAGE - OVERRIDE
-		$this->loader->add_filter('restrict_manage_posts', $image, 'restrict_manage_posts_override');
-		$this->loader->add_filter('parse_query', $image, 'parse_query_override');
+		$this->loader->add_action('restrict_manage_posts', $image, 'restrict_manage_posts_override');
+		$this->loader->add_action('parse_query', $image, 'parse_query_override');
 		// SLIDE DECK
 		$slide_deck = $plugin_common->get_slide_deck();
 		$this->loader->add_action('init', $slide_deck, 'register');
-		$this->loader->add_filter('init', $slide_deck, 'register_field_group');
-		$this->loader->add_filter('manage_futusign_slide_deck_posts_custom_column', $slide_deck, 'manage_posts_custom_column', 10, 2 );
+		$this->loader->add_action('init', $slide_deck, 'register_field_group');
+		$this->loader->add_action('manage_futusign_slide_deck_posts_custom_column', $slide_deck, 'manage_posts_custom_column', 10, 2 );
 		$this->loader->add_filter('manage_futusign_slide_deck_posts_columns', $slide_deck, 'manage_posts_columns');
-		$this->loader->add_filter('restrict_manage_posts', $slide_deck, 'restrict_manage_posts');
-		$this->loader->add_filter('parse_query', $slide_deck, 'parse_query');
+		$this->loader->add_action('restrict_manage_posts', $slide_deck, 'restrict_manage_posts');
+		$this->loader->add_action('parse_query', $slide_deck, 'parse_query');
 		// SLIDE DECK - OVERRIDE
-		$this->loader->add_filter('restrict_manage_posts', $slide_deck, 'restrict_manage_posts_override');
-		$this->loader->add_filter('parse_query', $slide_deck, 'parse_query_override');
+		$this->loader->add_action('restrict_manage_posts', $slide_deck, 'restrict_manage_posts_override');
+		$this->loader->add_action('parse_query', $slide_deck, 'parse_query_override');
 	}
 	/**
 	 * Register all of the hooks related to the admin area functionality
