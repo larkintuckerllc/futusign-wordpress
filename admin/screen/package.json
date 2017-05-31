@@ -42,7 +42,12 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
+    "normalizr": "^3.2.3",
     "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "react-redux": "^5.0.5",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0",
+    "reselect": "^3.0.1"
   }
 }

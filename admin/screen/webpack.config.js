@@ -7,6 +7,9 @@ const BablePluginTransformObjectRestSpread = require('babel-plugin-transform-obj
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = env => ({
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
   devtool: env === 'production' ? 'source-map' : 'cheap-eval-source-map',
   entry: './src/index.jsx',
   output: {
