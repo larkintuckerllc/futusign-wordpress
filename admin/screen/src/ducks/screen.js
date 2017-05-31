@@ -15,8 +15,6 @@ export const RESET_FETCH_SCREEN_ERROR = `${ACTION_PREFIX}RESET_FETCH_SCREEN_ERRO
 // REDUCERS
 const value = (state = {
   id: SCREEN_ID,
-  title: null,
-  subscribedPlaylistIds: [],
 }, action) => {
   switch (action.type) {
     case FETCH_SCREEN_SUCCESS:
@@ -54,9 +52,9 @@ export default combineReducers({
   fetchErrorMessage,
 });
 // ACCESSORS AKA SELECTORS
-export const getScreen = (state) => state[reducerMountPoint].value;
-export const getIsFetchingScreen = (state) => state[reducerMountPoint].isFetching;
-export const getFetchScreenErrorMessage = (state) => state[reducerMountPoint].fetchErrorMessage;
+export const getScreen = state => state[reducerMountPoint].value;
+export const getIsFetchingScreen = state => state[reducerMountPoint].isFetching;
+export const getFetchScreenErrorMessage = state => state[reducerMountPoint].fetchErrorMessage;
 // ACTION CREATOR VALIDATORS
 // ACTION CREATORS
 export const fetchScreen = () => (dispatch, getState) => {
@@ -68,34 +66,20 @@ export const fetchScreen = () => (dispatch, getState) => {
   });
   return get(screen.id)
     .then(
-      response => {
+      (response) => {
         dispatch({
           type: FETCH_SCREEN_SUCCESS,
           response: response.screen,
         });
-        dispatch(setImages(response.images));
-        dispatch(setImagesOverride(response.imagesOverride));
-        dispatch(setMediaDecks(response.mediaDecks));
-        dispatch(setMediaDecksOverride(response.mediaDecksOverride));
-        dispatch(setWebs(response.webs));
-        dispatch(setWebsOverride(response.websOverride));
-        dispatch(setYoutubeVideos(response.youtubeVideos));
-        dispatch(setYoutubeVideosOverride(response.youtubeVideosOverride));
-        dispatch(setSlideDecks(response.slideDecks));
-        dispatch(setSlideDecksOverride(response.slideDecksOverride));
-        dispatch(setLayers(response.layers));
-        dispatch(setOverlay(response.overlay));
-        dispatch(setOvWidgets(response.ovWidgets));
-        dispatch(setMonitor(response.monitor));
         return response;
       },
-      error => {
+      (error) => {
         dispatch({
           type: FETCH_SCREEN_ERROR,
           message: error.message,
         });
         throw new ServerException(error.message);
-      }
+      },
     );
 };
 export const resetFetchScreenError = () => ({

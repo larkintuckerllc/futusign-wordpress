@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import appBlocking from '../ducks/appBlocking';
+import screen from '../ducks/screen';
 
 export default combineReducers({
-  appBlocking,
+  screen,
 });
