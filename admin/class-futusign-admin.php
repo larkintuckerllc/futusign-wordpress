@@ -64,7 +64,7 @@ class Futusign_Admin {
 			$screen = get_current_screen();
 			if( is_object( $screen ) && $cpt == $screen->post_type ){
 				wp_register_script('futusign_admin_screen',
-					plugin_dir_url( __FILE__ ) . 'screen/dist/index.js',
+					plugin_dir_url( __FILE__ ) . 'screen/dist/main.bundle.js',
 					array(),
 					'2017053101', true
 				);
