@@ -27,7 +27,6 @@ class PlayerYoutubeVideos extends Component {
       nextPlaying,
       setBadPlaying,
       setCover,
-      setOfflinePlaying,
       setNextIsReady,
       youtubeVideos,
     } = this.props;
@@ -43,7 +42,7 @@ class PlayerYoutubeVideos extends Component {
       if (window.futusignYoutubePlayer === undefined) {
         this.readyTimeout = window.setTimeout(() => {
           if (window.futusignYoutubePlayer === undefined) {
-            setOfflinePlaying(true);
+            setBadPlaying(true);
             return;
           }
           if (!this.validVideos()) {
@@ -146,8 +145,8 @@ class PlayerYoutubeVideos extends Component {
     }
   }
   handleYoutubeError() {
-    const { setOfflinePlaying } = this.props;
-    setOfflinePlaying(true);
+    const { setBadPlaying } = this.props;
+    setBadPlaying(true);
   }
   validVideos() {
     const { youtubeVideos } = this.props;
@@ -177,7 +176,6 @@ PlayerYoutubeVideos.propTypes = {
   setCover: PropTypes.func.isRequired,
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
-  setOfflinePlaying: PropTypes.func.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
 };
 export default PlayerYoutubeVideos;

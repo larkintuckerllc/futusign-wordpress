@@ -2,6 +2,7 @@
   "screen": {
     "id": 0,
     "title": "Sample",
+    "polling": 60,
     "subscribedPlaylistIds": [
       0
     ],
@@ -132,14 +133,5 @@
       "url": "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/cat-icon.png"
     }
   ],
-  "monitor": {
-    "apiKey": "AIzaSyCHlnyTagJHHRutt6p11wyYFd27N5AQ7cc",
-    "authDomain": "test-12880.firebaseapp.com",
-    "databaseURL": "https://test-12880.firebaseio.com",
-    "projectId": "test-12880",
-    "storageBucket": "test-12880.appspot.com",
-    "messagingSenderId": "68843491940",
-    "email": "john@larkintuckerllc.com",
-    "password": "FIonly00"
-  }
+  "monitor": null
 }

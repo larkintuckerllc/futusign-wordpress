@@ -56,11 +56,14 @@ function futusign_endpoint($screen_id) {
 			$override_terms = get_the_terms( $id, 'futusign_override');
 			$subscribed_override_ids = $override_terms ? array_map('term_to_id', $override_terms) : [];
 		}
+		// POLLING
+		$polling = get_field('polling');
 		// OVERLAY
 		$overlayPost = get_field('overlay');
 		$screen = array(
 			'id' => $id,
 			'title' => get_the_title(),
+			'polling' => $polling ? intval( $polling ) : 60, // OPTIONAL IN OLDER VERSIONS
 			'subscribedPlaylistIds' => $subscribed_playlist_ids,
 			'subscribedOverrideIds' => $subscribed_override_ids,
 			'overlay' => $overlayPost ? $overlayPost->ID : null

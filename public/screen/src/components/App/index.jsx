@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import { CACHE_INTERVAL, POLLING_INTERVAL, TRANSITION } from '../../strings';
+import { CACHE_INTERVAL, ERROR_POLLING_INTERVAL, TRANSITION } from '../../strings';
 import { minLargerPriority } from '../../util/misc';
 import * as fromAppBlocking from '../../ducks/appBlocking';
 import * as fromMonitor from '../../ducks/monitor';
@@ -72,7 +72,6 @@ class App extends Component {
       }
     };
     this.fetch();
-    window.setInterval(this.fetch, POLLING_INTERVAL * 1000);
     window.setInterval(check, CACHE_INTERVAL * 1000);
     appCache.addEventListener('updateready', handleUpdateReady);
     window.addEventListener('message', handleMessage);
@@ -220,6 +219,7 @@ class App extends Component {
       ) {
         this.restartPlayingLoop();
       }
+      window.setTimeout(this.fetch, screen.polling * 60 * 1000);
     })
     .catch(error => {
       setOfflinePlaying(true);
@@ -230,6 +230,7 @@ class App extends Component {
         window.console.log(error);
         return;
       }
+      window.setTimeout(this.fetch, ERROR_POLLING_INTERVAL * 1000);
     });
   }
   restartPlayingLoop() {

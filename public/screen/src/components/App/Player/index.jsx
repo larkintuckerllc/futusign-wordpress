@@ -11,7 +11,6 @@ import * as fromNextIsReady from '../../../ducks/nextIsReady';
 import * as fromBadPlaying from '../../../ducks/badPlaying';
 import * as fromCover from '../../../ducks/cover';
 import * as fromCounter from '../../../ducks/counter';
-import * as fromOfflinePlaying from '../../../ducks/offlinePlaying';
 import * as fromPriority from '../../../ducks/priority';
 import { getMinImagePriority } from '../../../ducks/minImagePriority';
 import PlayerTransition from './PlayerTransition';
@@ -239,7 +238,6 @@ class Player extends Component {
       setCover,
       setCurrentlyIsPlaying,
       setNextIsReady,
-      setOfflinePlaying,
     } = this.props;
     return (
       <div>
@@ -290,7 +288,6 @@ class Player extends Component {
           setCover={setCover}
           setCurrentlyIsPlaying={setCurrentlyIsPlaying}
           setNextIsReady={setNextIsReady}
-          setOfflinePlaying={setOfflinePlaying}
           youtubeVideos={this.filteredYoutubeVideos}
         />
         <PlayerSlideDecks
@@ -323,7 +320,6 @@ Player.propTypes = {
   setCurrentlyIsPlaying: PropTypes.func.isRequired,
   setNextIsReady: PropTypes.func.isRequired,
   setNextPlaying: PropTypes.func.isRequired,
-  setOfflinePlaying: PropTypes.func.isRequired,
   setPriority: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
   webs: PropTypes.array.isRequired,
@@ -346,7 +342,6 @@ export default connect(
     setCurrentlyIsPlaying: fromCurrentlyIsPlaying.setCurrentlyIsPlaying,
     setNextIsReady: fromNextIsReady.setNextIsReady,
     setNextPlaying: fromNextPlaying.setNextPlaying,
-    setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
     setPriority: fromPriority.setPriority,
   }
 )(Player);

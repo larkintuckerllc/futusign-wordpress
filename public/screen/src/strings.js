@@ -14,7 +14,7 @@ export const MONITOR_API_ENDPOINT = 'fs-monitor';
 export const OVERLAYS_API_ENDPOINT = 'fs-overlays';
 export const OVERRIDES_API_ENDPOINT = 'fs-overrides';
 export const CACHE_INTERVAL = 60 * 60;
-export const POLLING_INTERVAL = 60 * 60;
+export const ERROR_POLLING_INTERVAL = 60;
 export const OV_WIDGETS_API_ENDPOINT = 'fs-ov-widgets';
 // PLAYERS
 export const TRANSITION = 'TRANSITION';
