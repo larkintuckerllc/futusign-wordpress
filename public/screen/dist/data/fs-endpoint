@@ -54,37 +54,8 @@
     }
   ],
   "mediaDecksOverride": [
-    {
-      "id": 2,
-      "title": "B",
-      "media": [
-        {
-          "type": "IMAGES",
-          "file": "http://localhost:8080/data/sample.jpg",
-          "imageDuration": 5
-        },
-        {
-          "type": "WEBS",
-          "url": "https://www.futusign.com/",
-          "webDuration": 5
-        },
-        {
-          "type": "YOUTUBE_VIDEOS",
-          "url": "https://youtu.be/LIjMBLVHDQs",
-          "suggestedQuality": "default"
-        }
-      ],
-      "priority": 1
-    }
   ],
   "webs": [
-    {
-      "id": 3,
-      "title": "C",
-      "url": "https://www.futusign.com/",
-      "webDuration": 5,
-      "priority": 1
-    }
   ],
   "websOverride": [
     {
@@ -96,13 +67,6 @@
     }
   ],
   "youtubeVideos": [
-    {
-      "id": 4,
-      "title": "D",
-      "url": "https://youtu.be/LIjMBLVHDQs",
-      "suggestedQuality": "default",
-      "priority": 1
-    }
   ],
   "youtubeVideosOverride": [
     {

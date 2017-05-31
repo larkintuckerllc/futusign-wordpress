@@ -252,7 +252,9 @@ class App extends Component {
       slideDecks,
       slideDecksOverride,
       webs,
+      websOverride,
       youtubeVideos,
+      youtubeVideosOverride,
     } = this.props;
     let usedSlideDecks = slideDecks;
     let usedImages = images;
@@ -263,8 +265,8 @@ class App extends Component {
       usedSlideDecks = slideDecksOverride;
       usedMediaDecks = mediaDecksOverride;
       usedImages = imagesOverride;
-      usedWebs = [];
-      usedYoutubeVideos = [];
+      usedWebs = websOverride;
+      usedYoutubeVideos = youtubeVideosOverride;
     }
     setNextIsReady(false);
     setCurrentlyIsPlaying(false);
@@ -303,7 +305,9 @@ class App extends Component {
       slideDecks,
       slideDecksOverride,
       webs,
+      websOverride,
       youtubeVideos,
+      youtubeVideosOverride,
     } = this.props;
     const lastImageURL = window.localStorage.getItem('futusign_image_url');
     let usedImages = images;
@@ -314,8 +318,8 @@ class App extends Component {
     if (override) {
       usedImages = imagesOverride;
       usedMediaDecks = mediaDecksOverride;
-      usedWebs = [];
-      usedYoutubeVideos = [];
+      usedWebs = websOverride;
+      usedYoutubeVideos = youtubeVideosOverride;
       usedSlideDecks = slideDecksOverride;
     }
     if (appBlocking) return <Blocking />;
