@@ -1,6 +1,17 @@
 import { combineReducers } from 'redux';
 import { ACTION_PREFIX, SCREEN_ID } from '../strings';
 import { ServerException } from '../util/exceptions';
+import { setImages } from './images';
+import { setImagesOverride } from './imagesOverride';
+import { setWebs } from './webs';
+import { setWebsOverride } from './websOverride';
+import { setYoutubeVideos } from './youtubeVideos';
+import { setYoutubeVideosOverride } from './youtubeVideosOverride';
+import { setSlideDecks } from './slideDecks';
+import { setSlideDecksOverride } from './slideDecksOverride';
+import { setLayers } from './layers';
+import { setMediaDecks } from './mediaDecks';
+import { setMediaDecksOverride } from './mediaDecksOverride';
 // API
 import { get } from '../apis/endpoint';
 
@@ -71,6 +82,17 @@ export const fetchScreen = () => (dispatch, getState) => {
           type: FETCH_SCREEN_SUCCESS,
           response: response.screen,
         });
+        dispatch(setImages(response.images));
+        dispatch(setImagesOverride(response.imagesOverride));
+        dispatch(setMediaDecks(response.mediaDecks));
+        dispatch(setMediaDecksOverride(response.mediaDecksOverride));
+        dispatch(setWebs(response.webs));
+        dispatch(setWebsOverride(response.websOverride));
+        dispatch(setYoutubeVideos(response.youtubeVideos));
+        dispatch(setYoutubeVideosOverride(response.youtubeVideosOverride));
+        dispatch(setSlideDecks(response.slideDecks));
+        dispatch(setSlideDecksOverride(response.slideDecksOverride));
+        dispatch(setLayers(response.layers));
         return response;
       },
       (error) => {
