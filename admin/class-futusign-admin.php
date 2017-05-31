@@ -26,13 +26,49 @@ class Futusign_Admin {
 	 */
 	public function __construct() {
 	}
+	/**
+	 * Render Currently Playing Metabox for Screen
+	 *
+	 * @since    2.2.0
+	 */
+	public function render_screen_playing() {
+		echo '<div id="root"></div>';
+	}
+	/**
+	 * Add Currently Playing Metabox for Screen
+	 *
+	 * @since    2.2.0
+	 */
+	public function add_meta_boxes_futusign_screen() {
+		$screen = get_current_screen();
+		if ( 'add' !== $screen->action ) {
+			add_meta_box(
+				'futusign_screen_playing',
+				__( 'Currently Playing', 'futusign'),
+				array($this, 'render_screen_playing'),
+				'futusign_screen',
+				'normal',
+				'default'
+	    );
+		}
+	}
+	/**
+	 * Enqueue Admin Scripts for Screen
+	 *
+	 * @since    2.2.0
+	 * @param    string     $hook_suffix      The page.
+	 */
 	public function admin_enqueue_scripts ( $hook_suffix ) {
 		$cpt = 'futusign_screen';
 		if( in_array( $hook_suffix, array( 'post.php' ) ) ){
 			$screen = get_current_screen();
 			if( is_object( $screen ) && $cpt == $screen->post_type ){
-				// TODO: ADD SCRIPT TO LIST
-				// Register, enqueue scripts and styles here
+				wp_register_script('futusign_admin_screen',
+					plugin_dir_url( __FILE__ ) . 'screen/dist/index.js',
+					array(),
+					'2017053101', true
+				);
+				wp_enqueue_script('futusign_admin_screen');
 			}
 		}
 	}
