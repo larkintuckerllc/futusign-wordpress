@@ -41,8 +41,8 @@ class Futusign_Inactive {
 	 * @since    0.3.0
 	 */
 	public function missing_plugins_notice() {
-		if ( ! Futusign::is_plugin_active( 'acf-to-rest-api' ) ) {
-			include plugin_dir_path( __FILE__ ) . 'partials/futusign-missing-acf-to-rest-api.php';
+		if ( ! Futusign::is_plugin_active( 'acf' ) ) {
+			include plugin_dir_path( __FILE__ ) . 'partials/futusign-missing-acf.php';
 		}
 	}
 }

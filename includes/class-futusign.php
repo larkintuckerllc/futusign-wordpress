@@ -27,10 +27,10 @@ class Futusign {
 	 * @var      string    $plugin    Indicates which plugin(s) to check for.
 	 */
 	public static function is_plugin_active( $plugin ) {
-		if ( 'acf-to-rest-api' == $plugin ) {
-			return class_exists( 'ACF_TO_REST_API' );
+		if ( 'acf' == $plugin ) {
+			return class_exists( 'acf' );
 		} elseif ( 'all' == $plugin ) {
-			return class_exists( 'WP_REST_Controller' ) && class_exists( 'acf' ) && class_exists ( 'ACF_TO_REST_API' );
+			return class_exists( 'acf' );
 		}
 		return false;
 	}
@@ -45,8 +45,8 @@ class Futusign {
 			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
 		$paths = false;
-		if ( 'acf-to-rest-api' == $plugin ) {
-			$paths = array( 'acf-to-rest-api/class-acf-to-rest-api.php' );
+		if ( 'acf' == $plugin ) {
+			$paths = array( 'advanced-custom-fields-pro/acf.php', 'acf-pro/acf.php', 'advanced-custom-fields/acf.php' );
 		}
 		if ( $paths ) {
 			$plugins = get_plugins();

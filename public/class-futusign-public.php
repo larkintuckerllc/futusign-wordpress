@@ -67,8 +67,8 @@ class Futusign_Public {
 			} else {
 				status_header(400);
 			}
+			exit();
 		}
-		exit();
 		return;
 	}
 }
