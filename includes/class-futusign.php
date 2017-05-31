@@ -203,6 +203,7 @@ class Futusign {
 	 */
 	private function define_admin_hooks() {
 		$plugin_admin = new Futusign_Admin();
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'admin_enqueue_scripts');
 	}
 	/**
 	 * Register all of the hooks related to the public-facing functionality

@@ -26,4 +26,14 @@ class Futusign_Admin {
 	 */
 	public function __construct() {
 	}
+	public function admin_enqueue_scripts ( $hook_suffix ) {
+		$cpt = 'futusign_screen';
+		if( in_array( $hook_suffix, array( 'post.php' ) ) ){
+			$screen = get_current_screen();
+			if( is_object( $screen ) && $cpt == $screen->post_type ){
+				// TODO: ADD SCRIPT TO LIST
+				// Register, enqueue scripts and styles here
+			}
+		}
+	}
 }
