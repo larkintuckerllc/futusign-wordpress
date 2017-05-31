@@ -31,8 +31,12 @@ class Futusign_Admin {
 	 *
 	 * @since    2.2.0
 	 */
-	public function render_screen_playing() {
+	public function render_screen_playing( $post ) {
 		echo '<div id="root"></div>';
+		echo '<script>';
+		echo "window.siteUrl = '" . trailingslashit( site_url() ) . "';";
+		echo "window.screenId = " . $post->ID . ";";
+		echo '</script>';
 	}
 	/**
 	 * Add Currently Playing Metabox for Screen
