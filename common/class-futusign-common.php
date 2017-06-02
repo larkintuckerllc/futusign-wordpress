@@ -75,16 +75,6 @@ class Futusign_Common {
 		require_once plugin_dir_path( __FILE__ ) . 'class-futusign-playlist.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-futusign-image.php';
 	}
-	// DUPLICATED IN INACTIVE
-	/**
-	 * Flush on upgrade
-	 *
-	 * @since    2.2.1
-	 */
-	public function upgrader_process_complete() {
-		require_once plugin_dir_path( __FILE__ ) . '../includes/class-futusign-activator.php';
-		Futusign_Activator::activate();
-	}
 	/**
 	 * Retrieve the screen.
 	 *

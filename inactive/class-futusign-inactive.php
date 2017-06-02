@@ -28,16 +28,6 @@ class Futusign_Inactive {
 	}
 	// DUPLICATED IN COMMON
 	/**
-	 * Flush on upgrade
-	 *
-	 * @since    2.2.1
-	 */
-	public function upgrader_process_complete() {
-		require_once plugin_dir_path( __FILE__ ) . '../includes/class-futusign-activator.php';
-		Futusign_Activator::activate();
-	}
-	// DUPLICATED IN COMMON
-	/**
 	 * Add rewrite rules
 	 *
 	 * @since    2.1.2
