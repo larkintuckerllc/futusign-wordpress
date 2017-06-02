@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import appBlocking from '../ducks/appBlocking';
 import images from '../ducks/images';
 import imagesOverride from '../ducks/imagesOverride';
 import layers from '../ducks/layers';
@@ -13,6 +14,7 @@ import youtubeVideos from '../ducks/youtubeVideos';
 import youtubeVideosOverride from '../ducks/youtubeVideosOverride';
 
 export default combineReducers({
+  appBlocking,
   images,
   imagesOverride,
   layers,

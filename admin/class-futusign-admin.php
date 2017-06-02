@@ -32,11 +32,15 @@ class Futusign_Admin {
 	 * @since    2.2.0
 	 */
 	public function render_screen_playing( $post ) {
-		echo '<div id="root"></div>';
-		echo '<script>';
-		echo "window.siteUrl = '" . trailingslashit( site_url() ) . "';";
-		echo "window.screenId = " . $post->ID . ";";
-		echo '</script>';
+		?>
+		<div id="root"></div>
+
+		<script>
+			window.siteUrl = "<?php echo trailingslashit( site_url() );?>";
+			window.screenId = <?php echo $post->ID; ?>;
+			window.priority = <?php echo class_exists( 'Futusign_Priority' ) ? 'true' : 'false'; ?>;
+		</script>
+		<?php
 	}
 	/**
 	 * Add Currently Playing Metabox for Screen
