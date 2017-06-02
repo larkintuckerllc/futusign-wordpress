@@ -82,7 +82,8 @@ class Futusign_Common {
 	 * @since    2.2.1
 	 */
 	public function upgrader_process_complete() {
-		flush_rewrite_rules();
+		require_once plugin_dir_path( __FILE__ ) . '../includes/class-futusign-activator.php';
+		Futusign_Activator::activate();
 	}
 	/**
 	 * Retrieve the screen.
