@@ -42,6 +42,7 @@ class Futusign_Common {
 	 * @access   private
 	 * @var      Futusign_Playlist    $playlist    The playlist.
 	 */
+	private $playlist;
 	/**
 	 * The image.
 	 *
@@ -50,13 +51,11 @@ class Futusign_Common {
 	 * @var      Futusign_Image    $image    The image
 	 */
 	private $image;
-	private $playlist;
 	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    0.3.0
 	 */
-
 	public function __construct() {
 		$this->load_dependencies();
 		$this->screen = new Futusign_Screen();
@@ -75,6 +74,15 @@ class Futusign_Common {
 		require_once plugin_dir_path( __FILE__ ) . 'class-futusign-slide-deck.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-futusign-playlist.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-futusign-image.php';
+	}
+	// DUPLICATED IN INACTIVE
+	/**
+	 * Flush on upgrade
+	 *
+	 * @since    2.2.1
+	 */
+	public function upgrader_process_complete() {
+		flush_rewrite_rules();
 	}
 	/**
 	 * Retrieve the screen.

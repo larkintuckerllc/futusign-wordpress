@@ -92,7 +92,7 @@ class Futusign {
 	 */
 	public function __construct() {
 		$this->plugin_name = 'futusign';
-		$this->version = '2.2.0';
+		$this->version = '2.2.1';
 		$this->load_dependencies();
 		$this->set_locale();
 		if (Futusign::is_plugin_active('all')) {
@@ -145,6 +145,7 @@ class Futusign {
 	 */
 	private function define_inactive_hooks() {
 		$plugin_inactive = new Futusign_Inactive();
+		$this->loader->add_action('upgrader_process_complete', $plugin_inactive, 'upgrader_process_complete');
 		$this->loader->add_action('init', $plugin_inactive, 'add_rewrite_rules');
 		$this->loader->add_action('admin_notices', $plugin_inactive, 'missing_plugins_notice' );
 	}
@@ -156,6 +157,7 @@ class Futusign {
 	 */
 	private function define_common_hooks() {
 		$plugin_common = new Futusign_Common();
+		$this->loader->add_action('upgrader_process_complete', $plugin_common, 'upgrader_process_complete');
 		// ENDPOINT
 		$this->loader->add_action('init', $plugin_common, 'add_rewrite_rules');
 		// PLAYLIST

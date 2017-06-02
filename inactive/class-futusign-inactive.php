@@ -28,6 +28,15 @@ class Futusign_Inactive {
 	}
 	// DUPLICATED IN COMMON
 	/**
+	 * Flush on upgrade
+	 *
+	 * @since    2.2.1
+	 */
+	public function upgrader_process_complete() {
+		flush_rewrite_rules();
+	}
+	// DUPLICATED IN COMMON
+	/**
 	 * Add rewrite rules
 	 *
 	 * @since    2.1.2
