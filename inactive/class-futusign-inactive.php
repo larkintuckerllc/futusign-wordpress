@@ -26,14 +26,23 @@ class Futusign_Inactive {
 	 */
 	public function __construct() {
 	}
+	// DUPLICATED IN COMMON
+	/**
+	 * Add rewrite rules
+	 *
+	 * @since    2.1.2
+	 */
+	public function add_rewrite_rules() {
+		add_rewrite_rule( '^fs-endpoint/?', 'index.php?futusign_endpoint=1', 'top' );
+	}
 	/**
 	 * Display missing plugin dependency notices.
 	 *
 	 * @since    0.3.0
 	 */
 	public function missing_plugins_notice() {
-		if ( ! Futusign::is_plugin_active( 'acf-to-rest-api' ) ) {
-			include plugin_dir_path( __FILE__ ) . 'partials/futusign-missing-acf-to-rest-api.php';
+		if ( ! Futusign::is_plugin_active( 'acf' ) ) {
+			include plugin_dir_path( __FILE__ ) . 'partials/futusign-missing-acf.php';
 		}
 	}
 }

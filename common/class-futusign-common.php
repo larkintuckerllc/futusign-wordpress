@@ -42,6 +42,7 @@ class Futusign_Common {
 	 * @access   private
 	 * @var      Futusign_Playlist    $playlist    The playlist.
 	 */
+	private $playlist;
 	/**
 	 * The image.
 	 *
@@ -50,13 +51,11 @@ class Futusign_Common {
 	 * @var      Futusign_Image    $image    The image
 	 */
 	private $image;
-	private $playlist;
 	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    0.3.0
 	 */
-
 	public function __construct() {
 		$this->load_dependencies();
 		$this->screen = new Futusign_Screen();
@@ -111,5 +110,14 @@ class Futusign_Common {
  */
 	public function get_image() {
 		return $this->image;
+	}
+	// DUPLICATED IN INACTIVE
+	/**
+	 * Add rewrite rules
+	 *
+	 * @since    2.1.2
+	 */
+	public function add_rewrite_rules() {
+		add_rewrite_rule( '^fs-endpoint/?', 'index.php?futusign_endpoint=1', 'top' );
 	}
 }

@@ -1,4 +1,4 @@
-import { ACTION_PREFIX } from '../strings';
+import { ACTION_PREFIX, ERROR_POLLING_INTERVAL } from '../strings';
 
 // API
 // REDUCER MOUNT POINT
@@ -23,6 +23,11 @@ const validBadPlaying = value =>
 // ACTION CREATORS
 export const setBadPlaying = (value) => {
   if (!validBadPlaying(value)) throw new Error();
+  if (value) {
+    window.setTimeout(() => {
+      window.location.reload();
+    }, ERROR_POLLING_INTERVAL * 1000);
+  }
   return ({
     type: SET_BAD_PLAYING,
     value,

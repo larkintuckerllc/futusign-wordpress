@@ -40,4 +40,35 @@ class Futusign_Public {
 		}
 		return $single;
 	}
+	/**
+	 * Add to query variables
+	 *
+	 * @since    2.1.2
+	 * @param    array      $query_vars     query variables
+	 * @return   array      query variables
+	 */
+	public function query_vars( $query_vars ) {
+    $query_vars[] = 'futusign_endpoint';
+		$query_vars[] = 'futusign_screen_id';
+		return $query_vars;
+	}
+	/**
+	 * Define futusign-monitor endpoint
+	 *
+	 * @since    2.1.2
+	 * @param    array      $query     query
+	 */
+	public function parse_request( $query ) {
+		$query_vars = $query->query_vars;
+		if ( array_key_exists( 'futusign_endpoint', $query_vars ) ) {
+			if ( array_key_exists( 'futusign_screen_id', $query_vars ) ) {
+				include 'partials/futusign-endpoint.php';
+				futusign_endpoint($query_vars['futusign_screen_id']);
+			} else {
+				status_header(400);
+			}
+			exit();
+		}
+		return;
+	}
 }

@@ -1,0 +1,101 @@
+{
+  "screen": {
+    "id": 0,
+    "title": "Sample",
+    "polling": 60,
+    "subscribedPlaylistIds": [
+      0
+    ],
+    "subscribedOverrideIds": [
+      0
+    ],
+    "overlay": null
+  },
+  "images": [
+    {
+      "id": 1,
+      "title": "A",
+      "file": "http://localhost:8080/data/sample.jpg",
+      "imageDuration": 3,
+      "priority": 1
+    }
+  ],
+  "imagesOverride": [
+    {
+      "id": 1,
+      "title": "A",
+      "file": "http://localhost:8080/data/sample.jpg",
+      "imageDuration": 3,
+      "priority": 1
+    }
+  ],
+  "mediaDecks": [
+    {
+      "id": 2,
+      "title": "B",
+      "media": [
+        {
+          "type": "IMAGES",
+          "file": "http://localhost:8080/data/sample.jpg",
+          "imageDuration": 5
+        },
+        {
+          "type": "WEBS",
+          "url": "https://www.futusign.com/",
+          "webDuration": 5
+        },
+        {
+          "type": "YOUTUBE_VIDEOS",
+          "url": "https://youtu.be/LIjMBLVHDQs",
+          "suggestedQuality": "default"
+        }
+      ],
+      "priority": 1
+    }
+  ],
+  "mediaDecksOverride": [
+  ],
+  "webs": [
+  ],
+  "websOverride": [
+    {
+      "id": 3,
+      "title": "C",
+      "url": "https://www.futusign.com/",
+      "webDuration": 5,
+      "priority": 1
+    }
+  ],
+  "youtubeVideos": [
+  ],
+  "youtubeVideosOverride": [
+    {
+      "id": 4,
+      "title": "D",
+      "url": "https://youtu.be/LIjMBLVHDQs",
+      "suggestedQuality": "default",
+      "priority": 1
+    }
+  ],
+  "slideDecks": [],
+  "slideDecksOverride": [],
+  "layers": [],
+  "overlay": {
+    "id": 7,
+    "upperLeft": 8,
+    "upperMiddle": 8,
+    "upperRight": 8,
+    "middleLeft": 8,
+    "middleRight": 8,
+    "lowerLeft": 8,
+    "lowerMiddle": 8,
+    "lowerRight": 8
+  },
+  "ovWidgets": [
+    {
+      "id": 8,
+      "url": "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/cat-icon.png"
+    }
+  ],
+  "monitor": null
+}

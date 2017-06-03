@@ -3,7 +3,7 @@ Contributors: sckmkny
 Tags: digital, signage
 Requires at least: 4.3
 Tested up to: 4.7
-Stable tag: 2.1.1
+Stable tag: 2.2.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -21,6 +21,31 @@ Install and activate the *futusign* plugin via the WordPress *Plugins* admin
 screen.
 
 == Changelog ==
+
+= 2.2.3 =
+
+Bug fix: Hopefully final attempt to fix problem during upgrade;
+current work-around is to deactivate and activate the plugin.
+
+= 2.2.2 =
+
+Bug fix: Try to fix problem during upgrade; current work-around is to
+deactivate and activate the plugin.
+
+= 2.2.1 =
+
+Bug fix: On upgrade to 2.2.0, the plugin needed to be reactivated
+before screens would play again.
+
+= 2.2.0 =
+
+Enhancement: Currently playing / layers summary on screens.
+
+Enhancement: Screen polling cycle choice; default hour.
+
+Enhancement: No longer dependent on ACF to Rest plugin.
+
+Performance fix: Collapsed poll from 10+ polls to a single poll.
 
 = 2.1.1 =
 

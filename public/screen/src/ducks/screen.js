@@ -1,8 +1,23 @@
 import { combineReducers } from 'redux';
 import { ACTION_PREFIX, SCREEN_ID } from '../strings';
 import { ServerException } from '../util/exceptions';
+import { setImages } from './images';
+import { setImagesOverride } from './imagesOverride';
+import { setWebs } from './webs';
+import { setWebsOverride } from './websOverride';
+import { setYoutubeVideos } from './youtubeVideos';
+import { setYoutubeVideosOverride } from './youtubeVideosOverride';
+import { setSlideDecks } from './slideDecks';
+import { setSlideDecksOverride } from './slideDecksOverride';
+import { setLayers } from './layers';
+import { setMediaDecks } from './mediaDecks';
+import { setMediaDecksOverride } from './mediaDecksOverride';
+import { setOverlay } from './overlay';
+import { setOvWidgets } from './ovWidgets';
+import { setMonitor } from './monitor';
 // API
-import { get } from '../apis/screen';
+import { get } from '../apis/endpoint';
+
 // REDUCER MOUNT POINT
 const reducerMountPoint = 'screen';
 // ACTIONS
@@ -14,8 +29,6 @@ export const RESET_FETCH_SCREEN_ERROR = `${ACTION_PREFIX}RESET_FETCH_SCREEN_ERRO
 // REDUCERS
 const value = (state = {
   id: SCREEN_ID,
-  title: null,
-  subscribedPlaylistIds: [],
 }, action) => {
   switch (action.type) {
     case FETCH_SCREEN_SUCCESS:
@@ -67,10 +80,27 @@ export const fetchScreen = () => (dispatch, getState) => {
   });
   return get(screen.id)
     .then(
-      response => dispatch({
-        type: FETCH_SCREEN_SUCCESS,
-        response,
-      }).response,
+      response => {
+        dispatch({
+          type: FETCH_SCREEN_SUCCESS,
+          response: response.screen,
+        });
+        dispatch(setImages(response.images));
+        dispatch(setImagesOverride(response.imagesOverride));
+        dispatch(setMediaDecks(response.mediaDecks));
+        dispatch(setMediaDecksOverride(response.mediaDecksOverride));
+        dispatch(setWebs(response.webs));
+        dispatch(setWebsOverride(response.websOverride));
+        dispatch(setYoutubeVideos(response.youtubeVideos));
+        dispatch(setYoutubeVideosOverride(response.youtubeVideosOverride));
+        dispatch(setSlideDecks(response.slideDecks));
+        dispatch(setSlideDecksOverride(response.slideDecksOverride));
+        dispatch(setLayers(response.layers));
+        dispatch(setOverlay(response.overlay));
+        dispatch(setOvWidgets(response.ovWidgets));
+        dispatch(setMonitor(response.monitor));
+        return response;
+      },
       error => {
         dispatch({
           type: FETCH_SCREEN_ERROR,

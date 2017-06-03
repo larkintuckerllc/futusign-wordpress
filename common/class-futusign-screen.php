@@ -234,6 +234,21 @@ if ( ! defined( 'WPINC' ) ) {
             array( 'i' => array() )
           )
         ),
+				array (
+					'key' => 'field_acf_fs_sc_polling',
+					'label' => __('Polling Cycle', 'futusign'),
+					'name' => 'polling',
+					'type' => 'number',
+					'instructions' => esc_html__('The number of minutes between polling for updates', 'futusign'),
+					'required' => 1,
+					'default_value' => 60,
+					'placeholder' => '',
+					'prepend' => '',
+					'append' => '',
+					'min' => 1,
+					'max' => '',
+					'step' => 1,
+				),
       ),
       'location' => array (
         array (
