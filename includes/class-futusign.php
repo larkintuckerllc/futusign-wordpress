@@ -92,7 +92,7 @@ class Futusign {
 	 */
 	public function __construct() {
 		$this->plugin_name = 'futusign';
-		$this->version = '2.2.2';
+		$this->version = '2.2.3';
 		$this->load_dependencies();
 		$this->set_locale();
 		if (Futusign::is_plugin_active('all')) {
@@ -147,6 +147,8 @@ class Futusign {
 		$plugin_inactive = new Futusign_Inactive();
 		$this->loader->add_action('init', $plugin_inactive, 'add_rewrite_rules');
 		$this->loader->add_action('admin_notices', $plugin_inactive, 'missing_plugins_notice' );
+		// UPDATE DB CHECK
+		$this->loader->add_action('init', $this, 'update_db_check');
 	}
 	/**
 	 * Register all of the common hooks of the plugin.
@@ -193,6 +195,8 @@ class Futusign {
 		// SLIDE DECK - OVERRIDE
 		$this->loader->add_action('restrict_manage_posts', $slide_deck, 'restrict_manage_posts_override');
 		$this->loader->add_action('parse_query', $slide_deck, 'parse_query_override');
+		// UPDATE DB CHECK
+		$this->loader->add_action('init', $this, 'update_db_check');
 	}
 	/**
 	 * Register all of the hooks related to the admin area functionality
@@ -245,5 +249,17 @@ class Futusign {
 	 */
 	public function get_loader() {
 		return $this->loader;
+	}
+	/**
+	 * On update, update database
+	 *
+	 * @since    2.2.3
+	 */
+	public function update_db_check() {
+		$current_version = $this->version;
+		if ( get_site_option( 'futusign_db_version' ) !== $current_version ) {
+			flush_rewrite_rules();
+			update_option( 'futusign_db_version', $current_version );
+		}
 	}
 }
