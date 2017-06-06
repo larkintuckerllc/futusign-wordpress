@@ -17,12 +17,7 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * @since    2.1.2
  */
-function futusign_endpoint($screen_id, $debug) {
-	// DEBUG 4
-	if ($debug === '4') {
-		echo '4';
-		die();
-	}
+function futusign_endpoint($screen_id) {
 	function term_to_id($o) {
 		return $o->term_id;
 	}
@@ -50,17 +45,7 @@ function futusign_endpoint($screen_id, $debug) {
 		'page_id' => $screen_id,
 	);
 	$loop = new WP_Query( $args );
-	// DEBUG 5
-	if ($debug === '5') {
-		echo '5';
-		die();
-	}
 	while ( $loop->have_posts() ) {
-		// DEBUG 6 
-		if ($debug === '6') {
-			echo '6';
-			die();
-		}
 		$loop->the_post();
 		$id = get_the_ID();
 		// SUBSCRIBED PLAYLISTS
@@ -83,11 +68,6 @@ function futusign_endpoint($screen_id, $debug) {
 			'subscribedOverrideIds' => $subscribed_override_ids,
 			'overlay' => $overlayPost ? $overlayPost->ID : null
 		);
-	}
-	// DEBUG 7
-	if ($debug === '7') {
-		echo '7';
-		die();
 	}
 	if ($screen === null) {
 		status_header(404);

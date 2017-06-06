@@ -3,7 +3,7 @@ Contributors: sckmkny
 Tags: digital, signage
 Requires at least: 4.3
 Tested up to: 4.7
-Stable tag: 2.2.4
+Stable tag: 2.2.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -21,6 +21,11 @@ Install and activate the *futusign* plugin via the WordPress *Plugins* admin
 screen.
 
 == Changelog ==
+
+= 2.2.5 =
+
+Fix bug with relative require causing endpoint to fail; thus
+the screen player to fail.
 
 = 2.2.4 =
 

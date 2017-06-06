@@ -50,7 +50,6 @@ class Futusign_Public {
 	public function query_vars( $query_vars ) {
     $query_vars[] = 'futusign_endpoint';
 		$query_vars[] = 'futusign_screen_id';
-		$query_vars[] = 'futusign_debug';
 		return $query_vars;
 	}
 	/**
@@ -61,34 +60,10 @@ class Futusign_Public {
 	 */
 	public function parse_request( $query ) {
 		$query_vars = $query->query_vars;
-		$debug = null;
-		if ( array_key_exists( 'futusign_debug', $query_vars ) ) {
-			$debug = $query_vars['futusign_debug'];
-		}
-		// DEBUG 0
-		if ($debug === '0') {
-			echo '0';
-			die();
-		}
 		if ( array_key_exists( 'futusign_endpoint', $query_vars ) ) {
-			// DEBUG 1
-			if ($debug === '1') {
-				echo '1';
-				die();
-			}
 			if ( array_key_exists( 'futusign_screen_id', $query_vars ) ) {
-				// DEBUG 2
-				if ($debug === '2') {
-					echo '2';
-					die();
-				}
-				require 'partials/futusign-endpoint.php';
-				// DEBUG 3
-				if ($debug === '3') {
-					echo '3';
-					die();
-				}
-				futusign_endpoint($query_vars['futusign_screen_id'], $debug);
+				require_once plugin_dir_path( __FILE__ ) . 'partials/futusign-endpoint.php';
+				futusign_endpoint($query_vars['futusign_screen_id']);
 			} else {
 				status_header(400);
 			}
