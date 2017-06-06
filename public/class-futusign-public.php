@@ -78,6 +78,11 @@ class Futusign_Public {
 					echo 1;
 					die();
 				}
+				if ($futusign_debug === 'debug') {
+					require_once plugin_dir_path( __FILE__ ) . 'partials/futusign-endpoint-debug.php';
+					futusign_endpoint($query_vars['futusign_screen_id']);
+					die();
+				}
 				require_once plugin_dir_path( __FILE__ ) . 'partials/futusign-endpoint.php';
 				// DEGUG 5
 				if ($futusign_debug === '5') {

@@ -23,6 +23,16 @@ if ($futusign_debug === '3') {
 	die();
 }
 /**
+ * futusign term to id
+ * @param    object     $o      The term
+ * @return   number      the id
+ *
+ * @since    2.2.7
+ */
+function futusign_term_to_id($o) {
+	return $o->term_id;
+}
+/**
  * futusign endpoint
  * @param    number     $screen_id      The screen id
  *
@@ -34,9 +44,6 @@ function futusign_endpoint($screen_id) {
 	if ($futusign_debug === '6') {
 		echo 6;
 		die();
-	}
-	function term_to_id($o) {
-		return $o->term_id;
 	}
 	$screen = null;
 	$subscribed_playlist_ids;
@@ -77,11 +84,11 @@ function futusign_endpoint($screen_id) {
 		$id = get_the_ID();
 		// SUBSCRIBED PLAYLISTS
 		$playlist_terms = get_the_terms( $id, 'futusign_playlist');
-		$subscribed_playlist_ids = $playlist_terms ? array_map('term_to_id', $playlist_terms) : [];
+		$subscribed_playlist_ids = $playlist_terms ? array_map('futusign_term_to_id', $playlist_terms) : [];
 		// SUBSCRIBED OVERRIDES
 		if (class_exists( 'Futusign_Override' )) {
 			$override_terms = get_the_terms( $id, 'futusign_override');
-			$subscribed_override_ids = $override_terms ? array_map('term_to_id', $override_terms) : [];
+			$subscribed_override_ids = $override_terms ? array_map('futusign_term_to_id', $override_terms) : [];
 		}
 		// POLLING
 		$polling = get_field('polling');
