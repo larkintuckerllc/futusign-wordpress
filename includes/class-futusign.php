@@ -92,7 +92,7 @@ class Futusign {
 	 */
 	public function __construct() {
 		$this->plugin_name = 'futusign';
-		$this->version = '2.2.5';
+		$this->version = '2.2.6';
 		$this->load_dependencies();
 		$this->set_locale();
 		if (Futusign::is_plugin_active('all')) {

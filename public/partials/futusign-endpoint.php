@@ -1,4 +1,10 @@
 <?php
+// DEGUG 2
+global $futusign_debug;
+if ($futusign_debug === '2') {
+	echo 2;
+	die();
+}
 /**
  * futusign endpoint
  *
@@ -11,6 +17,11 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
+// DEGUG 3
+if ($futusign_debug === '3') {
+	echo 3;
+	die();
+}
 /**
  * futusign endpoint
  * @param    number     $screen_id      The screen id
@@ -18,6 +29,12 @@ if ( ! defined( 'WPINC' ) ) {
  * @since    2.1.2
  */
 function futusign_endpoint($screen_id) {
+	global $futusign_debug;
+	// DEGUG 6
+	if ($futusign_debug === '6') {
+		echo 6;
+		die();
+	}
 	function term_to_id($o) {
 		return $o->term_id;
 	}
@@ -44,8 +61,18 @@ function futusign_endpoint($screen_id) {
 		'posts_per_page' => -1,
 		'page_id' => $screen_id,
 	);
+	// DEGUG 7
+	if ($futusign_debug === '7') {
+		echo 7;
+		die();
+	}
 	$loop = new WP_Query( $args );
 	while ( $loop->have_posts() ) {
+		// DEGUG 8
+		if ($futusign_debug === '8') {
+			echo 8;
+			die();
+		}
 		$loop->the_post();
 		$id = get_the_ID();
 		// SUBSCRIBED PLAYLISTS
@@ -69,9 +96,19 @@ function futusign_endpoint($screen_id) {
 			'overlay' => $overlayPost ? $overlayPost->ID : null
 		);
 	}
+	// DEGUG 9
+	if ($futusign_debug === '9') {
+		echo 9;
+		die();
+	}
 	if ($screen === null) {
 		status_header(404);
 		return;
+	}
+	// DEBUG 10
+	if ($futusign_debug === '10') {
+		echo 10;
+		die();
 	}
 	wp_reset_query();
 	// IMAGES
@@ -516,4 +553,9 @@ function futusign_endpoint($screen_id) {
 	echo ', "monitor": ';
 	echo json_encode( $monitor );
 	echo '}';
+}
+// DEGUG 4
+if ($futusign_debug === '4') {
+	echo 4;
+	die();
 }
