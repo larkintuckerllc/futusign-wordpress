@@ -8,7 +8,7 @@ export default () => (
     id={styles.root}
   >
     <img
-      id={styles.rootSpinnerZ}
+      id={styles.rootSpinner}
       src={spinner}
       alt="spinner"
       width="150"
