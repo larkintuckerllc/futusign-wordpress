@@ -74,7 +74,7 @@ class Futusign_Admin {
 				wp_register_script('futusign_admin_screen',
 					plugin_dir_url( __FILE__ ) . 'screen/dist/main.bundle.js',
 					array(),
-					'2017053101', true
+					'2017060701', true
 				);
 				wp_enqueue_script('futusign_admin_screen');
 			}

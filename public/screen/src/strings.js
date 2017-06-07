@@ -2,7 +2,6 @@
 export const ACTION_PREFIX = 'app/';
 export const SITE_URL = window.siteUrl;
 export const SCREEN_ID = window.screenId;
-export const ENDPOINT_API_ENDPOINT = 'fs-endpoint';
 export const CACHE_INTERVAL = 60 * 60;
 export const ERROR_POLLING_INTERVAL = 60;
 // PLAYERS

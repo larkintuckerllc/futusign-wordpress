@@ -1,8 +1,12 @@
-import { ENDPOINT_API_ENDPOINT, SITE_URL } from '../strings';
+import { SITE_URL } from '../strings';
+import { getPretty } from './base.js';
 import * as fromRest from '../util/rest';
 
 // eslint-disable-next-line
 export const get = (id) => {
   // eslint-disable-next-line
-  return fromRest.get(`${SITE_URL}${ENDPOINT_API_ENDPOINT}?futusign_screen_id=${id.toString()}`);
+  if (getPretty()) {
+    return fromRest.get(`${SITE_URL}fs-endpoint?futusign_screen_id=${id.toString()}`);
+  }
+  return fromRest.get(`${SITE_URL}?futusign_endpoint=1&futusign_screen_id=${id.toString()}`);
 };

@@ -5,6 +5,7 @@ import 'firebase/auth';
 import 'firebase/database';
 import { CACHE_INTERVAL, ERROR_POLLING_INTERVAL, TRANSITION } from '../../strings';
 import { minLargerPriority } from '../../util/misc';
+import { fetchBase } from '../../apis/base';
 import * as fromAppBlocking from '../../ducks/appBlocking';
 import * as fromMonitor from '../../ducks/monitor';
 import * as fromScreen from '../../ducks/screen';
@@ -100,12 +101,15 @@ class App extends Component {
       setOverride,
       setOfflinePlaying,
     } = this.props;
-    fetchScreen()
-    .then(response => {
+    fetchBase()
+    .then(() => {
+      // DETECT COMING BACK ONLINE
       if (offlinePlaying) {
         window.location.reload();
-        return;
       }
+      return fetchScreen();
+    })
+    .then(response => {
       const screen = response.screen;
       let nextOverride = false;
       let nextImages = response.images;

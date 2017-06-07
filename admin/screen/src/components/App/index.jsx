@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { PRIORITY } from '../../strings';
+import { fetchBase } from '../../apis/base';
 import * as fromAppBlocking from '../../ducks/appBlocking';
 import * as fromScreen from '../../ducks/screen';
 import { getImages } from '../../ducks/images';
@@ -37,7 +38,8 @@ const icons = {
 class App extends Component {
   componentDidMount() {
     const { fetchScreen, setAppBlocking } = this.props;
-    fetchScreen()
+    fetchBase()
+    .then(fetchScreen)
     .then(() => setAppBlocking(false))
     .catch((error) => {
       if (process.env.NODE_ENV !== 'production'
