@@ -1,10 +1,4 @@
 <?php
-// DEGUG 2
-global $futusign_debug;
-if ($futusign_debug === '2') {
-	echo 2;
-	die();
-}
 /**
  * futusign endpoint
  *
@@ -16,11 +10,6 @@ if ($futusign_debug === '2') {
  */
 if ( ! defined( 'WPINC' ) ) {
 	die;
-}
-// DEGUG 3
-if ($futusign_debug === '3') {
-	echo 3;
-	die();
 }
 /**
  * futusign term to id
@@ -39,12 +28,6 @@ function futusign_term_to_id($o) {
  * @since    2.1.2
  */
 function futusign_endpoint($screen_id) {
-	global $futusign_debug;
-	// DEGUG 6
-	if ($futusign_debug === '6') {
-		echo 6;
-		die();
-	}
 	$screen = null;
 	$subscribed_playlist_ids;
 	$subscribed_override_ids = array();
@@ -68,27 +51,17 @@ function futusign_endpoint($screen_id) {
 		'posts_per_page' => -1,
 		'page_id' => $screen_id,
 	);
-	// DEGUG 7
-	if ($futusign_debug === '7') {
-		echo 7;
-		die();
-	}
 	$loop = new WP_Query( $args );
 	while ( $loop->have_posts() ) {
-		// DEGUG 8
-		if ($futusign_debug === '8') {
-			echo 8;
-			die();
-		}
 		$loop->the_post();
 		$id = get_the_ID();
 		// SUBSCRIBED PLAYLISTS
 		$playlist_terms = get_the_terms( $id, 'futusign_playlist');
-		$subscribed_playlist_ids = $playlist_terms ? array_map('futusign_term_to_id', $playlist_terms) : [];
+		$subscribed_playlist_ids = $playlist_terms ? array_map('futusign_term_to_id', $playlist_terms) : array();
 		// SUBSCRIBED OVERRIDES
 		if (class_exists( 'Futusign_Override' )) {
 			$override_terms = get_the_terms( $id, 'futusign_override');
-			$subscribed_override_ids = $override_terms ? array_map('futusign_term_to_id', $override_terms) : [];
+			$subscribed_override_ids = $override_terms ? array_map('futusign_term_to_id', $override_terms) : array();
 		}
 		// POLLING
 		$polling = get_field('polling');
@@ -103,19 +76,9 @@ function futusign_endpoint($screen_id) {
 			'overlay' => $overlayPost ? $overlayPost->ID : null
 		);
 	}
-	// DEGUG 9
-	if ($futusign_debug === '9') {
-		echo 9;
-		die();
-	}
 	if ($screen === null) {
 		status_header(404);
 		return;
-	}
-	// DEBUG 10
-	if ($futusign_debug === '10') {
-		echo 10;
-		die();
 	}
 	wp_reset_query();
 	// IMAGES
@@ -517,10 +480,10 @@ function futusign_endpoint($screen_id) {
 	//  MONITOR
 	if (class_exists( 'Futusign_Monitor' )) {
 		$monitor = array();
-		$keys = [ 'api_key', 'auth_domain', 'database_url', 'project_id', 'storage_bucket', 'messaging_sender_id', 'email', 'password' ];
-		$outputKeys = [ 'apiKey', 'authDomain', 'databaseURL', 'projectId', 'storageBucket', 'messagingSenderId', 'email', 'password' ];
-		$options = get_option('futusign_monitor_option_name');
-		for ($i = 0; $i < sizeOf($keys); $i++) {
+		$keys = array( 'api_key', 'auth_domain', 'database_url', 'project_id', 'storage_bucket', 'messaging_sender_id', 'email', 'password' );
+		$outputKeys = array( 'apiKey', 'authDomain', 'databaseURL', 'projectId', 'storageBucket', 'messagingSenderId', 'email', 'password' );
+		$options = get_option( 'futusign_monitor_option_name' );
+		for ($i = 0; $i < sizeOf( $keys ); $i++) {
 			$key = $keys[$i];
 			$outputKey = $outputKeys[$i];
 			$monitor[$outputKey] = $options[$key];
@@ -560,9 +523,4 @@ function futusign_endpoint($screen_id) {
 	echo ', "monitor": ';
 	echo json_encode( $monitor );
 	echo '}';
-}
-// DEGUG 4
-if ($futusign_debug === '4') {
-	echo 4;
-	die();
 }
