@@ -39,7 +39,8 @@ When editing a screen; a list of the currently playing media is provided.
 
 To create a digital sign, connect a television to a computer with Chrome
 browser and have it load the *Screen's* URL. The loaded web application will
-check every hour to automatically apply changes made on the admin screens.
+check every hour (configurable) to automatically apply changes made on the
+admin screens.
 
 **Caveats**
 
