@@ -69,7 +69,6 @@ maintaining aspect ratio) to just cover the target display screen.
 WordPress schedule feature.
 * *Images* can be scheduled to expire in the future using the third-party
 plugin [Post Expirator](https://wordpress.org/plugins/post-expirator/).
-* *Screens* are limited to playing less than 100 *Images*.
 * A variety of devices can be used for digital signage
 as described in the article [Digital Signage is Just Another Screen](https://medium.com/@johntucker_48673/digital-signage-is-just-another-screen-e138c2ec3ae9#.244a74dta).
 * Additional features can be added via commercial plugins available at
