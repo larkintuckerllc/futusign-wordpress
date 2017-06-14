@@ -145,10 +145,7 @@ class Futusign {
 	 */
 	private function define_inactive_hooks() {
 		$plugin_inactive = new Futusign_Inactive();
-		$this->loader->add_action('init', $plugin_inactive, 'add_rewrite_rules');
 		$this->loader->add_action('admin_notices', $plugin_inactive, 'missing_plugins_notice' );
-		// UPDATE DB CHECK
-		$this->loader->add_action('init', $this, 'update_db_check');
 	}
 	/**
 	 * Register all of the common hooks of the plugin.

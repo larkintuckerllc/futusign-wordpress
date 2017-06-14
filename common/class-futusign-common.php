@@ -111,7 +111,6 @@ class Futusign_Common {
 	public function get_image() {
 		return $this->image;
 	}
-	// DUPLICATED IN INACTIVE
 	/**
 	 * Add rewrite rules
 	 *
