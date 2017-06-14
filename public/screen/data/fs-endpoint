@@ -79,7 +79,11 @@
   ],
   "slideDecks": [],
   "slideDecksOverride": [],
-  "layers": [],
+  "layers": [{
+    "id": 831,
+    "title": "Test",
+    "url": "/data/layer1.html"
+  }],
   "overlay": {
     "id": 7,
     "upperLeft": 8,
@@ -97,5 +101,6 @@
       "url": "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/cat-icon.png"
     }
   ],
-  "monitor": null
+  "monitor": null,
+  "time": 1497386847
 }

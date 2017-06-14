@@ -30,27 +30,45 @@
 </style>
 </head>
 <body>
-  <iframe id="interactive" style="display: none;"></iframe>
   <div id="buttons">
+    <div id="time" class="buttons__button">TIME</div>
     <div id="block" class="buttons__button">BLOCK</div>
     <div id="unblock" class="buttons__button" style="display: none;">UNBLOCK</div>
   </div>
   <script>
-  var INTERACTIVE_URL = 'http://localhost:8080/data/interactive.html';
-  document.addEventListener("DOMContentLoaded", function(event) {
+  var INTERACTIVE_URL = 'https://s3.amazonaws.com/futusign-wordpress/interactive.html';
+  window.addEventListener('message', function(message) {
+    switch (message.data.type) {
+      case 'MSG_TIME':
+        window.console.log(message.data);
+        break;
+      default:
+    };
+  });
+  document.addEventListener('DOMContentLoaded', function(event) {
+    var timeEl = document.getElementById('time');
     var blockEl = document.getElementById('block');
     var unblockEl = document.getElementById('unblock');
     var interactiveEl = document.getElementById('interactive');
+    timeEl.addEventListener('click', function() {
+      window.parent.postMessage({
+        type: 'MSG_TIME',
+      }, '*');
+    });
     blockEl.addEventListener('click', function() {
       blockEl.style.display = "none";
-      window.parent.postMessage('block', '*');
+      window.parent.postMessage({
+        type: 'MSG_BLOCK',
+      }, '*');
       interactiveEl.src = INTERACTIVE_URL;
       interactiveEl.style.display = 'block';
       unblockEl.style.display = "block";
     });
     unblockEl.addEventListener('click', function() {
       unblockEl.style.display = "none";
-      window.parent.postMessage('unblock', '*');
+      window.parent.postMessage({
+        type: 'MSG_UNBLOCK',
+      }, '*');
       interactiveEl.style.display = 'none';
       interactiveEl.src = '';
       blockEl.style.display = "block";

@@ -522,5 +522,7 @@ function futusign_endpoint($screen_id) {
 	echo json_encode( $ov_widgets );
 	echo ', "monitor": ';
 	echo json_encode( $monitor );
+	echo ', "time": ';
+  echo time();
 	echo '}';
 }

@@ -28,6 +28,7 @@ import override from '../ducks/override';
 import counter from '../ducks/counter';
 import mediaDecks from '../ducks/mediaDecks';
 import mediaDecksOverride from '../ducks/mediaDecksOverride';
+import time from '../ducks/time';
 
 export default combineReducers({
   appBlocking,
@@ -59,4 +60,5 @@ export default combineReducers({
   mediaDecksOverride,
   youtubeVideos,
   youtubeVideosOverride,
+  time,
 });
