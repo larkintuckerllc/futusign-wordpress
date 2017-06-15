@@ -97,9 +97,9 @@ class Futusign_Admin {
 			array ( $this, 'reload_section_callback'),
 			'futusign_settings_page');
 		add_settings_field(
-			'timestamp',
-			'timestamp',
-			array ( $this, 'timestamp' ),
+			'version',
+			'version',
+			array ( $this, 'version' ),
 			'futusign_settings_page',
 			'futusign_reload_section'
 		);
@@ -113,7 +113,7 @@ class Futusign_Admin {
 	 */
 	public function sanitize_callback($input) {
 		$newinput = array();
-		$newinput['timestamp'] = trim($input['timestamp']);
+		$newinput['version'] = trim($input['version']);
 		return $newinput;
 	}
 	/**
@@ -123,17 +123,17 @@ class Futusign_Admin {
 	 */
 	public function reload_section_callback() {
 		?>
-		<p>Please follow...</p>
+		<p>Update version to force all screen players to reload at their next poll.</p>
 		<?php
 	}
 	/**
-	 * timestamp Input
+	 * version Input
 	 *
 	 * @since    2.4.0
 	 */
-	public function timestamp() {
+	public function version() {
 		$options = get_option('futusign_option_name');
-		echo "<input id='timestamp' name='futusign_option_name[timestamp]' size='40' type='text' value='{$options['timestamp']}' />";
+		echo "<input id='version' name='futusign_option_name[version]' size='40' type='text' value='{$options['version']}' />";
 	}
 	/**
 	 * Add admin menus

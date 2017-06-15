@@ -43,6 +43,7 @@ import * as fromOverride from '../../ducks/override';
 import * as fromMediaDecks from '../../ducks/mediaDecks';
 import * as fromMediaDecksOverride from '../../ducks/mediaDecksOverride';
 import * as fromTime from '../../ducks/time';
+import * as fromVersion from '../../ducks/version';
 import Blocking from './Blocking';
 import Offline from './Offline';
 import Connected from './Connected';
@@ -116,6 +117,8 @@ class App extends Component {
       setOverride,
       setOfflinePlaying,
       setTime,
+      version,
+      setVersion,
     } = this.props;
     fetchBase()
     .then(() => {
@@ -127,6 +130,9 @@ class App extends Component {
     })
     .then(response => {
       const screen = response.screen;
+      if (version !== null && version !== response.version) {
+        window.location.reload();
+      }
       let nextOverride = false;
       let nextImages = response.images;
       let nextMediaDecks = response.mediaDecks;
@@ -214,6 +220,7 @@ class App extends Component {
       const localTime = Date.now();
       setTime(localTime - serverTime);
       // MISC
+      setVersion(response.version);
       setOfflinePlaying(false);
       setBadPlaying(false);
       setAppBlocking(false);
@@ -410,9 +417,11 @@ App.propTypes = {
   setOverride: PropTypes.func.isRequired,
   setPriority: PropTypes.func.isRequired,
   setTime: PropTypes.func.isRequired,
+  setVersion: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
   slideDecksOverride: PropTypes.array.isRequired,
   time: PropTypes.number.isRequired,
+  version: PropTypes.string,
   webs: PropTypes.array.isRequired,
   websOverride: PropTypes.array.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
@@ -438,6 +447,7 @@ export default connect(
     slideDecks: fromSlideDecks.getSlideDecks(state),
     slideDecksOverride: fromSlideDecksOverride.getSlideDecksOverride(state),
     time: fromTime.getTime(state),
+    version: fromVersion.getVersion(state),
     webs: fromWebs.getWebs(state),
     websOverride: fromWebsOverride.getWebsOverride(state),
     youtubeVideos: fromYoutubeVideos.getYoutubeVideos(state),
@@ -461,5 +471,6 @@ export default connect(
     setOverride: fromOverride.setOverride,
     setPriority: fromPriority.setPriority,
     setTime: fromTime.setTime,
+    setVersion: fromVersion.setVersion,
   }
 )(App);

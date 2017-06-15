@@ -482,17 +482,23 @@ function futusign_endpoint($screen_id) {
 		$monitor = array();
 		$keys = array( 'api_key', 'auth_domain', 'database_url', 'project_id', 'storage_bucket', 'messaging_sender_id', 'email', 'password' );
 		$outputKeys = array( 'apiKey', 'authDomain', 'databaseURL', 'projectId', 'storageBucket', 'messagingSenderId', 'email', 'password' );
-		$options = get_option( 'futusign_monitor_option_name' );
+		$monitor_options = get_option( 'futusign_monitor_option_name' );
 		for ($i = 0; $i < sizeOf( $keys ); $i++) {
 			$key = $keys[$i];
 			$outputKey = $outputKeys[$i];
-			$monitor[$outputKey] = $options[$key];
+			$monitor[$outputKey] = $monitor_options[$key];
 		}
 	}
+	// VERSION
+	$options = get_option( 'futusign_option_name' );
+	$version = array_key_exists( 'version', $options ) ? $options['version'] : '';
+  // OUTPUT
 	header( 'Content-Type: application/json' );
 	header( 'Cache-Control: no-cache, no-store, must-revalidate');
 	echo '{';
-	echo '"screen": ';
+	echo '"version": ';
+	echo json_encode( $version );
+	echo ', "screen": ';
 	echo json_encode( $screen );
 	echo ', "images": ';
 	echo json_encode( $images );
