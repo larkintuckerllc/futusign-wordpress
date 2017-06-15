@@ -209,8 +209,11 @@ class App extends Component {
         window.localStorage.removeItem('futusign_image_url');
         window.localStorage.removeItem('futusign_image_file');
       }
+      // SET DRIFT TIME
+      const serverTime = response.time * 1000;
+      const localTime = Date.now();
+      setTime(localTime - serverTime);
       // MISC
-      setTime(response.time);
       setOfflinePlaying(false);
       setBadPlaying(false);
       setAppBlocking(false);
