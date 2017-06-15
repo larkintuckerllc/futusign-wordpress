@@ -87,14 +87,21 @@
   }],
   "overlay": {
     "id": 7,
-    "upperLeft": 8,
-    "upperMiddle": 8,
-    "upperRight": 8,
-    "middleLeft": 8,
-    "middleRight": 8,
-    "lowerLeft": 8,
-    "lowerMiddle": 8,
-    "lowerRight": 8
+    "upper": 8,
+    "middleRow": 8,
+    "lower": 8,
+    "left": 8,
+    "middleColumn": 8,
+    "right": 8,
+    "upperLeft": null,
+    "upperMiddle": null,
+    "upperRight": null,
+    "middleLeft": null,
+    "middleMiddle": null,
+    "middleRight": null,
+    "lowerLeft": null,
+    "lowerMiddle": null,
+    "lowerRight": null
   },
   "ovWidgets": [
     {
