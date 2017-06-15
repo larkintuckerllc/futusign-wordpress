@@ -206,6 +206,8 @@ class Futusign {
 		$plugin_admin = new Futusign_Admin();
 		$this->loader->add_action( 'add_meta_boxes_futusign_screen', $plugin_admin, 'add_meta_boxes_futusign_screen' );
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'admin_enqueue_scripts');
+		$this->loader->add_action('admin_init', $plugin_admin, 'admin_init');
+		$this->loader->add_action('admin_menu', $plugin_admin, 'admin_menu');
 	}
 	/**
 	 * Register all of the hooks related to the public-facing functionality

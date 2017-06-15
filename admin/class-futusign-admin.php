@@ -80,4 +80,95 @@ class Futusign_Admin {
 			}
 		}
 	}
+	/**
+	 * Define settings
+	 *
+	 * @since    2.4.0
+	 */
+	public function admin_init() {
+		register_setting(
+			'futusign_option_group',
+			'futusign_option_name',
+			array( $this, 'sanitize_callback')
+		);
+		add_settings_section(
+			'futusign_reload_section',
+			'Reload',
+			array ( $this, 'reload_section_callback'),
+			'futusign_settings_page');
+		add_settings_field(
+			'timestamp',
+			'timestamp',
+			array ( $this, 'timestamp' ),
+			'futusign_settings_page',
+			'futusign_reload_section'
+		);
+	}
+	/**
+	 * Sanitize inputs
+	 *
+	 * @since   2.4.0
+	 * @param    array      $input     input
+	 * @return   array      sanitized input
+	 */
+	public function sanitize_callback($input) {
+		$newinput = array();
+		$newinput['timestamp'] = trim($input['timestamp']);
+		return $newinput;
+	}
+	/**
+	 * Reload section copy
+	 *
+	 * @since    2.4.0
+	 */
+	public function reload_section_callback() {
+		?>
+		<p>Please follow...</p>
+		<?php
+	}
+	/**
+	 * timestamp Input
+	 *
+	 * @since    2.4.0
+	 */
+	public function timestamp() {
+		$options = get_option('futusign_option_name');
+		echo "<input id='timestamp' name='futusign_option_name[timestamp]' size='40' type='text' value='{$options['timestamp']}' />";
+	}
+	/**
+	 * Add admin menus
+	 *
+	 * @since    2.4.0
+	 */
+	public function admin_menu() {
+		add_options_page(
+			'futusign',
+			'futusign',
+			'manage_options',
+			'futusign_options',
+			array( $this, 'options_page' )
+		);
+	}
+	/**
+	 * Display settings page
+	 *
+	 * @since    2.4.0
+	 */
+	public function options_page() {
+		?>
+		<div class="wrap">
+			<h1>futusign Settings</h1>
+			<form action="options.php" method="post">
+				<?php settings_fields('futusign_option_group'); ?>
+				<?php do_settings_sections('futusign_settings_page'); ?>
+				<input
+					name="Submit"
+					type="submit"
+					value="<?php esc_attr_e('Save Changes', 'futusign'); ?>"
+					class="button button-primary"
+				/>
+			</form>
+		</div>
+		<?php
+	}
 }
