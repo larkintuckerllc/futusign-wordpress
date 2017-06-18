@@ -92,7 +92,7 @@ class Futusign {
 	 */
 	public function __construct() {
 		$this->plugin_name = 'futusign';
-		$this->version = '2.3.1';
+		$this->version = '2.4.1';
 		$this->load_dependencies();
 		$this->set_locale();
 		if (Futusign::is_plugin_active('all')) {
@@ -145,10 +145,7 @@ class Futusign {
 	 */
 	private function define_inactive_hooks() {
 		$plugin_inactive = new Futusign_Inactive();
-		$this->loader->add_action('init', $plugin_inactive, 'add_rewrite_rules');
 		$this->loader->add_action('admin_notices', $plugin_inactive, 'missing_plugins_notice' );
-		// UPDATE DB CHECK
-		$this->loader->add_action('init', $this, 'update_db_check');
 	}
 	/**
 	 * Register all of the common hooks of the plugin.
@@ -209,6 +206,8 @@ class Futusign {
 		$plugin_admin = new Futusign_Admin();
 		$this->loader->add_action( 'add_meta_boxes_futusign_screen', $plugin_admin, 'add_meta_boxes_futusign_screen' );
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'admin_enqueue_scripts');
+		$this->loader->add_action('admin_init', $plugin_admin, 'admin_init');
+		$this->loader->add_action('admin_menu', $plugin_admin, 'admin_menu');
 	}
 	/**
 	 * Register all of the hooks related to the public-facing functionality

@@ -3,7 +3,14 @@ import { connect } from 'react-redux';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import { CACHE_INTERVAL, ERROR_POLLING_INTERVAL, TRANSITION } from '../../strings';
+import {
+  CACHE_INTERVAL,
+  ERROR_POLLING_INTERVAL,
+  MSG_BLOCK,
+  MSG_TIME,
+  MSG_UNBLOCK,
+  TRANSITION,
+} from '../../strings';
 import { minLargerPriority } from '../../util/misc';
 import { fetchBase } from '../../apis/base';
 import * as fromAppBlocking from '../../ducks/appBlocking';
@@ -35,6 +42,8 @@ import * as fromMinImagePriority from '../../ducks/minImagePriority';
 import * as fromOverride from '../../ducks/override';
 import * as fromMediaDecks from '../../ducks/mediaDecks';
 import * as fromMediaDecksOverride from '../../ducks/mediaDecksOverride';
+import * as fromTime from '../../ducks/time';
+import * as fromVersion from '../../ducks/version';
 import Blocking from './Blocking';
 import Offline from './Offline';
 import Connected from './Connected';
@@ -51,9 +60,9 @@ class App extends Component {
     super();
     this.fetch = this.fetch.bind(this);
     this.restartPlayingLoop = this.restartPlayingLoop.bind(this);
+    this.handleMessage = this.handleMessage.bind(this);
   }
   componentDidMount() {
-    const { setLayerBlocking } = this.props;
     const appCache = window.applicationCache;
     const check = () => {
       appCache.update();
@@ -61,21 +70,28 @@ class App extends Component {
     const handleUpdateReady = () => {
       window.location.reload();
     };
-    const handleMessage = (message) => {
-      switch (message.data) {
-        case 'block':
-          setLayerBlocking(true);
-          break;
-        case 'unblock':
-          this.restartPlayingLoop();
-          break;
-        default:
-      }
-    };
     this.fetch();
     window.setInterval(check, CACHE_INTERVAL * 1000);
     appCache.addEventListener('updateready', handleUpdateReady);
-    window.addEventListener('message', handleMessage);
+    window.addEventListener('message', this.handleMessage);
+  }
+  handleMessage(message) {
+    const { setLayerBlocking, time } = this.props;
+    switch (message.data.type) {
+      case MSG_BLOCK:
+        setLayerBlocking(true);
+        break;
+      case MSG_UNBLOCK:
+        this.restartPlayingLoop();
+        break;
+      case MSG_TIME:
+        message.source.postMessage({
+          type: MSG_TIME,
+          value: time,
+        }, message.origin);
+        break;
+      default:
+    }
   }
   fetch() {
     const {
@@ -100,6 +116,9 @@ class App extends Component {
       setBadPlaying,
       setOverride,
       setOfflinePlaying,
+      setTime,
+      version,
+      setVersion,
     } = this.props;
     fetchBase()
     .then(() => {
@@ -111,6 +130,9 @@ class App extends Component {
     })
     .then(response => {
       const screen = response.screen;
+      if (version !== null && version !== response.version) {
+        window.location.reload();
+      }
       let nextOverride = false;
       let nextImages = response.images;
       let nextMediaDecks = response.mediaDecks;
@@ -193,7 +215,12 @@ class App extends Component {
         window.localStorage.removeItem('futusign_image_url');
         window.localStorage.removeItem('futusign_image_file');
       }
+      // SET DRIFT TIME
+      const serverTime = response.time * 1000;
+      const localTime = Date.now();
+      setTime(localTime - serverTime);
       // MISC
+      setVersion(response.version);
       setOfflinePlaying(false);
       setBadPlaying(false);
       setAppBlocking(false);
@@ -389,8 +416,12 @@ App.propTypes = {
   setOfflinePlaying: PropTypes.func.isRequired,
   setOverride: PropTypes.func.isRequired,
   setPriority: PropTypes.func.isRequired,
+  setTime: PropTypes.func.isRequired,
+  setVersion: PropTypes.func.isRequired,
   slideDecks: PropTypes.array.isRequired,
   slideDecksOverride: PropTypes.array.isRequired,
+  time: PropTypes.number.isRequired,
+  version: PropTypes.string,
   webs: PropTypes.array.isRequired,
   websOverride: PropTypes.array.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
@@ -415,6 +446,8 @@ export default connect(
     ovWidgets: fromOvWidgets.getOvWidgets(state),
     slideDecks: fromSlideDecks.getSlideDecks(state),
     slideDecksOverride: fromSlideDecksOverride.getSlideDecksOverride(state),
+    time: fromTime.getTime(state),
+    version: fromVersion.getVersion(state),
     webs: fromWebs.getWebs(state),
     websOverride: fromWebsOverride.getWebsOverride(state),
     youtubeVideos: fromYoutubeVideos.getYoutubeVideos(state),
@@ -437,5 +470,7 @@ export default connect(
     setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
     setOverride: fromOverride.setOverride,
     setPriority: fromPriority.setPriority,
+    setTime: fromTime.setTime,
+    setVersion: fromVersion.setVersion,
   }
 )(App);

@@ -439,20 +439,34 @@ function futusign_endpoint($screen_id) {
 		while ( $loop->have_posts() ) {
 			$loop->the_post();
 			$id = get_the_ID();
+			$upper = get_field('upper');
+			$middleRow = get_field('middle_row');
+			$lower = get_field('lower');
+			$left = get_field('left');
+			$middleColumn = get_field('middle_column');
+			$right = get_field('right');
 			$upper_left = get_field('upper_left');
 			$upper_middle = get_field('upper_middle');
 			$upper_right = get_field('upper_right');
 			$middle_left = get_field('middle_left');
+			$middle_middle = get_field('middle_middle');
 			$middle_right = get_field('middle_right');
 			$lower_left = get_field('lower_left');
 			$lower_middle = get_field('lower_middle');
 			$lower_right = get_field('lower_right');
 			$overlay = array(
 				'id' => $id,
+				'upper' => $upper ? $upper->ID : null,
+				'middleRow' => $middleRow ? $middleRow->ID : null,
+				'lower' => $lower ? $lower->ID : null,
+				'left' => $left ? $left->ID : null,
+				'middleColumn' => $middleColumn ? $middleColumn->ID : null,
+				'right' => $right ? $right->ID : null,
 				'upperLeft' => $upper_left ? $upper_left->ID : null,
 				'upperMiddle' => $upper_middle ? $upper_middle->ID : null,
 				'upperRight' => $upper_right ? $upper_right->ID : null,
 				'middleLeft' => $middle_left ? $upper_left->ID : null,
+				'middleMiddle' => $middle_middle ? $middle_middle->ID : null,
 				'middleRight' => $middle_right ? $upper_right->ID : null,
 				'lowerLeft' => $lower_left ? $lower_left->ID : null,
 				'lowerMiddle' => $lower_left ? $lower_middle->ID : null,
@@ -482,17 +496,23 @@ function futusign_endpoint($screen_id) {
 		$monitor = array();
 		$keys = array( 'api_key', 'auth_domain', 'database_url', 'project_id', 'storage_bucket', 'messaging_sender_id', 'email', 'password' );
 		$outputKeys = array( 'apiKey', 'authDomain', 'databaseURL', 'projectId', 'storageBucket', 'messagingSenderId', 'email', 'password' );
-		$options = get_option( 'futusign_monitor_option_name' );
+		$monitor_options = get_option( 'futusign_monitor_option_name' );
 		for ($i = 0; $i < sizeOf( $keys ); $i++) {
 			$key = $keys[$i];
 			$outputKey = $outputKeys[$i];
-			$monitor[$outputKey] = $options[$key];
+			$monitor[$outputKey] = $monitor_options[$key];
 		}
 	}
+	// VERSION
+	$options = get_option( 'futusign_option_name' );
+	$version = $options !== false && array_key_exists( 'version', $options ) ? $options['version'] : '';
+  // OUTPUT
 	header( 'Content-Type: application/json' );
 	header( 'Cache-Control: no-cache, no-store, must-revalidate');
 	echo '{';
-	echo '"screen": ';
+	echo '"version": ';
+	echo json_encode( $version );
+	echo ', "screen": ';
 	echo json_encode( $screen );
 	echo ', "images": ';
 	echo json_encode( $images );
@@ -522,5 +542,7 @@ function futusign_endpoint($screen_id) {
 	echo json_encode( $ov_widgets );
 	echo ', "monitor": ';
 	echo json_encode( $monitor );
+	echo ', "time": ';
+  echo time();
 	echo '}';
 }

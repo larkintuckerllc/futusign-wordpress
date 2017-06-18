@@ -15,7 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
     id="futusign_youtube"
     style="visibility: hidden;"
     frameborder="0"
-    src="https://www.youtube.com/embed/XIMLoLxmTDw?enablejsapi=1"
+    src="https://www.youtube.com/embed/XIMLoLxmTDw?enablejsapi=1&cc_load_policy=1"
   ></iframe>
   <script>
     (function(){
@@ -60,6 +60,7 @@ if ( ! defined( 'WPINC' ) ) {
             'enablejsapi': 1,
             'showinfo': 0,
             'rel': 0,
+            'cc_load_policy': 1,
           },
           events: {
             'onReady': onPlayerReady,
@@ -99,6 +100,6 @@ if ( ! defined( 'WPINC' ) ) {
   <!-- MANUALLY UPDATE -->
   <script src="<?php echo plugins_url( 'vendor.799e354700962c16c313.bundle.js', __FILE__ ); ?>"></script>
   <!-- MANUALLY UPDATE -->
-  <script src="<?php echo plugins_url( 'main.a33e1b770f844bb61fa2.bundle.js', __FILE__ ); ?>"></script>
+  <script src="<?php echo plugins_url( 'main.f1be8737ddcb356f86fb.bundle.js', __FILE__ ); ?>"></script>
 </body>
 </html>

@@ -1,20 +1,38 @@
-#root {
+#rootFine {
+  z-index: 4;
+}
+#rootFine td {
+  position: relative;
+  width: 34%;
+  height: 34%;
+}
+#rootCourseRow {
+  z-index: 2;
+}
+#rootCourseRow td {
+  position: relative;
+  width: 100%;
+  height: 34%;
+}
+#rootCourseColumn {
+  z-index: 3;
+}
+#rootCourseColumn td {
+  position: relative;
+  width: 34%;
+  height: 100%;
+}
+.rootGrid {
   position: fixed;
   table-layout: fixed;
   top: 0px;
   left: 0px;
-  z-index: 2;
   border-spacing: 0;
   border-collapse: collapse;
   width: 100%;
   height: 100%;
 }
-#root td {
-  position: relative;
-  width: 34%;
-  height: 34%;
-}
-.rootWidget {
+.rootGridWidget {
   position: absolute;
   top: 0px;
   left: 0px;

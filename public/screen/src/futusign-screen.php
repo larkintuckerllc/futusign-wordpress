@@ -15,7 +15,7 @@ if ( ! defined( 'WPINC' ) ) {
     id="futusign_youtube"
     style="visibility: hidden;"
     frameborder="0"
-    src="https://www.youtube.com/embed/XIMLoLxmTDw?enablejsapi=1"
+    src="https://www.youtube.com/embed/XIMLoLxmTDw?enablejsapi=1&cc_load_policy=1"
   ></iframe>
   <script>
     (function(){
@@ -60,6 +60,7 @@ if ( ! defined( 'WPINC' ) ) {
             'enablejsapi': 1,
             'showinfo': 0,
             'rel': 0,
+            'cc_load_policy': 1,
           },
           events: {
             'onReady': onPlayerReady,
