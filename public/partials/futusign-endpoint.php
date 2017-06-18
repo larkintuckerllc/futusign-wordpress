@@ -505,7 +505,7 @@ function futusign_endpoint($screen_id) {
 	}
 	// VERSION
 	$options = get_option( 'futusign_option_name' );
-	$version = array_key_exists( 'version', $options ) ? $options['version'] : '';
+	$version = $options !== false && array_key_exists( 'version', $options ) ? $options['version'] : '';
   // OUTPUT
 	header( 'Content-Type: application/json' );
 	header( 'Cache-Control: no-cache, no-store, must-revalidate');
