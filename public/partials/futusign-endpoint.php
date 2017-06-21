@@ -440,10 +440,10 @@ function futusign_endpoint($screen_id) {
 			$loop->the_post();
 			$id = get_the_ID();
 			$upper = get_field('upper');
-			$middleRow = get_field('middle_row');
+			$middle_row = get_field('middle_row');
 			$lower = get_field('lower');
 			$left = get_field('left');
-			$middleColumn = get_field('middle_column');
+			$middle_column = get_field('middle_column');
 			$right = get_field('right');
 			$upper_left = get_field('upper_left');
 			$upper_middle = get_field('upper_middle');
@@ -457,20 +457,20 @@ function futusign_endpoint($screen_id) {
 			$overlay = array(
 				'id' => $id,
 				'upper' => $upper ? $upper->ID : null,
-				'middleRow' => $middleRow ? $middleRow->ID : null,
+				'middleRow' => $middle_row ? $middle_row->ID : null,
 				'lower' => $lower ? $lower->ID : null,
 				'left' => $left ? $left->ID : null,
-				'middleColumn' => $middleColumn ? $middleColumn->ID : null,
+				'middleColumn' => $middle_column ? $middle_column->ID : null,
 				'right' => $right ? $right->ID : null,
 				'upperLeft' => $upper_left ? $upper_left->ID : null,
 				'upperMiddle' => $upper_middle ? $upper_middle->ID : null,
 				'upperRight' => $upper_right ? $upper_right->ID : null,
-				'middleLeft' => $middle_left ? $upper_left->ID : null,
+				'middleLeft' => $middle_left ? $middle_left->ID : null,
 				'middleMiddle' => $middle_middle ? $middle_middle->ID : null,
-				'middleRight' => $middle_right ? $upper_right->ID : null,
+				'middleRight' => $middle_right ? $middle_right->ID : null,
 				'lowerLeft' => $lower_left ? $lower_left->ID : null,
-				'lowerMiddle' => $lower_left ? $lower_middle->ID : null,
-				'lowerRight' => $lower_left ? $lower_right->ID : null,
+				'lowerMiddle' => $lower_middle ? $lower_middle->ID : null,
+				'lowerRight' => $lower_right ? $lower_right->ID : null,
 			);
 		}
 		wp_reset_query();
