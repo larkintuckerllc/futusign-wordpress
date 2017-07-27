@@ -14,12 +14,12 @@ Description
 
 Simply put... *WordPress* is one of the best content managements systems available today. Digital signage management is a content management problem. As for *futusign* itself, hearing how others are using it is the best way to understand the possibilities.
 
-The [Digital Signage Case Study: Warrington College of Business]( https://www.futusign.com/stories/digital-signage-case-study-warrington/) illustrates a medium-sized futusign deployment at an educational institution.
+The *[Digital Signage Case Study: Warrington College of Business]( https://www.futusign.com/stories/digital-signage-case-study-warrington/)* illustrates a medium-sized futusign deployment at an educational institution.
 
 Installation
 ====
 
-Install and activate the *futusign* plugin via the WordPress *Plugins* admin
+Install and activate the *futusign* plugin via the *WordPress Plugins* admin
 screen.
 
 Usage
@@ -39,7 +39,7 @@ image file.
 
 When editing a screen; a list of the currently playing media is provided.
 
-To create a digital sign, connect a television to a computer with Chrome browser and have it load the *Screen's* URL. The loaded web application will check every hour (configurable) to automatically apply changes made on the admin screens.
+To create a digital sign, connect a television to a computer with *Chrome* browser and have it load the *Screen's* URL. The loaded web application will check every hour (configurable) to automatically apply changes made on the admin screens.
 
 Additional information available at [www.futusign.com](https://www.futusign.com/).
 
