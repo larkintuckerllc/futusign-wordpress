@@ -12,15 +12,9 @@ Manage and display digital signage content
 Description
 ===
 
-Simply put... WordPress is one of the best content managements systems
-available today. Digital signage management is a content management
-problem.
+Simply put... WordPress is one of the best content managements systems available today. Digital signage management is a content management problem. As for futusign itself, hearing how others are using futusign is the best way to understand the possibilities.
 
-As for futusign itself, hearing how others are using futusign is the
-best way to understand the possibilities.
-
-The [Digital Signage Case Study: Warrington College of Business]( https://www.futusign.com/stories/digital-signage-case-study-warrington/)
-illustrates a medium-sized futusign deployment at an educational institution.
+The [Digital Signage Case Study: Warrington College of Business]( https://www.futusign.com/stories/digital-signage-case-study-warrington/) illustrates a medium-sized futusign deployment at an educational institution.
 
 Installation
 ====
@@ -30,10 +24,7 @@ screen.
 
 Usage
 ====
-Using your favorite presentation tool, e.g., PowerPoint, create a slide
-show with the same resolution and aspect ratio of the target display screen;
-for example 1920px by 1080px for an landscape HD screen. Save it as a series of
-images.
+Using your favorite presentation tool, e.g., PowerPoint, create a slide show with the same resolution and aspect ratio of the target display screen; for example 1920px by 1080px for an landscape HD screen. Save it as a series of images.
 
 From the WordPress administrative screens.
 
@@ -48,10 +39,7 @@ image file.
 
 When editing a screen; a list of the currently playing media is provided.
 
-To create a digital sign, connect a television to a computer with Chrome
-browser and have it load the *Screen's* URL. The loaded web application will
-check every hour (configurable) to automatically apply changes made on the
-admin screens.
+To create a digital sign, connect a television to a computer with Chrome browser and have it load the *Screen's* URL. The loaded web application will check every hour (configurable) to automatically apply changes made on the admin screens.
 
 Additional information available at [www.futusign.com](https://www.futusign.com/).
 
