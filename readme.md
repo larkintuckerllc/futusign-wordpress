@@ -12,7 +12,7 @@ Manage and display digital signage content
 Description
 ===
 
-Simply put... WordPress is one of the best content managements systems available today. Digital signage management is a content management problem. As for futusign itself, hearing how others are using futusign is the best way to understand the possibilities.
+Simply put... *WordPress* is one of the best content managements systems available today. Digital signage management is a content management problem. As for *futusign* itself, hearing how others are using it is the best way to understand the possibilities.
 
 The [Digital Signage Case Study: Warrington College of Business]( https://www.futusign.com/stories/digital-signage-case-study-warrington/) illustrates a medium-sized futusign deployment at an educational institution.
 
@@ -24,9 +24,9 @@ screen.
 
 Usage
 ====
-Using your favorite presentation tool, e.g., PowerPoint, create a slide show with the same resolution and aspect ratio of the target display screen; for example 1920px by 1080px for an landscape HD screen. Save it as a series of images.
+Using your favorite presentation tool, e.g., *PowerPoint*, create a slide show with the same resolution and aspect ratio of the target display screen; for example 1920px by 1080px for an landscape HD screen. Save it as a series of images.
 
-From the WordPress administrative screens.
+From the *WordPress* administrative screens.
 
 1. Add a new *Image* (or multiple) from the admin menu; uploading the
 image file.
@@ -45,7 +45,7 @@ Additional information available at [www.futusign.com](https://www.futusign.com/
 
 Contributing
 ====
-Submit bug or enhancement requests using the GitHub issues feature.
+Submit bug or enhancement requests using the *GitHub* issues feature.
 
 Contact
 ====
