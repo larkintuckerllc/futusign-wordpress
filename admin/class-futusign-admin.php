@@ -171,4 +171,23 @@ class Futusign_Admin {
 		</div>
 		<?php
 	}
+	/**
+	 * Display settings page
+	 *
+	 * @since    2.6.0
+	 * @param    array      $query     query
+	 * @return   array      filtered query
+	 */
+	public function wp_link_query_args( $query ) {
+		$cpt_to_remove = 'futusign_screen';
+		$key = array_search( $cpt_to_remove, $query['post_type'] );
+		if( $key ) unset( $query['post_type'][$key] );
+		$cpt_to_remove = 'futusign_image';
+		$key = array_search( $cpt_to_remove, $query['post_type'] );
+		if( $key ) unset( $query['post_type'][$key] );
+		$cpt_to_remove = 'futusign_slide_deck';
+		$key = array_search( $cpt_to_remove, $query['post_type'] );
+		if( $key ) unset( $query['post_type'][$key] );
+		return $query;
+	}
 }
