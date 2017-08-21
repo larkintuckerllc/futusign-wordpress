@@ -1,0 +1,105 @@
+<?php
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+?>
+<!DOCTYPE html>
+<html lang="en" manifest="<?php echo trailingslashit( plugins_url( '', __FILE__ ) ); ?>index.appcache">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>futusign Screen</title>
+</head>
+<body>
+  <div id="root"></div>
+  <iframe
+    id="futusign_youtube"
+    style="visibility: hidden;"
+    frameborder="0"
+    src="https://www.youtube.com/embed/XIMLoLxmTDw?enablejsapi=1&cc_load_policy=1"
+  ></iframe>
+  <script>
+    (function(){
+      // SET WIDTH OF YOUTUBE
+      var futusignYoutubeEl = document.getElementById('futusign_youtube');
+      var width = window.outerWidth;
+      var height = window.outerHeight
+      if ((width / height) >= (16 / 9)) {
+        futusignYoutubeEl.style.width = width.toString() + 'px';
+        futusignYoutubeEl.style.height = (width * (9 / 16)).toString() + 'px';
+      } else {
+        futusignYoutubeEl.style.width = (height * (16 / 9)).toString() + 'px';
+        futusignYoutubeEl.style.height = (height).toString() + 'px';
+      }
+      // SETUP YOUTUBE EMITTERS
+      window.futusignYoutubeStateChange = {
+        addEventListener: function(listener) {
+          window.document.addEventListener('futusign_youtube_state_change', listener);
+        },
+        removeEventListener: function(listener) {
+          window.document.removeEventListener('futusign_youtube_state_change', listener);
+        }
+      };
+      window.futusignYoutubeError = {
+        addEventListener: function(listener) {
+          window.document.addEventListener('futusign_youtube_error', listener);
+        },
+        removeEventListener: function(listener) {
+          window.document.removeEventListener('futusign_youtube_error', listener);
+        }
+      };
+      // STARTUP YOUTUBE
+      var tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      window.onYouTubeIframeAPIReady = function() {
+        // REL DOES NOT SEEM TO WORK AS DOCUMENT; COVER WORKAROUND
+        var player = new window.YT.Player('futusign_youtube', {
+          playerVars: {
+            'controls': 0,
+            'enablejsapi': 1,
+            'showinfo': 0,
+            'rel': 0,
+            'cc_load_policy': 1,
+          },
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange,
+            'onError': onPlayerError,
+          }
+        });
+        function onPlayerReady() {
+          window.futusignYoutubePlayer = player;
+        }
+        function onPlayerStateChange(event) {
+          window.document.dispatchEvent(
+            new CustomEvent(
+              'futusign_youtube_state_change',
+              { detail: event.data }
+            )
+          );
+        }
+        function onPlayerError(event) {
+          window.document.dispatchEvent(
+            new CustomEvent(
+              'futusign_youtube_error',
+              { detail: event.data }
+            )
+          );
+        }
+      }
+    })();
+  </script>
+  <?php while (have_posts()) : the_post(); ?>
+    <script>
+      window.siteUrl = '<?php echo trailingslashit( site_url() ); ?>';
+      window.publicPath = '<?php echo trailingslashit( plugins_url( '', __FILE__ ) ); ?>';
+      window.screenId = <?php echo get_the_ID(); ?>;
+    </script>
+  <?php endwhile; ?>
+  <!-- MANUALLY UPDATE -->
+  <script src="<?php echo plugins_url( 'vendor.ab0fcf0ec5f9c6a3c596.bundle.js', __FILE__ ); ?>"></script>
+  <!-- MANUALLY UPDATE -->
+  <script src="<?php echo plugins_url( 'main.e7f38ca79630756dd476.bundle.js', __FILE__ ); ?>"></script>
+</body>
+</html>
