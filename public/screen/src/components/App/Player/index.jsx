@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import {
-  IMAGES, MEDIA_DECKS, TRANSITION, TRANSITION2, WEBS, YOUTUBE_VIDEOS, SLIDE_DECKS,
+  IMAGES, MEDIA_DECKS, TRANSITION, TRANSITION2, WEBS, YOUTUBE_VIDEOS,
 } from '../../../strings';
 import { minLargerPriority } from '../../../util/misc';
 import * as fromCurrentlyPlaying from '../../../ducks/currentlyPlaying';
@@ -15,7 +15,6 @@ import * as fromPriority from '../../../ducks/priority';
 import { getMinImagePriority } from '../../../ducks/minImagePriority';
 import PlayerTransition from './PlayerTransition';
 import PlayerTransition2 from './PlayerTransition2';
-import PlayerSlideDecks from './PlayerSlideDecks';
 import PlayerImages from './PlayerImages';
 import PlayerWebs from './PlayerWebs';
 import PlayerYoutubeVideos from './PlayerYoutubeVideos';
@@ -29,7 +28,6 @@ class Player extends Component {
     this.filteredMediaDecks = [];
     this.filteredWebs = [];
     this.filteredYoutubeVideos = [];
-    this.filteredSlideDecks = [];
   }
   componentWillReceiveProps(upProps) {
     const {
@@ -47,7 +45,6 @@ class Player extends Component {
       setNextIsReady,
       setNextPlaying,
       setPriority,
-      slideDecks,
       webs,
       youtubeVideos,
     } = this.props;
@@ -96,18 +93,10 @@ class Player extends Component {
               type: YOUTUBE_VIDEOS,
               media: o,
             }));
-          const mediaSlideDecks = slideDecks
-            .filter(o => o.priority === priority)
-            .map(o => ({
-              title: o.title,
-              type: SLIDE_DECKS,
-              media: o,
-            }));
           this.media = [
             ...this.mediaImages,
             ...mediaWebs,
             ...mediaYoutubeVideos,
-            ...mediaSlideDecks,
           ].sort((a, b) => {
             if (a.title < b.title) {
               return -1;
@@ -155,7 +144,6 @@ class Player extends Component {
         this.filteredImages = [];
         this.filteredWebs = [];
         this.filteredYoutubeVideos = [];
-        this.filteredSlideDecks = [];
         switch (nextMedia.type) {
           case IMAGES:
             this.filteredImages = [nextMedia.media];
@@ -165,9 +153,6 @@ class Player extends Component {
             break;
           case YOUTUBE_VIDEOS:
             this.filteredYoutubeVideos = [nextMedia.media];
-            break;
-          case SLIDE_DECKS:
-            this.filteredSlideDecks = [nextMedia.media];
             break;
           default:
         }
@@ -206,7 +191,6 @@ class Player extends Component {
               ...mediaDecks,
               ...webs,
               ...youtubeVideos,
-              ...slideDecks,
             ]);
             if (nextPriority === Infinity) {
               nextPriority = minLargerPriority(0, [
@@ -214,7 +198,6 @@ class Player extends Component {
                 ...mediaDecks,
                 ...webs,
                 ...youtubeVideos,
-                ...slideDecks,
               ]);
             }
             setPriority(nextPriority);
@@ -290,15 +273,6 @@ class Player extends Component {
           setNextIsReady={setNextIsReady}
           youtubeVideos={this.filteredYoutubeVideos}
         />
-        <PlayerSlideDecks
-          currentlyIsPlaying={currentlyIsPlaying}
-          currentlyPlaying={currentlyPlaying}
-          nextPlaying={nextPlaying}
-          setBadPlaying={setBadPlaying}
-          setCurrentlyIsPlaying={setCurrentlyIsPlaying}
-          setNextIsReady={setNextIsReady}
-          slideDecks={this.filteredSlideDecks}
-        />
       </div>
     );
   }
@@ -321,7 +295,6 @@ Player.propTypes = {
   setNextIsReady: PropTypes.func.isRequired,
   setNextPlaying: PropTypes.func.isRequired,
   setPriority: PropTypes.func.isRequired,
-  slideDecks: PropTypes.array.isRequired,
   webs: PropTypes.array.isRequired,
   youtubeVideos: PropTypes.array.isRequired,
 };

@@ -15,4 +15,3 @@ export const IMAGES = 'IMAGES';
 export const MEDIA_DECKS = 'MEDIA_DECKS';
 export const WEBS = 'WEBS';
 export const YOUTUBE_VIDEOS = 'YOUTUBE_VIDEOS';
-export const SLIDE_DECKS = 'SLIDE_DECKS';

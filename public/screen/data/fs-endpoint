@@ -17,82 +17,28 @@
       "id": 1,
       "title": "A",
       "file": "http://localhost:8080/data/sample.jpg",
-      "imageDuration": 3,
+      "imageDuration": 30,
       "priority": 1
     }
   ],
-  "imagesOverride": [
-    {
-      "id": 1,
-      "title": "A",
-      "file": "http://localhost:8080/data/sample.jpg",
-      "imageDuration": 3,
-      "priority": 1
-    }
-  ],
-  "mediaDecks": [
-    {
-      "id": 2,
-      "title": "B",
-      "media": [
-        {
-          "type": "IMAGES",
-          "file": "http://localhost:8080/data/sample.jpg",
-          "imageDuration": 5
-        },
-        {
-          "type": "WEBS",
-          "url": "https://www.futusign.com/",
-          "webDuration": 5
-        },
-        {
-          "type": "YOUTUBE_VIDEOS",
-          "url": "https://youtu.be/LIjMBLVHDQs",
-          "suggestedQuality": "default"
-        }
-      ],
-      "priority": 1
-    }
-  ],
-  "mediaDecksOverride": [
-  ],
-  "webs": [
-  ],
-  "websOverride": [
-    {
-      "id": 3,
-      "title": "C",
-      "url": "https://www.futusign.com/",
-      "webDuration": 5,
-      "priority": 1
-    }
-  ],
-  "youtubeVideos": [
-  ],
-  "youtubeVideosOverride": [
-    {
-      "id": 4,
-      "title": "D",
-      "url": "https://youtu.be/LIjMBLVHDQs",
-      "suggestedQuality": "default",
-      "priority": 1
-    }
-  ],
+  "imagesOverride": [],
+  "mediaDecks": [],
+  "mediaDecksOverride": [],
+  "webs": [],
+  "websOverride": [],
+  "youtubeVideos": [],
+  "youtubeVideosOverride": [],
   "slideDecks": [],
   "slideDecksOverride": [],
-  "layers": [{
-    "id": 831,
-    "title": "Test",
-    "url": "/data/layer1.html"
-  }],
+  "layers": [],
   "overlay": {
     "id": 7,
-    "upper": 8,
-    "middleRow": 8,
-    "lower": 8,
-    "left": 8,
-    "middleColumn": 8,
-    "right": 8,
+    "upper": null,
+    "middleRow": null,
+    "lower": null,
+    "left": null,
+    "middleColumn": null,
+    "right": null,
     "upperLeft": null,
     "upperMiddle": null,
     "upperRight": null,
@@ -103,12 +49,7 @@
     "lowerMiddle": null,
     "lowerRight": null
   },
-  "ovWidgets": [
-    {
-      "id": 8,
-      "url": "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/cat-icon.png"
-    }
-  ],
+  "ovWidgets": [],
   "monitor": null,
   "time": 1497386847
 }

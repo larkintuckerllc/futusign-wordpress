@@ -351,58 +351,6 @@ function futusign_endpoint($screen_id) {
 		  wp_reset_query();
 		}
 	}
-	// SLIDE DECKS
-	$args = array(
-		'post_type' => 'futusign_slide_deck',
-		'posts_per_page' => -1,
-		'tax_query' => array(
-			array(
-				'taxonomy' => 'futusign_playlist',
-				'field'    => 'id',
-				'terms'    => $subscribed_playlist_ids,
-			),
-		),
-	);
-	$loop = new WP_Query( $args );
-	while ( $loop->have_posts() ) {
-		$loop->the_post();
-		$priority = get_field('priority');
-		$slide_decks[] = array(
-			'id' => get_the_ID(),
-			'title' => get_the_title(),
-			'file' => get_field('file'),
-			'slideDuration' => intval(get_field('slide_duration')),
-			'priority' => $priority ? intval($priority) : 1
-		);
-	}
-	wp_reset_query();
-	// SLIDE DECKS OVERRIDE
-	if (class_exists( 'Futusign_Override' )) {
-		$args = array(
-			'post_type' => 'futusign_slide_deck',
-			'posts_per_page' => -1,
-			'tax_query' => array(
-				array(
-					'taxonomy' => 'futusign_override',
-					'field'    => 'id',
-					'terms'    => $subscribed_override_ids,
-				),
-			),
-		);
-		$loop = new WP_Query( $args );
-		while ( $loop->have_posts() ) {
-			$loop->the_post();
-			$priority = get_field('priority');
-			$slide_decks_override[] = array(
-				'id' => get_the_ID(),
-				'title' => get_the_title(),
-				'file' => get_field('file'),
-				'slideDuration' => intval(get_field('slide_duration')),
-				'priority' => $priority ? intval($priority) : 1
-			);
-		}
-		wp_reset_query();
-	}
 	// LAYERS
 	if (class_exists( 'Futusign_Layer' )) {
 		$args = array(
@@ -530,6 +478,7 @@ function futusign_endpoint($screen_id) {
 	echo json_encode( $youtube_videos );
 	echo ', "youtubeVideosOverride": ';
 	echo json_encode( $youtube_videos_override );
+	// TODO: IN LATER VERSION REMOVE UNUSED SLIDE_DECKS
 	echo ', "slideDecks": ';
 	echo json_encode( $slide_decks );
 	echo ', "slideDecksOverride": ';

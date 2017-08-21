@@ -28,14 +28,6 @@ class Futusign_Common {
 	 */
 	private $screen;
 	/**
-	 * The slide deck.
-	 *
-	 * @since    0.3.0
-	 * @access   private
-	 * @var      Futusign_Slide_Deck    $slide_deck    The slide deck.
-	 */
-	private $slide_deck;
-	/**
 	 * The playlist.
 	 *
 	 * @since    0.3.0
@@ -59,7 +51,6 @@ class Futusign_Common {
 	public function __construct() {
 		$this->load_dependencies();
 		$this->screen = new Futusign_Screen();
-		$this->slide_deck = new Futusign_Slide_Deck();
 		$this->playlist = new Futusign_Playlist();
 		$this->image = new Futusign_Image();
 	}
@@ -71,7 +62,6 @@ class Futusign_Common {
 	 */
 	private function load_dependencies() {
 		require_once plugin_dir_path( __FILE__ ) . 'class-futusign-screen.php';
-		require_once plugin_dir_path( __FILE__ ) . 'class-futusign-slide-deck.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-futusign-playlist.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-futusign-image.php';
 	}
@@ -83,15 +73,6 @@ class Futusign_Common {
 	 */
 	public function get_screen() {
 		return $this->screen;
-	}
-	/**
-	 * Retrieve the slide deck.
-	 *
-	 * @since     0.3.0
-	 * @return    Futusign_Slide_Deck    The slide deck functionality.
-	 */
-	public function get_slide_deck() {
-		return $this->slide_deck;
 	}
 	/**
 	 * Retrieve the playlist.

@@ -29,7 +29,6 @@ module.exports = {
     vendor: [
       'babel-polyfill',
       'normalizr',
-      'pdfjs-dist',
       'react',
       'react-dom',
       'react-redux',
@@ -89,7 +88,6 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: 'src/futusign-screen.php', to: 'futusign-screen.php' },
       { from: 'data', to: 'data' },
-      { from: 'node_modules/pdfjs-dist/build/pdf.worker.js', to: 'pdf.worker.js' },
     ]),
     HtmlWebpackPluginConfig,
     new webpack.DefinePlugin({

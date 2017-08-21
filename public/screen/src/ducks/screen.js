@@ -7,8 +7,6 @@ import { setWebs } from './webs';
 import { setWebsOverride } from './websOverride';
 import { setYoutubeVideos } from './youtubeVideos';
 import { setYoutubeVideosOverride } from './youtubeVideosOverride';
-import { setSlideDecks } from './slideDecks';
-import { setSlideDecksOverride } from './slideDecksOverride';
 import { setLayers } from './layers';
 import { setMediaDecks } from './mediaDecks';
 import { setMediaDecksOverride } from './mediaDecksOverride';
@@ -93,8 +91,6 @@ export const fetchScreen = () => (dispatch, getState) => {
         dispatch(setWebsOverride(response.websOverride));
         dispatch(setYoutubeVideos(response.youtubeVideos));
         dispatch(setYoutubeVideosOverride(response.youtubeVideosOverride));
-        dispatch(setSlideDecks(response.slideDecks));
-        dispatch(setSlideDecksOverride(response.slideDecksOverride));
         dispatch(setLayers(response.layers));
         dispatch(setOverlay(response.overlay));
         dispatch(setOvWidgets(response.ovWidgets));

@@ -181,17 +181,6 @@ class Futusign {
 		// IMAGE - OVERRIDE
 		$this->loader->add_action('restrict_manage_posts', $image, 'restrict_manage_posts_override');
 		$this->loader->add_action('parse_query', $image, 'parse_query_override');
-		// SLIDE DECK
-		$slide_deck = $plugin_common->get_slide_deck();
-		$this->loader->add_action('init', $slide_deck, 'register');
-		$this->loader->add_action('init', $slide_deck, 'register_field_group');
-		$this->loader->add_action('manage_futusign_slide_deck_posts_custom_column', $slide_deck, 'manage_posts_custom_column', 10, 2 );
-		$this->loader->add_filter('manage_futusign_slide_deck_posts_columns', $slide_deck, 'manage_posts_columns');
-		$this->loader->add_action('restrict_manage_posts', $slide_deck, 'restrict_manage_posts');
-		$this->loader->add_action('parse_query', $slide_deck, 'parse_query');
-		// SLIDE DECK - OVERRIDE
-		$this->loader->add_action('restrict_manage_posts', $slide_deck, 'restrict_manage_posts_override');
-		$this->loader->add_action('parse_query', $slide_deck, 'parse_query_override');
 		// UPDATE DB CHECK
 		$this->loader->add_action('init', $this, 'update_db_check');
 	}
