@@ -17,7 +17,13 @@
       "id": 1,
       "title": "A",
       "file": "http://localhost:8080/data/sample.jpg",
-      "imageDuration": 30,
+      "imageDuration": 3,
+      "priority": 1
+    }, {
+      "id": 2,
+      "title": "B",
+      "file": "http://localhost:8080/data/cat.jpg",
+      "imageDuration": 3,
       "priority": 1
     }
   ],
