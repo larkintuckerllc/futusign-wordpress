@@ -7,24 +7,34 @@ export const fetchBase = () => {
     return Promise.resolve();
   }
   return new Promise((resolve, reject) => {
+    let cleanUp = () => {}; // WILL REASSIGN
     const xmlhttp = new XMLHttpRequest();
-    xmlhttp.addEventListener('load', () => {
+    const handleLoad = () => {
       const status = xmlhttp.status;
       if (status !== 200) {
         reject({ message: status.toString() });
+        cleanUp();
+        return;
       }
       const link = xmlhttp.getResponseHeader('Link');
       if (link.indexOf('?') !== -1) {
         pretty = false;
       }
       resolve();
-    });
-    xmlhttp.addEventListener('error', () => {
+      cleanUp();
+    };
+    const handleError = () => {
       reject({ message: '500' });
-    });
-    xmlhttp.addEventListener('abort', () => {
-      reject({ message: '500' });
-    });
+      cleanUp();
+    };
+    cleanUp = () => {
+      xmlhttp.removeEventListener('load', handleLoad);
+      xmlhttp.removeEventListener('error', handleError);
+      xmlhttp.removeEventListener('abort', handleError);
+    };
+    xmlhttp.addEventListener('load', handleLoad);
+    xmlhttp.addEventListener('error', handleError);
+    xmlhttp.addEventListener('abort', handleError);
     xmlhttp.open('HEAD', SITE_URL, true);
     xmlhttp.send();
   });

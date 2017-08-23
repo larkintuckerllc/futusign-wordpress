@@ -1,5 +1,5 @@
 import { SITE_URL } from '../strings';
-import { getPretty } from './base.js';
+import { getPretty } from './base';
 import * as fromRest from '../util/rest';
 
 // eslint-disable-next-line
