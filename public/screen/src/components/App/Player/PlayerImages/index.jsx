@@ -6,18 +6,16 @@ import styles from './index.scss';
 class PlayerImages extends Component {
   constructor(props) {
     super(props);
+    this.even = true;
+    this.mounted = true;
     this.showing = false;
-    this.imageDuration = null;
+    this.handleFile = this.handleFile.bind(this);
+    this.loadImage = this.loadImage.bind(this);
+    this.playImage = this.playImage.bind(this);
     this.readyTimeout = null;
-    this.stopTimeout = null;
-    this.imageIndex = null;
     this.rootEvenEl = null;
     this.rootOddEl = null;
-    this.mounted = true;
-    this.even = true;
-    this.loadImage = this.loadImage.bind(this);
-    this.handleFile = this.handleFile.bind(this);
-    this.playImage = this.playImage.bind(this);
+    this.stopTimeout = null;
   }
   componentDidMount() {
     this.rootEvenEl = document.getElementById(styles.rootEven);
@@ -37,7 +35,6 @@ class PlayerImages extends Component {
       nextPlaying !== IMAGES &&
       upNextPlaying === IMAGES
     ) {
-      this.imageIndex = 0;
       this.loadImage();
     }
     // START PLAYING
@@ -46,7 +43,6 @@ class PlayerImages extends Component {
       !currentlyIsPlaying &&
       upCurrentlyIsPlaying
     ) {
-      this.showing = true;
       this.playImage();
     }
     // STOP PLAYING
@@ -54,8 +50,7 @@ class PlayerImages extends Component {
       currentlyPlaying === IMAGES &&
       upCurrentlyPlaying !== IMAGES
     ) {
-      window.clearTimeout(this.slideTimeout);
-      window.clearTimeout(this.stopTimeout);
+      // STOP PLAYING
     }
     // STOP SHOWING
     if (
@@ -73,52 +68,49 @@ class PlayerImages extends Component {
     return false;
   }
   componentWillUnmount() {
-    window.clearTimeout(this.slideTimeout);
-    window.clearTimeout(this.stopTimeout);
     this.mounted = false;
+    window.clearTimeout(this.readyTimeout);
+    window.clearTimeout(this.stopTimeout);
   }
-  handleFile(file) {
-    const { images, storeOffline } = this.props;
+  handleFile(image) {
+    const { setNextIsReady, storeOffline } = this.props;
     if (!this.mounted) { return; }
-    const { setNextIsReady } = this.props;
     // CACHING OFFLINE
-    if (storeOffline && this.imageIndex === 0) {
-      const newImageURL = images[0].file;
+    if (storeOffline) {
+      const newImageURL = image.file;
       const lastImageURL = window.localStorage.getItem('futusign_image_url');
       if (newImageURL !== lastImageURL) {
         window.localStorage.setItem('futusign_image_url', newImageURL);
-        window.localStorage.setItem('futusign_image_file', file);
+        window.localStorage.setItem('futusign_image_file', image.encoded);
       }
     }
     const renderEl = this.even ? this.rootEvenEl : this.rootOddEl;
-    renderEl.style.backgroundImage = `url(${file})`;
-    if (this.imageIndex === 0) {
-      setNextIsReady(true);
-    }
+    renderEl.style.backgroundImage = `url(${image.encoded})`;
+    setNextIsReady(true);
   }
   loadImage() {
-    const { setBadPlaying, images } = this.props;
-    const image = images[this.imageIndex];
-    this.imageDuration = image.imageDuration;
+    const { images, setBadPlaying } = this.props;
+    const image = images[0]; // EVENTUALLY GET RID OF ARRAY
     getFile(image.file)
-    .then(this.handleFile, () => setBadPlaying(true));
+    .then(encoded => {
+      this.handleFile({
+        ...image,
+        encoded,
+      });
+    })
+    .catch(setBadPlaying);
   }
   playImage() {
-    const { setCurrentlyIsPlaying, images } = this.props;
+    const { images, setCurrentlyIsPlaying } = this.props;
+    const image = images[0]; // EVENTUALLY GET RID OF ARRAY
+    this.showing = true;
     const playEl = this.even ? this.rootEvenEl : this.rootOddEl;
     const hideEl = !this.even ? this.rootEvenEl : this.rootOddEl;
     playEl.style.display = 'block';
     hideEl.style.display = 'none';
     this.even = !this.even;
-    if (this.imageIndex < images.length - 1) {
-      this.imageIndex += 1;
-      this.imageTimeout = window.setTimeout(this.playImage, this.imageDuration * 1000);
-      this.loadImage();
-    } else {
-      this.stopTimeout = window.setTimeout(() => {
-        setCurrentlyIsPlaying(false);
-      }, this.imageDuration * 1000);
-    }
+    this.stopTimeout
+      = window.setTimeout(() => setCurrentlyIsPlaying(false), image.imageDuration * 1000);
   }
   render() {
     return (

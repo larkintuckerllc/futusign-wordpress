@@ -7,9 +7,7 @@ class PlayerWebs extends Component {
   constructor(props) {
     super(props);
     this.showing = false;
-    this.webDuration = null;
     this.stopTimeout = null;
-    this.webIndex = null;
     this.rootEvenEl = null;
     this.rootOddEl = null;
     this.mounted = true;
@@ -36,7 +34,6 @@ class PlayerWebs extends Component {
       nextPlaying !== WEBS &&
       upNextPlaying === WEBS
     ) {
-      this.webIndex = 0;
       this.loadWeb();
       this.readyTimeout = window.setTimeout(() => setNextIsReady(true), WEB_LOAD_TIME * 1000);
     }
@@ -80,28 +77,21 @@ class PlayerWebs extends Component {
   }
   loadWeb() {
     const { webs } = this.props;
-    const web = webs[this.webIndex];
-    this.webDuration = web.webDuration;
+    const web = webs[0];
     const renderEl = this.even ? this.rootEvenEl : this.rootOddEl;
     renderEl.src = web.url;
   }
   playWeb() {
     const { setCurrentlyIsPlaying, webs } = this.props;
+    const web = webs[0];
     const playEl = this.even ? this.rootEvenEl : this.rootOddEl;
     const hideEl = !this.even ? this.rootEvenEl : this.rootOddEl;
     playEl.style.display = 'block';
     hideEl.style.display = 'none';
     hideEl.src = 'about:blank';
     this.even = !this.even;
-    if (this.webIndex < webs.length - 1) {
-      this.webIndex += 1;
-      this.webTimeout = window.setTimeout(this.playWeb, this.webDuration * 1000);
-      this.loadWeb();
-    } else {
-      this.stopTimeout = window.setTimeout(() => {
-        setCurrentlyIsPlaying(false);
-      }, this.webDuration * 1000);
-    }
+    this.stopTimeout =
+      window.setTimeout(() => { setCurrentlyIsPlaying(false); }, web.webDuration * 1000);
   }
   render() {
     return (
