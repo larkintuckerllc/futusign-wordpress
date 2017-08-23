@@ -38,7 +38,13 @@
     "priority": 1
   }],
   "websOverride": [],
-  "youtubeVideos": [],
+  "youtubeVideos": [{
+    "id": 4,
+    "title": "D",
+    "url": "https://youtu.be/LIjMBLVHDQs",
+    "suggestedQuality": "default",
+    "priority": 1
+  }],
   "youtubeVideosOverride": [],
   "slideDecks": [],
   "slideDecksOverride": [],
