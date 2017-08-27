@@ -12,7 +12,6 @@ class PlayerImages extends Component {
     this.handleFile = this.handleFile.bind(this);
     this.loadImage = this.loadImage.bind(this);
     this.playImage = this.playImage.bind(this);
-    this.readyTimeout = null;
     this.rootEvenEl = null;
     this.rootOddEl = null;
     this.stopTimeout = null;
@@ -69,7 +68,6 @@ class PlayerImages extends Component {
   }
   componentWillUnmount() {
     this.mounted = false;
-    window.clearTimeout(this.readyTimeout);
     window.clearTimeout(this.stopTimeout);
   }
   handleFile(image) {
@@ -98,7 +96,7 @@ class PlayerImages extends Component {
         encoded,
       });
     })
-    .catch(setBadPlaying);
+    .catch(() => setBadPlaying(true));
   }
   playImage() {
     const { images, setCurrentlyIsPlaying } = this.props;

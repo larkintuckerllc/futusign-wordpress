@@ -7,6 +7,7 @@ class PlayerWebs extends Component {
   constructor(props) {
     super(props);
     this.showing = false;
+    this.readyTimeout = null;
     this.stopTimeout = null;
     this.rootEvenEl = null;
     this.rootOddEl = null;
@@ -51,8 +52,7 @@ class PlayerWebs extends Component {
       currentlyPlaying === WEBS &&
       upCurrentlyPlaying !== WEBS
     ) {
-      window.clearTimeout(this.webTimeout);
-      window.clearTimeout(this.stopTimeout);
+      // STOP PLAYING
     }
     // STOP SHOWING
     if (
@@ -72,7 +72,7 @@ class PlayerWebs extends Component {
     return false;
   }
   componentWillUnmount() {
-    window.clearTimeout(this.webTimeout);
+    window.clearTimeout(this.readyTimeout);
     window.clearTimeout(this.stopTimeout);
   }
   loadWeb() {

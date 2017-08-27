@@ -28,6 +28,7 @@ import mediaDecks from '../ducks/mediaDecks';
 import mediaDecksOverride from '../ducks/mediaDecksOverride';
 import time from '../ducks/time';
 import version from '../ducks/version';
+import noPlayer from '../ducks/noPlayer';
 
 export default combineReducers({
   appBlocking,
@@ -59,4 +60,5 @@ export default combineReducers({
   youtubeVideosOverride,
   time,
   version,
+  noPlayer,
 });

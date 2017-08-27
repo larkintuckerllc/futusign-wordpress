@@ -71,12 +71,10 @@ class PlayerYoutubeVideos extends Component {
     return false;
   }
   componentWillUnmount() {
-    const { setCover } = this.props;
     if (window.futusignYoutubePlayer !== undefined) {
       window.futusignYoutubePlayer.pauseVideo();
     }
     this.futusignYoutubeEl.style.visibility = 'hidden';
-    setCover(false);
     window.clearTimeout(this.readyTimeout);
     window.clearTimeout(this.coverTimeout);
     window.futusignYoutubeStateChange.removeEventListener(this.handleYoutubeStateChange);

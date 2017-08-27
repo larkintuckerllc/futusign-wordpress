@@ -9,6 +9,7 @@ import {
   MSG_BLOCK,
   MSG_TIME,
   MSG_UNBLOCK,
+  RESTART_DELAY,
   TRANSITION,
 } from '../../strings';
 import { minLargerPriority } from '../../util/misc';
@@ -42,6 +43,7 @@ import * as fromMediaDecks from '../../ducks/mediaDecks';
 import * as fromMediaDecksOverride from '../../ducks/mediaDecksOverride';
 import * as fromTime from '../../ducks/time';
 import * as fromVersion from '../../ducks/version';
+import * as fromNoPlayer from '../../ducks/noPlayer';
 import Blocking from './Blocking';
 import Offline from './Offline';
 import Connected from './Connected';
@@ -264,17 +266,20 @@ class App extends Component {
       resetCurrentlyPlaying,
       resetNextPlaying,
       setCounter,
+      setCover,
       setCurrentlyIsPlaying,
       setCurrentlyPlaying,
-      setLayerBlocking,
       setMinImagePriority,
       setNextIsReady,
+      setNoPlayer,
       setPriority,
       webs,
       websOverride,
       youtubeVideos,
       youtubeVideosOverride,
     } = this.props;
+    setNoPlayer(true);
+    setCover(true);
     let usedImages = images;
     let usedMediaDecks = mediaDecks;
     let usedWebs = webs;
@@ -289,7 +294,6 @@ class App extends Component {
     setCurrentlyIsPlaying(false);
     resetCurrentlyPlaying();
     resetNextPlaying();
-    setLayerBlocking(false);
     setMinImagePriority(minLargerPriority(0, usedImages));
     setPriority(minLargerPriority(0, [
       ...usedImages,
@@ -299,7 +303,11 @@ class App extends Component {
     ]));
     setCounter(0);
     setCurrentlyPlaying(TRANSITION);
-    setCurrentlyIsPlaying(true);
+    window.setTimeout(() => {
+      setNoPlayer(false);
+      setCover(false);
+      setCurrentlyIsPlaying(true);
+    }, RESTART_DELAY * 1000);
   }
   render() {
     const {
@@ -311,6 +319,7 @@ class App extends Component {
       imagesOverride,
       mediaDecks,
       mediaDecksOverride,
+      noPlayer,
       layers,
       layerBlocking,
       monitor,
@@ -350,8 +359,8 @@ class App extends Component {
         {!layerBlocking && cover && <Cover />}
         {!layerBlocking && monitor !== null && <Connected connected={connected} />}
         {!layerBlocking && overlay !== null && <Overlay overlay={overlay} ovWidgets={ovWidgets} />}
-        {!layerBlocking && noMedia && !override && <NoMedia />}
-        {!layerBlocking && !noMedia &&
+        {!layerBlocking && noMedia && <NoMedia />}
+        {!layerBlocking && !noMedia && !noPlayer &&
           <Player
             images={usedImages}
             mediaDecks={usedMediaDecks}
@@ -376,6 +385,7 @@ App.propTypes = {
   mediaDecks: PropTypes.array.isRequired,
   mediaDecksOverride: PropTypes.array.isRequired,
   monitor: PropTypes.object,
+  noPlayer: PropTypes.bool.isRequired,
   offlinePlaying: PropTypes.bool.isRequired,
   overlay: PropTypes.object,
   override: PropTypes.bool.isRequired,
@@ -395,6 +405,7 @@ App.propTypes = {
   setOfflinePlaying: PropTypes.func.isRequired,
   setOverride: PropTypes.func.isRequired,
   setPriority: PropTypes.func.isRequired,
+  setNoPlayer: PropTypes.func.isRequired,
   setTime: PropTypes.func.isRequired,
   setVersion: PropTypes.func.isRequired,
   time: PropTypes.number.isRequired,
@@ -417,6 +428,7 @@ export default connect(
     mediaDecks: fromMediaDecks.getMediaDecks(state),
     mediaDecksOverride: fromMediaDecksOverride.getMediaDecksOverride(state),
     monitor: fromMonitor.getMonitor(state),
+    noPlayer: fromNoPlayer.getNoPlayer(state),
     offlinePlaying: fromOfflinePlaying.getOfflinePlaying(state),
     overlay: fromOverlay.getOverlay(state),
     override: fromOverride.getOverride(state),
@@ -442,6 +454,7 @@ export default connect(
     setLayerBlocking: fromLayerBlocking.setLayerBlocking,
     setMinImagePriority: fromMinImagePriority.setMinImagePriority,
     setNextIsReady: fromNextIsReady.setNextIsReady,
+    setNoPlayer: fromNoPlayer.setNoPlayer,
     setOfflinePlaying: fromOfflinePlaying.setOfflinePlaying,
     setOverride: fromOverride.setOverride,
     setPriority: fromPriority.setPriority,

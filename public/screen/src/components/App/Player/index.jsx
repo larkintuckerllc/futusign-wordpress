@@ -34,19 +34,13 @@ class Player extends Component {
       counter,
       currentlyIsPlaying,
       currentlyPlaying,
-      images,
-      mediaDecks,
       nextIsReady,
       nextPlaying,
-      priority,
       setCounter,
       setCurrentlyIsPlaying,
       setCurrentlyPlaying,
       setNextIsReady,
       setNextPlaying,
-      setPriority,
-      webs,
-      youtubeVideos,
     } = this.props;
     const upCurrentlyIsPlaying = upProps.currentlyIsPlaying;
     const upNextIsReady = upProps.nextIsReady;
@@ -54,91 +48,7 @@ class Player extends Component {
     if (!currentlyIsPlaying && upCurrentlyIsPlaying) {
       if (currentlyPlaying === TRANSITION) {
         // BEGINNING OF NEW PRIORITY; SET MEDIA
-        if (counter === 0) {
-          // HANDLED DIFFERENT BECAUSE OF OFFLINE
-          this.mediaImages = images
-            .filter(o => o.priority === priority)
-            .map(o => ({
-              title: o.title,
-              type: IMAGES,
-              media: o,
-            }))
-            .sort((a, b) => {
-              if (a.title < b.title) {
-                return -1;
-              }
-              if (a.title > b.title) {
-                return 1;
-              }
-              return 0;
-            });
-          const mediaWebs = webs
-            .filter(o => o.priority === priority)
-            .map(o => ({
-              title: o.title,
-              type: WEBS,
-              media: o,
-            }));
-          const mediaMediaDecks = mediaDecks
-            .filter(o => o.priority === priority)
-            .map(o => ({
-              title: o.title,
-              type: MEDIA_DECKS,
-              media: o,
-            }));
-          const mediaYoutubeVideos = youtubeVideos
-            .filter(o => o.priority === priority)
-            .map(o => ({
-              title: o.title,
-              type: YOUTUBE_VIDEOS,
-              media: o,
-            }));
-          this.media = [
-            ...this.mediaImages,
-            ...mediaWebs,
-            ...mediaYoutubeVideos,
-          ].sort((a, b) => {
-            if (a.title < b.title) {
-              return -1;
-            }
-            if (a.title > b.title) {
-              return 1;
-            }
-            return 0;
-          });
-          // MERGE IN MEDIA DECKS
-          const newMedia = [];
-          for (let i = this.media.length - 1; i >= 0; i -= 1) {
-            const mediaItem = this.media[i];
-            for (let j = mediaMediaDecks.length - 1; j >= 0; j -= 1) {
-              const mediaMediaDecksItem = mediaMediaDecks[j];
-              if (mediaMediaDecksItem.title > mediaItem.title) {
-                mediaMediaDecks.splice(j, 1);
-                for (let k = mediaMediaDecksItem.media.media.length - 1; k >= 0; k -= 1) {
-                  const mediaMediaDecksItemItem = mediaMediaDecksItem.media.media[k];
-                  newMedia.unshift({
-                    media: mediaMediaDecksItemItem,
-                    title: mediaMediaDecksItem.title,
-                    type: mediaMediaDecksItemItem.type,
-                  });
-                }
-              }
-            }
-            newMedia.unshift(mediaItem);
-          }
-          for (let i = mediaMediaDecks.length - 1; i >= 0; i -= 1) {
-            const mediaMediaDecksItem = mediaMediaDecks[i];
-            for (let j = mediaMediaDecksItem.media.media.length - 1; j >= 0; j -= 1) {
-              const mediaMediaDecksItemItem = mediaMediaDecksItem.media.media[j];
-              newMedia.unshift({
-                media: mediaMediaDecksItemItem,
-                title: mediaMediaDecksItem.title,
-                type: mediaMediaDecksItemItem.type,
-              });
-            }
-          }
-          this.media = newMedia;
-        }
+        if (counter === 0) this.calculateMedia();
         // STUFF FILTERED
         const nextMedia = this.media[counter];
         this.filteredImages = [];
@@ -160,14 +70,14 @@ class Player extends Component {
         window.setTimeout(() => {
           setNextIsReady(false);
           setNextPlaying(TRANSITION2);
-        });
+        }, 0);
         return;
       }
       if (currentlyPlaying === TRANSITION2) {
         window.setTimeout(() => {
           setNextPlaying(this.media[counter].type);
           setNextIsReady(false);
-        });
+        }, 0);
         return;
       }
       // PLAYING ACTUAL MEDIA
@@ -175,7 +85,7 @@ class Player extends Component {
         setCounter(counter + 1);
         setNextPlaying('TRANSITION');
         setNextIsReady(false);
-      });
+      }, 0);
       return;
     }
     // TRIGGER PLAYING
@@ -184,31 +94,131 @@ class Player extends Component {
       (!nextIsReady && upNextIsReady && !currentlyIsPlaying)
     ) {
       window.setTimeout(() => {
-        if (nextPlaying === TRANSITION) {
-          if (counter === this.media.length) {
-            let nextPriority = minLargerPriority(priority, [
-              ...images,
-              ...mediaDecks,
-              ...webs,
-              ...youtubeVideos,
-            ]);
-            if (nextPriority === Infinity) {
-              nextPriority = minLargerPriority(0, [
-                ...images,
-                ...mediaDecks,
-                ...webs,
-                ...youtubeVideos,
-              ]);
-            }
-            setPriority(nextPriority);
-            setCounter(0);
-          }
-        }
+        if (nextPlaying === TRANSITION && counter === this.media.length) this.calculatePriority();
         setCurrentlyPlaying(nextPlaying);
         setCurrentlyIsPlaying(true);
-      });
+      }, 0);
       return;
     }
+  }
+  calculateMedia() {
+    const {
+      images,
+      mediaDecks,
+      priority,
+      webs,
+      youtubeVideos,
+    } = this.props;
+    // HANDLED DIFFERENT BECAUSE OF OFFLINE
+    this.mediaImages = images
+      .filter(o => o.priority === priority)
+      .map(o => ({
+        title: o.title,
+        type: IMAGES,
+        media: o,
+      }))
+      .sort((a, b) => {
+        if (a.title < b.title) {
+          return -1;
+        }
+        if (a.title > b.title) {
+          return 1;
+        }
+        return 0;
+      });
+    const mediaWebs = webs
+      .filter(o => o.priority === priority)
+      .map(o => ({
+        title: o.title,
+        type: WEBS,
+        media: o,
+      }));
+    const mediaMediaDecks = mediaDecks
+      .filter(o => o.priority === priority)
+      .map(o => ({
+        title: o.title,
+        type: MEDIA_DECKS,
+        media: o,
+      }));
+    const mediaYoutubeVideos = youtubeVideos
+      .filter(o => o.priority === priority)
+      .map(o => ({
+        title: o.title,
+        type: YOUTUBE_VIDEOS,
+        media: o,
+      }));
+    this.media = [
+      ...this.mediaImages,
+      ...mediaWebs,
+      ...mediaYoutubeVideos,
+    ].sort((a, b) => {
+      if (a.title < b.title) {
+        return -1;
+      }
+      if (a.title > b.title) {
+        return 1;
+      }
+      return 0;
+    });
+    // MERGE IN MEDIA DECKS
+    const newMedia = [];
+    for (let i = this.media.length - 1; i >= 0; i -= 1) {
+      const mediaItem = this.media[i];
+      for (let j = mediaMediaDecks.length - 1; j >= 0; j -= 1) {
+        const mediaMediaDecksItem = mediaMediaDecks[j];
+        if (mediaMediaDecksItem.title > mediaItem.title) {
+          mediaMediaDecks.splice(j, 1);
+          for (let k = mediaMediaDecksItem.media.media.length - 1; k >= 0; k -= 1) {
+            const mediaMediaDecksItemItem = mediaMediaDecksItem.media.media[k];
+            newMedia.unshift({
+              media: mediaMediaDecksItemItem,
+              title: mediaMediaDecksItem.title,
+              type: mediaMediaDecksItemItem.type,
+            });
+          }
+        }
+      }
+      newMedia.unshift(mediaItem);
+    }
+    for (let i = mediaMediaDecks.length - 1; i >= 0; i -= 1) {
+      const mediaMediaDecksItem = mediaMediaDecks[i];
+      for (let j = mediaMediaDecksItem.media.media.length - 1; j >= 0; j -= 1) {
+        const mediaMediaDecksItemItem = mediaMediaDecksItem.media.media[j];
+        newMedia.unshift({
+          media: mediaMediaDecksItemItem,
+          title: mediaMediaDecksItem.title,
+          type: mediaMediaDecksItemItem.type,
+        });
+      }
+    }
+    this.media = newMedia;
+  }
+  calculatePriority() {
+    const {
+      images,
+      mediaDecks,
+      priority,
+      setCounter,
+      setPriority,
+      webs,
+      youtubeVideos,
+    } = this.props;
+    let nextPriority = minLargerPriority(priority, [
+      ...images,
+      ...mediaDecks,
+      ...webs,
+      ...youtubeVideos,
+    ]);
+    if (nextPriority === Infinity) {
+      nextPriority = minLargerPriority(0, [
+        ...images,
+        ...mediaDecks,
+        ...webs,
+        ...youtubeVideos,
+      ]);
+    }
+    setPriority(nextPriority);
+    setCounter(0);
   }
   render() {
     const {

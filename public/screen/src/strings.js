@@ -13,5 +13,6 @@ export const TRANSITION = 'TRANSITION';
 export const TRANSITION2 = 'TRANSITION2';
 export const IMAGES = 'IMAGES';
 export const MEDIA_DECKS = 'MEDIA_DECKS';
+export const RESTART_DELAY = 2;
 export const WEBS = 'WEBS';
 export const YOUTUBE_VIDEOS = 'YOUTUBE_VIDEOS';
