@@ -3,7 +3,7 @@ import { YOUTUBE_VIDEOS, TRANSITION, TRANSITION2 } from '../../../../strings';
 
 const URL_REGEX = /^https:\/\/youtu\.be\/(.*)/;
 const PLAYER_DELAY = 5;
-const VIDEO_DELAY = 2;
+const VIDEO_DELAY = 1;
 class PlayerYoutubeVideos extends Component {
   constructor(props) {
     super(props);
