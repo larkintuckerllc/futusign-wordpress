@@ -11,25 +11,12 @@ if ( ! defined( 'WPINC' ) ) {
 </head>
 <body>
   <div id="root"></div>
-  <iframe
+  <div
     id="futusign_youtube"
     style="visibility: hidden;"
-    frameborder="0"
-    src="https://www.youtube.com/embed/XIMLoLxmTDw?enablejsapi=1&cc_load_policy=1"
-  ></iframe>
+  ></div>
   <script>
     (function(){
-      // SET WIDTH OF YOUTUBE
-      var futusignYoutubeEl = document.getElementById('futusign_youtube');
-      var width = window.outerWidth;
-      var height = window.outerHeight
-      if ((width / height) >= (16 / 9)) {
-        futusignYoutubeEl.style.width = width.toString() + 'px';
-        futusignYoutubeEl.style.height = (width * (9 / 16)).toString() + 'px';
-      } else {
-        futusignYoutubeEl.style.width = (height * (16 / 9)).toString() + 'px';
-        futusignYoutubeEl.style.height = (height).toString() + 'px';
-      }
       // SETUP YOUTUBE EMITTERS
       window.futusignYoutubeStateChange = {
         addEventListener: function(listener) {
@@ -53,7 +40,6 @@ if ( ! defined( 'WPINC' ) ) {
       var firstScriptTag = document.getElementsByTagName('script')[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       window.onYouTubeIframeAPIReady = function() {
-        // REL DOES NOT SEEM TO WORK AS DOCUMENT; COVER WORKAROUND
         var player = new window.YT.Player('futusign_youtube', {
           playerVars: {
             'controls': 0,
@@ -68,6 +54,18 @@ if ( ! defined( 'WPINC' ) ) {
             'onError': onPlayerError,
           }
         });
+        // SET WIDTH OF YOUTUBE
+        var futusignYoutubeEl = document.getElementById('futusign_youtube');
+        var width = window.innerWidth;
+        var height = window.innerHeight
+        if ((width / height) >= (16 / 9)) {
+          futusignYoutubeEl.style.width = width.toString() + 'px';
+          futusignYoutubeEl.style.height = (width * (9 / 16)).toString() + 'px';
+        } else {
+          futusignYoutubeEl.style.width = (height * (16 / 9)).toString() + 'px';
+          futusignYoutubeEl.style.height = (height).toString() + 'px';
+        }
+        // FUNCTIONS
         function onPlayerReady() {
           window.futusignYoutubePlayer = player;
         }
