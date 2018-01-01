@@ -54,7 +54,11 @@
   "youtubeVideosOverride": [],
   "slideDecks": [],
   "slideDecksOverride": [],
-  "layers": [],
+  "layers": [{
+    "id": 1303,
+    "title": "Interactive Poster",
+    "url": "https://s3.amazonaws.com/futusign-wordpress/cover.html?url=https://slides.com/johntucker-1/deck/embed/"
+  }],
   "overlay": {
     "id": 7,
     "upper": null,

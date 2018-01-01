@@ -82,6 +82,7 @@ class App extends Component {
         setLayerBlocking(true);
         break;
       case MSG_UNBLOCK:
+        setLayerBlocking(false);
         this.restartPlayingLoop();
         break;
       case MSG_TIME:
