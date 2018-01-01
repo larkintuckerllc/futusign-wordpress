@@ -1,0 +1,83 @@
+{
+  "version": "",
+  "screen": {
+    "id": 0,
+    "title": "Sample",
+    "polling": 60,
+    "subscribedPlaylistIds": [
+      0
+    ],
+    "subscribedOverrideIds": [
+      0
+    ],
+    "overlay": null
+  },
+  "images": [
+    {
+      "id": 1,
+      "title": "A",
+      "file": "http://localhost:8080/data/sample.jpg",
+      "imageDuration": 3,
+      "priority": 1
+    }, {
+      "id": 2,
+      "title": "B",
+      "file": "http://localhost:8080/data/cat.jpg",
+      "imageDuration": 3,
+      "priority": 1
+    }
+  ],
+  "imagesOverride": [],
+  "mediaDecks": [],
+  "mediaDecksOverride": [],
+    "webs": [{
+    "id": 3,
+    "title": "C",
+    "url": "https://www.futusign.com/",
+    "webDuration": 5,
+    "priority": 1
+  }],
+  "websOverride": [],
+  "youtubeVideos": [{
+    "id": 4,
+    "title": "D",
+    "url": "https://youtu.be/LIjMBLVHDQs",
+    "suggestedQuality": "default",
+    "priority": 1
+    }, {
+    "id": 5,
+    "title": "D",
+    "url": "https://youtu.be/MgG_O5xjR0w",
+    "suggestedQuality": "default",
+    "priority": 1
+  }],
+  "youtubeVideosOverride": [],
+  "slideDecks": [],
+  "slideDecksOverride": [],
+  "layers": [{
+    "id": 1303,
+    "title": "Interactive Poster",
+    "url": "https://s3.amazonaws.com/futusign-wordpress/cover.html?url=https://slides.com/johntucker-1/deck/embed/"
+  }],
+  "overlay": {
+    "id": 7,
+    "upper": null,
+    "middleRow": null,
+    "lower": null,
+    "left": null,
+    "middleColumn": null,
+    "right": null,
+    "upperLeft": null,
+    "upperMiddle": null,
+    "upperRight": null,
+    "middleLeft": null,
+    "middleMiddle": null,
+    "middleRight": null,
+    "lowerLeft": null,
+    "lowerMiddle": null,
+    "lowerRight": null
+  },
+  "ovWidgets": [],
+  "monitor": null,
+  "time": 1497386847
+}
