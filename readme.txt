@@ -3,7 +3,7 @@ Contributors: sckmkny
 Tags: digital, signage
 Requires at least: 4.3
 Tested up to: 4.9
-Stable tag: 3.0.3
+Stable tag: 3.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -42,6 +42,10 @@ To create a digital sign, connect a television to a computer with *Chrome* brows
 Additional information available at [www.futusign.com](https://www.futusign.com/).
 
 == Changelog ==
+
+= 3.0.4 =
+
+Fix for futusign Monitor disconnection
 
 = 3.0.3 =
 

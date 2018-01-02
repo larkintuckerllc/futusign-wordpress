@@ -98,6 +98,6 @@ if ( ! defined( 'WPINC' ) ) {
   <!-- MANUALLY UPDATE -->
   <script src="<?php echo plugins_url( 'vendor.dc0d247d5773334bbcf9.bundle.js', __FILE__ ); ?>"></script>
   <!-- MANUALLY UPDATE -->
-  <script src="<?php echo plugins_url( 'main.7a1eba0a4e952e80b765.bundle.js', __FILE__ ); ?>"></script>
+  <script src="<?php echo plugins_url( 'main.1aaf1f8028642a573430.bundle.js', __FILE__ ); ?>"></script>
 </body>
 </html>

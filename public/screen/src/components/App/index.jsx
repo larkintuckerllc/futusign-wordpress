@@ -175,7 +175,7 @@ class App extends Component {
                 const connectedRef = firebase.database().ref('.info/connected');
                 connectedRef.on('value', snap => {
                   if (snap.val() === true) {
-                    presenceRef.push(screen.id);
+                    const myPresenceRef = presenceRef.push(screen.id);
                     logRef.push({
                       id: screen.id,
                       title: screen.title,
@@ -183,7 +183,7 @@ class App extends Component {
                       timestamp: firebase.database.ServerValue.TIMESTAMP,
                     });
                     const disconnectRef = logRef.push();
-                    presenceRef.onDisconnect().remove();
+                    myPresenceRef.onDisconnect().remove();
                     disconnectRef.onDisconnect().set({
                       id: screen.id,
                       title: screen.title,

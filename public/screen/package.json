@@ -1,6 +1,6 @@
 {
   "name": "futusign-screen",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "futusign screen",
   "scripts": {
     "build": "NODE_ENV=production webpack -p -d source-map",
