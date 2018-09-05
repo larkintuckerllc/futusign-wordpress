@@ -22,6 +22,7 @@ screen.
 
 Additional features are provided through supplemental plugins:
 
+* [futusign Monitor](https://github.com/larkintuckerllc/futusign-wp-monitor): Support for screen monitoring; detecting if screens are offline
 * [futusign YouTube Video](https://github.com/larkintuckerllc/futusign-wp-youtube): Support for YouTube videos
 
 Usage
