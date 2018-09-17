@@ -24,6 +24,7 @@ Additional features are provided through supplemental plugins:
 
 * [futusign Media Deck](https://github.com/larkintuckerllc/futusign-wp-mediadeck): Support for displaying media decks; ordered list of existing media types: images, webs, and YouTube videos.
 * [futusign Monitor](https://github.com/larkintuckerllc/futusign-wp-monitor): Support for screen monitoring; detecting if screens are offline
+* [futusign Multisite](https://github.com/larkintuckerllc/futusign-wp-multisite): Support for WordPress multisite
 * [futusign YouTube Video](https://github.com/larkintuckerllc/futusign-wp-youtube): Support for YouTube videos
 
 Usage
