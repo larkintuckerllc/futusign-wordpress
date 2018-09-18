@@ -26,6 +26,9 @@ Additional features are provided through supplemental plugins:
 * [futusign Monitor](https://github.com/larkintuckerllc/futusign-wp-monitor): Support for screen monitoring; detecting if screens are offline
 * [futusign Multisite](https://github.com/larkintuckerllc/futusign-wp-multisite): Support for WordPress multisite
 * [futusign Overlay](https://github.com/larkintuckerllc/futusign-wp-overlay): Support for overlay of widgets
+* [futusign Overlay Clock](https://github.com/larkintuckerllc/futusign-wp-overlayclock): Support for adding a clock overlay widget
+* [futusign Overlay RSS](https://github.com/larkintuckerllc/futusign-wp-overlayrss): Support for adding a RSS  overlay widget
+* [futusign Override](https://github.com/larkintuckerllc/futusign-wp-override): Support for overriding media; for example to temporarily override media on subscribed playlists.
 * [futusign YouTube Video](https://github.com/larkintuckerllc/futusign-wp-youtube): Support for YouTube videos
 
 Usage
