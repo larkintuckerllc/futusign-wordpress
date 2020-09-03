@@ -10,7 +10,7 @@
  * Plugin Name:      futusign
  * Plugin URI:       https://github.com/larkintuckerllc/futusign
  * Description:      Manage and display digital signage content
- * Version:          3.0.4
+ * Version:          3.0.5
  * Author:           John Tucker
  * Author URI:       https://github.com/larkintuckerllc
  * License:          GPL2 or later
