@@ -63,10 +63,6 @@ module.exports = {
       test: /\.css$/,
       exclude: /node_modules/,
       loaders: ['style', 'css?module&-autoprefixer', 'postcss'],
-    }, {
-      test: /\.scss$/,
-      exclude: /node_modules/,
-      loaders: ['style', 'css?module&-autoprefixer', 'postcss', 'sass'],
     }],
   },
   postcss: () =>
