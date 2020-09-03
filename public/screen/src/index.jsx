@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import configureStore from './configureStore';
 import App from './components/App';
-import './index.scss';
+import './index.css';
 
 // eslint-disable-next-line
 __webpack_public_path__ = window.publicPath;

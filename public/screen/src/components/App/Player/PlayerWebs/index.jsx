@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { TRANSITION, TRANSITION2, WEBS } from '../../../../strings';
-import styles from './index.scss';
+import styles from './index.css';
 
 const WEB_LOAD_TIME = 2;
 class PlayerWebs extends Component {

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { getFile } from '../../../../util/rest';
 import { IMAGES, TRANSITION, TRANSITION2 } from '../../../../strings';
-import styles from './index.scss';
+import styles from './index.css';
 
 class PlayerImages extends Component {
   constructor(props) {

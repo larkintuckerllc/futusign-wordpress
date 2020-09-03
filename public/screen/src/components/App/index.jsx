@@ -4,7 +4,6 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import {
-  CACHE_INTERVAL,
   ERROR_POLLING_INTERVAL,
   MSG_BLOCK,
   MSG_TIME,

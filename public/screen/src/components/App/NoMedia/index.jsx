@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './index.scss';
+import styles from './index.css';
 import noMedia from './noMedia.png';
 
 export default () => (

@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import styles from './index.scss';
+import styles from './index.css';
 
 const Layers = ({ layers }) => (
   <div id={styles.root}>
