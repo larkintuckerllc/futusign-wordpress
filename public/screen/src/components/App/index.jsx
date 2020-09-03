@@ -63,16 +63,7 @@ class App extends Component {
     this.handleMessage = this.handleMessage.bind(this);
   }
   componentDidMount() {
-    const appCache = window.applicationCache;
-    const check = () => {
-      appCache.update();
-    };
-    const handleUpdateReady = () => {
-      window.location.reload();
-    };
     this.fetch();
-    window.setInterval(check, CACHE_INTERVAL * 1000);
-    appCache.addEventListener('updateready', handleUpdateReady);
     window.addEventListener('message', this.handleMessage);
   }
   handleMessage(message) {

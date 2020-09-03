@@ -4,7 +4,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en" manifest="<?php echo trailingslashit( plugins_url( '', __FILE__ ) ); ?>index.appcache">
+<html lang="en">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>futusign Screen</title>
