@@ -1,5 +1,8 @@
 futusign
 ====
+
+**This project is abandoned.**
+
 Manage and display digital signage content
 
 - [Description](#description)
